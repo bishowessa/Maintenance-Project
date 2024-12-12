@@ -1,4 +1,4 @@
-package com.lms.business;
+package com.lms.presentation;
 
 import com.lms.persistence.Person;
 import com.lms.persistence.Response;
