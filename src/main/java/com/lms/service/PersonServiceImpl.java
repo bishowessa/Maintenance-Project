@@ -1,17 +1,15 @@
 package com.lms.service;
 
-import com.lms.persistence.*;
-
 import java.util.*;
-
+import com.lms.persistence.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonServiceImpl {
+public class PersonServiceImpl implements PersonService {
 
     Map<Integer, Person> persons = new HashMap<>();
 
-
+    @Override
     public Boolean addPerson(Person p) {
         if (persons.get(p.getId()) != null) {
             return false;
@@ -20,7 +18,7 @@ public class PersonServiceImpl {
         return true;
     }
 
-
+    @Override
     public Boolean deletePerson(int id) {
         if (persons.get(id) == null) {
             return false;
@@ -29,12 +27,12 @@ public class PersonServiceImpl {
         return true;
     }
 
-
+    @Override
     public Person getPerson(int id) {
         return persons.get(id);
     }
 
-
+    @Override
     public List<Person> getAllPersons() {
         Set<Integer> ids = persons.keySet();
         List<Person> p = new ArrayList<>(ids.size());
