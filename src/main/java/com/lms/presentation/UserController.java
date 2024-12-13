@@ -31,12 +31,12 @@ public class UserController {
     public ResponseEntity<User> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Use UserDetails to retrieve authenticated user's email
+
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
 
         if (currentUser.isEmpty()) {
-            return ResponseEntity.status(404).build(); // User not found
+            return ResponseEntity.status(404).build();
         }
 
         return ResponseEntity.ok(currentUser.get());

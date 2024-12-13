@@ -11,7 +11,7 @@ public class LoginResponse {
 
     public LoginResponse setToken(String token) {
         this.token = token;
-        return this; // Return the current instance
+        return this;
     }
 
     public long getExpiresIn() {
@@ -20,6 +20,6 @@ public class LoginResponse {
 
     public LoginResponse setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
-        return this; // Return the current instance
+        return this;
     }
 }
