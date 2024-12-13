@@ -41,12 +41,24 @@ public class CourseController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
+        if (!"Instructor".equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        }
         courseService.createCourse(course);
         return ResponseEntity.ok("Course created successfully!");
     }
 
     @PostMapping("/{courseId}/media")
     public ResponseEntity<String> uploadMedia(@PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(404).build();
+        }
+        if (!"Instructor".equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        }
         Course course = courseService.findCourseById(courseId);
         if (course == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with ID: " + courseId);
@@ -90,9 +102,11 @@ public class CourseController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
-
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
+        }
+        if (!"Instructor".equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
         }
         courseService.addLessonToCourse(courseId, lesson);
         return ResponseEntity.ok("Lesson added successfully!");
