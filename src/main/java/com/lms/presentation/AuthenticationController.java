@@ -7,6 +7,7 @@ import com.lms.persistence.User;
 import com.lms.service.AuthenticationService;
 import com.lms.service.JwtService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +25,23 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
+//    @PostMapping("/signup")
+//    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+//        User registeredUser = authenticationService.signup(registerUserDto);
+//
+//        return ResponseEntity.ok(registeredUser);
+//    }
 
+    @PostMapping("/signup")
+    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
+        if (!"Admin".equals(registerUserDto.getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: you are unauthorized");
+        }
+        User registeredUser = authenticationService.signup(registerUserDto);
         return ResponseEntity.ok(registeredUser);
     }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {

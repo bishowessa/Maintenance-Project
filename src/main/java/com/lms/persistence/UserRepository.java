@@ -39,8 +39,6 @@ import java.util.Optional;
 @Repository
 public class UserRepository {
     private final List<User> users = new ArrayList<>();
-    private int idCounter = 1;
-
 
     public User save(User user) {
         users.add(user);
@@ -52,6 +50,7 @@ public class UserRepository {
                 .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst();
     }
+
 
     public List<User> findAll() {
         return new ArrayList<>(users);
