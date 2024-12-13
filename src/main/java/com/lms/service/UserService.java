@@ -1,16 +1,27 @@
 package com.lms.service;
 
 import com.lms.persistence.User;
-import org.springframework.stereotype.Component;
+import com.lms.persistence.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    public List<User> getUsers(){
-        return List.of(
-                new User("12345", "John", "Doe", "john.doe@example.com", "securePassword123")
-        );
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public List<User> allUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
+
+
