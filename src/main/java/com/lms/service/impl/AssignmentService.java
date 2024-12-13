@@ -2,7 +2,8 @@ package com.lms.service.impl;
 
 import com.lms.business.models.AssignmentModel;
 import com.lms.persistence.entities.AssignmentEntity;
-import com.lms.persistence.repositories.Repository;
+import com.lms.persistence.repositories.AssignmentRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class AssignmentService {
-    private final Repository<AssignmentEntity> repository;
+    private final AssignmentRepository repository;
 
-    public AssignmentService(Repository<AssignmentEntity> repository) {
+    public AssignmentService(AssignmentRepository repository) {
         this.repository = repository;
     }
 

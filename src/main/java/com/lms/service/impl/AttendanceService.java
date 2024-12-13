@@ -1,14 +1,14 @@
 package com.lms.service.impl;
 
 import com.lms.persistence.entities.AttendanceEntity;
-import com.lms.persistence.repositories.Repository;
+import com.lms.persistence.repositories.AttendanceRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AttendanceService {
-    private final Repository<AttendanceEntity> repository;
+    private final AttendanceRepository repository;
 
-    public AttendanceService(Repository<AttendanceEntity> repository) {
+    public AttendanceService(AttendanceRepository repository) {
         this.repository = repository;
     }
 
@@ -31,4 +31,5 @@ public class AttendanceService {
         }
         return false;
     }
+
 }

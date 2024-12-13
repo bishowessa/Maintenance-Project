@@ -2,7 +2,8 @@ package com.lms.service.impl;
 
 import com.lms.business.models.SubmissionModel;
 import com.lms.persistence.entities.SubmissionEntity;
-import com.lms.persistence.repositories.Repository;
+import com.lms.persistence.repositories.SubmissionRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class SubmissionService {
-    private final Repository<SubmissionEntity> repository;
+    private final SubmissionRepository repository;
 
-    public SubmissionService(Repository<SubmissionEntity> repository) {
+    public SubmissionService(SubmissionRepository repository) {
         this.repository = repository;
     }
 

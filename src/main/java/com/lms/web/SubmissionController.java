@@ -26,7 +26,7 @@ public class SubmissionController {
     }
 
     @GetMapping("/assignment/{assignmentId}")
-    public List<SubmissionEntity> getSubmissionsByAssignment(@PathVariable int assignmentId) {
+    public List<SubmissionEntity> getSubmissionsByAssignment(@PathVariable("assignmentId") int assignmentId) {
         return service.getSubmissionsByAssignment(assignmentId);
     }
 }

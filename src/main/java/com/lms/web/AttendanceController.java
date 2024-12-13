@@ -22,7 +22,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/lesson/{lessonId}/mark")
-    public String markAttendance(@PathVariable int courseId, @PathVariable int lessonId, @RequestParam int studentId, @RequestParam String otp) {
+    public String markAttendance(@PathVariable("courseId") int courseId, @PathVariable("lessonId") int lessonId, @RequestParam int studentId, @RequestParam String otp) {
         if (service.markAttendance(lessonId, studentId, otp)) {
             return "Attendance marked successfully.";
         } else {

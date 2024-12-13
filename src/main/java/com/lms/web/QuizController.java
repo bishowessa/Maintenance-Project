@@ -23,6 +23,7 @@ class QuizController {
         } else {
             return "Failed to create quiz.";
         }
+
     }
 
     @GetMapping
