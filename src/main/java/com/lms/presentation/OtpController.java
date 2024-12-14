@@ -9,6 +9,7 @@ import com.lms.service.CourseService;
 import com.lms.service.SmsService;
 import com.lms.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -49,7 +53,7 @@ public class OtpController {
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
         log.info("Inside sendOtp :: " + otpRequest.getUsername());
-        return smsService.sendSMS(otpRequest);
+        return smsService.sendSMS(otpRequest,currentUser);
     }
 
     @PostMapping("/validate-otp")
@@ -58,6 +62,19 @@ public class OtpController {
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
         log.info("Inside validateOtp :: " + otpValidationRequest.getUsername() + " " + otpValidationRequest.getOtp());
-        return smsService.validateOtp(otpValidationRequest);
+        return smsService.validateOtp(otpValidationRequest, currentUser);
+    }
+
+    @GetMapping("/viewAttendance")
+    public ResponseEntity<ArrayList<Pair<String, Optional<User>>>> getMediaForCourse() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
+
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.ok(SmsService.viewAttendance());
     }
 }

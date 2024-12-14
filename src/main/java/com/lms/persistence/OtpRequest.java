@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class OtpRequest {
     private String username;
     private String phoneNumber;
+    private String lessonName;
 
 }
