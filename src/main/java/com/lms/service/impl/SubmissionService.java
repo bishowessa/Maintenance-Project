@@ -1,10 +1,12 @@
 package com.lms.service.impl;
-import com.lms.business.models.SubmissionModel;
-import com.lms.persistence.entities.SubmissionEntity;
-import com.lms.persistence.repositories.SubmissionRepository;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.lms.business.models.DummySubmissionModel;
+import com.lms.persistence.entities.DummySubmissionEntity;
+import com.lms.persistence.repositories.SubmissionRepository;
 
 @Service
 public class SubmissionService {
@@ -14,8 +16,8 @@ public class SubmissionService {
         this.repository = repository;
     }
 
-    public boolean submitAssignment(SubmissionModel model, int assignmentId, int studentId) {
-        SubmissionEntity entity = new SubmissionEntity();
+    public boolean submitAssignment(DummySubmissionModel model, int assignmentId, int studentId) {
+        DummySubmissionEntity entity = new DummySubmissionEntity();
         entity.setId(model.getId());
         entity.setStudentId(studentId);
         entity.setScore(model.getScore());
@@ -25,7 +27,7 @@ public class SubmissionService {
         return repository.add(entity);
     }
 
-    public List<SubmissionEntity> getSubmissionsByAssignment(int assignmentId) {
+    public List<DummySubmissionEntity> getSubmissionsByAssignment(int assignmentId) {
         return repository.findAll().stream()
                 .filter(s -> s.getRelatedId() == assignmentId)
                 .collect(Collectors.toList());

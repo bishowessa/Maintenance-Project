@@ -1,11 +1,18 @@
 package com.lms.web;
 
-import com.lms.business.models.SubmissionModel;
-import com.lms.persistence.entities.SubmissionEntity;
-import com.lms.service.impl.SubmissionService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lms.business.models.DummySubmissionModel;
+import com.lms.persistence.entities.DummySubmissionEntity;
+import com.lms.service.impl.SubmissionService;
 
 @RestController
 @RequestMapping("/submissions")
@@ -17,7 +24,7 @@ public class SubmissionController {
     }
 
     @PostMapping("/assignment/{assignmentId}/submit")
-    public String submitAssignment(@PathVariable int assignmentId, @RequestParam int studentId, @RequestBody SubmissionModel model) {
+    public String submitAssignment(@PathVariable int assignmentId, @RequestParam int studentId, @RequestBody DummySubmissionModel model) {
         if (service.submitAssignment(model, assignmentId, studentId)) {
             return "Assignment submitted successfully.";
         } else {
@@ -26,7 +33,7 @@ public class SubmissionController {
     }
 
     @GetMapping("/assignment/{assignmentId}")
-    public List<SubmissionEntity> getSubmissionsByAssignment(@PathVariable("assignmentId") int assignmentId) {
+    public List<DummySubmissionEntity> getSubmissionsByAssignment(@PathVariable("assignmentId") int assignmentId) {
         return service.getSubmissionsByAssignment(assignmentId);
     }
 }

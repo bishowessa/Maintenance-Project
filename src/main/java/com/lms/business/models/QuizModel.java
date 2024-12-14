@@ -1,7 +1,5 @@
 package com.lms.business.models;
-
 import lombok.*;
-
 import java.util.List;
 
 @Getter
