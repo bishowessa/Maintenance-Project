@@ -8,12 +8,11 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 public class AttendanceEntity {
-    private int id;
-    private int lessonId;
-    private int courseId;
+    private String id;
+    private String lessonId;
+    private String courseId;
     private String otp;
-    private List<Integer> studentIds = new ArrayList<>();
+    private List<String> studentIds = new ArrayList<>();
 }

@@ -13,7 +13,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/lesson/{lessonId}/create")
-    public String createAttendance(@PathVariable int courseId, @PathVariable int lessonId, @RequestParam String otp) {
+    public String createAttendance(@PathVariable String courseId, @PathVariable String lessonId, @RequestParam String otp) {
         if (service.createAttendance(lessonId, otp, courseId)) {
             return "Attendance created successfully.";
         } else {
@@ -22,7 +22,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/lesson/{lessonId}/mark")
-    public String markAttendance(@PathVariable("courseId") int courseId, @PathVariable("lessonId") int lessonId, @RequestParam int studentId, @RequestParam String otp) {
+    public String markAttendance(@PathVariable String courseId, @PathVariable String lessonId, @RequestParam String studentId, @RequestParam String otp) {
         if (service.markAttendance(lessonId, studentId, otp)) {
             return "Attendance marked successfully.";
         } else {

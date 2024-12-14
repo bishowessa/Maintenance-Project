@@ -1,35 +1,71 @@
 package com.lms.service.impl;
 
-import com.lms.business.models.QuizModel;
-import com.lms.persistence.entities.QuizEntity;
+import com.lms.persistence.entities.QuestionBank;
+import com.lms.persistence.entities.Quiz;
+import com.lms.persistence.entities.questions.Question;
+import com.lms.persistence.repositories.QuestionBankRepository;
 import com.lms.persistence.repositories.QuizRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class QuizService {
 
-  private final QuizRepository repository;
+  private final QuizRepository quizRepository;
+  private final QuestionBankRepository questionBankRepository;
 
-  public QuizService(QuizRepository repository) {
-    this.repository = repository;
+  public QuizService(
+    QuizRepository quizRepository,
+    QuestionBankRepository questionBankRepository
+  ) {
+    this.quizRepository = quizRepository;
+    this.questionBankRepository = questionBankRepository;
   }
 
-  public boolean createQuiz(QuizModel model, int courseId) {
-    QuizEntity entity = new QuizEntity();
-    entity.setId(model.getId());
-    entity.setQuestions(model.getQuestions());
-    entity.setGrade(model.getGrade());
-    entity.setCourseId(courseId);
-    return repository.add(entity);
+  public Quiz createQuiz(
+    String courseId,
+    String name,
+    int questionsNumber,
+    int duration,
+    String status
+  ) {
+    QuestionBank questionBank = questionBankRepository.findByCourseId(courseId);
+
+    if (questionBank == null) {
+      throw new IllegalArgumentException(
+        "Question bank not found for the course."
+      );
+    }
+
+    List<Question> availableQuestions = questionBank.getQuestions();
+    if (availableQuestions.size() < questionsNumber) {
+      throw new IllegalArgumentException(
+        "Not enough questions in the question bank to create the quiz."
+      );
+    }
+
+    Collections.shuffle(availableQuestions);
+    List<Question> selectedQuestions = availableQuestions.subList(
+      0,
+      questionsNumber
+    );
+
+    Quiz quiz = new Quiz(
+      UUID.randomUUID().toString(),
+      courseId,
+      name,
+      questionsNumber,
+      duration,
+      status,
+      selectedQuestions
+    );
+
+    quizRepository.save(quiz);
+    return quiz;
   }
 
-  public List<QuizEntity> getQuizzesByCourse(int courseId) {
-    return repository
-      .findAll()
-      .stream()
-      .filter(q -> q.getCourseId() == courseId)
-      .collect(Collectors.toList());
+  public List<Quiz> getAllQuizzes() {
+    return quizRepository.findAll();
   }
 }

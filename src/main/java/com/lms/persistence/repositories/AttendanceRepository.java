@@ -18,7 +18,7 @@ public class AttendanceRepository {
     return new ArrayList<>(store);
   }
 
-  public AttendanceEntity findById(int id) {
+  public AttendanceEntity findById(String id) {
     return store.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
   }
 }

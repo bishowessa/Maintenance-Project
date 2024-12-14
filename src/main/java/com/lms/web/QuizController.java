@@ -1,33 +1,40 @@
 package com.lms.web;
 
-import com.lms.business.models.QuizModel;
-import com.lms.persistence.entities.QuizEntity;
+import com.lms.business.models.QuizRequest;
+import com.lms.persistence.entities.Quiz;
 import com.lms.service.impl.QuizService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/course/{courseId}/quizzes")
-class QuizController {
-    private final QuizService service;
+@RequestMapping("/quizzes")
+public class QuizController {
 
-    public QuizController(QuizService service) {
-        this.service = service;
-    }
+  private final QuizService quizService;
 
-    @PostMapping("/create")
-    public String createQuiz(@PathVariable int courseId, @RequestBody QuizModel model) {
-        if (service.createQuiz(model, courseId)) {
-            return "Quiz created successfully.";
-        } else {
-            return "Failed to create quiz.";
-        }
+  public QuizController(QuizService quizService) {
+    this.quizService = quizService;
+  }
 
-    }
+  @PostMapping
+  public ResponseEntity<Quiz> createQuiz(@RequestBody QuizRequest quizRequest) {
+    Quiz quiz = quizService.createQuiz(
+      quizRequest.getCourseId(),
+      quizRequest.getTitle(),
+      quizRequest.getQuestionsNumber(),
+      quizRequest.getDuration(),
+      quizRequest.getStatus()
+    );
+    return ResponseEntity.ok(quiz);
+  }
 
-    @GetMapping
-    public List<QuizEntity> getQuizzesByCourse(@PathVariable("courseId") int courseId) {
-        return service.getQuizzesByCourse(courseId);
-    }
+  @GetMapping
+  public ResponseEntity<List<Quiz>> getAllQuizzes() {
+    return ResponseEntity.ok(quizService.getAllQuizzes());
+  }
 }
