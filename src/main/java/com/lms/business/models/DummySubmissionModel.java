@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class DummySubmissionModel {
-    private int id;
-    private int studentId;
-    private int score;
+    private String id;
+    private String studentId;
+    private String score;
     private String fileURL;
     private String feedback;
 }

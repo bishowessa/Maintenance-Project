@@ -24,7 +24,7 @@ public class SubmissionController {
     }
 
     @PostMapping("/assignment/{assignmentId}/submit")
-    public String submitAssignment(@PathVariable int assignmentId, @RequestParam int studentId, @RequestBody DummySubmissionModel model) {
+    public String submitAssignment(@PathVariable String assignmentId, @RequestParam String studentId, @RequestBody DummySubmissionModel model) {
         if (service.submitAssignment(model, assignmentId, studentId)) {
             return "Assignment submitted successfully.";
         } else {
@@ -33,7 +33,7 @@ public class SubmissionController {
     }
 
     @GetMapping("/assignment/{assignmentId}")
-    public List<DummySubmissionEntity> getSubmissionsByAssignment(@PathVariable("assignmentId") int assignmentId) {
+    public List<DummySubmissionEntity> getSubmissionsByAssignment(@PathVariable String assignmentId) {
         return service.getSubmissionsByAssignment(assignmentId);
     }
 }

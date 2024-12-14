@@ -19,7 +19,7 @@ public class SubmissionRepository {
     return new ArrayList<>(store);
   }
 
-  public DummySubmissionEntity findById(int id) {
+  public DummySubmissionEntity findById(String id) {
     return store.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
   }
 }

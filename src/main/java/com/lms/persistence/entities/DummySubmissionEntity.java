@@ -11,10 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class DummySubmissionEntity {
-    private int id;
-    private int studentId;
-    private int score;
+    private String id;
+    private String studentId;
+    private String score;
     private String fileURL; // For assignments
     private String feedback;
-    private int relatedId; // Assignment or Quiz ID
+    private String relatedId; // Assignment or Quiz ID
 }
