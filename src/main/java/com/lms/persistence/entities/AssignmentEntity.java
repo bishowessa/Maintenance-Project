@@ -1,16 +1,17 @@
 package com.lms.persistence.entities;
-
+import java.sql.Date;
 import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 public class AssignmentEntity {
     private int id;
+    private String title;
+    private String courseId;
     private String description;
-    private String submissionURL;
     private int grade;
-    private int courseId;
+    private Date dueDate;
+    private String status;
 }

@@ -1,5 +1,4 @@
 package com.lms.service.impl;
-
 import com.lms.business.models.QuizModel;
 import com.lms.persistence.entities.QuizEntity;
 import com.lms.persistence.repositories.QuizRepository;
