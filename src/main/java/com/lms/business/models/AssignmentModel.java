@@ -1,5 +1,5 @@
 package com.lms.business.models;
-
+import java.sql.Date;
 import lombok.*;
 
 @Getter
@@ -8,8 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class AssignmentModel {
-    private int id;
+    private String title;
     private String description;
-    private String submissionURL;
     private int grade;
+    private Date dueDate;
+    private String status;
 }

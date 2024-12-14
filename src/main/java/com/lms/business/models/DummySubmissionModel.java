@@ -1,13 +1,16 @@
 package com.lms.business.models;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class SubmissionModel {
+public class DummySubmissionModel {
     private int id;
     private int studentId;
     private int score;
