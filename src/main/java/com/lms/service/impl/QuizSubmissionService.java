@@ -7,7 +7,6 @@ import com.lms.persistence.repositories.QuizSubmissionRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,6 +46,14 @@ public class QuizSubmissionService {
 
   public List<QuizSubmission> getSubmissionsByStudent(String studentId) {
     return submissionRepository.findByStudentId(studentId);
+  }
+
+  public List<QuizSubmission> getAllSubmissions() {
+    return submissionRepository.findAll();
+  }
+
+  public List<QuizSubmission> getSubmissionsByQuiz(String quizId) {
+    return submissionRepository.findByQuizId(quizId);
   }
 
   private double calculateScore(Map<String, String> studentAnswers, Quiz quiz) {

@@ -87,4 +87,18 @@ public class QuizController {
         .body("Error submitting quiz: " + e.getMessage());
     }
   }
+
+  @GetMapping("/submissions")
+  public ResponseEntity<List<QuizSubmission>> getAllSubmissions() {
+    return ResponseEntity.ok(quizSubmissionService.getAllSubmissions());
+  }
+
+  @GetMapping("/submissions/{quizId}")
+  public ResponseEntity<List<QuizSubmission>> getSubmissionsByQuiz(
+    @PathVariable String quizId
+  ) {
+    return ResponseEntity.ok(
+      quizSubmissionService.getSubmissionsByQuiz(quizId)
+    );
+  }
 }
