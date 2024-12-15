@@ -3,6 +3,7 @@ package com.lms.web;
 import com.lms.business.models.QuestionRequest;
 import com.lms.persistence.entities.questions.MCQQuestion;
 import com.lms.persistence.entities.questions.Question;
+import com.lms.persistence.entities.questions.QuestionFactory;
 import com.lms.persistence.entities.questions.ShortAnswerQuestion;
 import com.lms.persistence.entities.questions.TrueFalseQuestion;
 import com.lms.service.impl.QuestionBankService;
@@ -26,38 +27,10 @@ public class QuestionBankController {
     @PathVariable String courseId,
     @RequestBody QuestionRequest questionRequest
   ) {
-    Question question;
-
-    switch (questionRequest.getType()) {
-      case "MCQ":
-        question =
-          new MCQQuestion(
-            UUID.randomUUID().toString(),
-            questionRequest.getQuestionText(),
-            questionRequest.getOptions(),
-            questionRequest.getCorrectAnswer()
-          );
-        break;
-      case "TrueFalse":
-        question =
-          new TrueFalseQuestion(
-            UUID.randomUUID().toString(),
-            questionRequest.getQuestionText(),
-            questionRequest.getCorrectAnswerBoolean()
-          );
-        break;
-      case "ShortAnswer":
-        question =
-          new ShortAnswerQuestion(
-            UUID.randomUUID().toString(),
-            questionRequest.getQuestionText(),
-            questionRequest.getCorrectAnswer()
-          );
-        break;
-      default:
-        throw new IllegalArgumentException("Invalid question type.");
-    }
-
+    Question question = QuestionFactory.createQuestion(
+      questionRequest.getType(),
+      questionRequest
+    );
     questionBankService.addQuestion(courseId, question);
     return ResponseEntity.ok("Question added successfully.");
   }
