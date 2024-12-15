@@ -1,9 +1,9 @@
-package com.lms.web;
+package com.lms.presentation;
 
+import com.lms.business.models.CourseProgress;
+import com.lms.business.models.StudentProgress;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
-import com.lms.persistence.entities.CourseProgress;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.persistence.entities.StudentProgress;
 import com.lms.service.impl.AssignmentSubmissionService;
 import com.lms.service.impl.QuizSubmissionService;
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

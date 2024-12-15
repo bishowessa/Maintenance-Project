@@ -1,8 +1,8 @@
 package com.lms.service.impl;
 
+import com.lms.business.models.StudentAnswer;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.persistence.entities.StudentAnswer;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.QuizRepository;
 import com.lms.persistence.repositories.QuizSubmissionRepository;

@@ -1,4 +1,4 @@
-package com.lms.web;
+package com.lms.presentation;
 
 import com.lms.business.models.QuizRequest;
 import com.lms.persistence.entities.Quiz;

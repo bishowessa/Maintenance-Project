@@ -4,9 +4,12 @@ import com.lms.persistence.entities.QuizSubmission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
+@Scope("singleton")
 public class QuizSubmissionRepository {
 
   private List<QuizSubmission> submissions = new ArrayList<>();

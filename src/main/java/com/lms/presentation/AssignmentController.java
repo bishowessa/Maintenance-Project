@@ -1,4 +1,4 @@
-package com.lms.web;
+package com.lms.presentation;
 
 import com.lms.business.models.AssignmentModel;
 import com.lms.persistence.entities.AssignmentEntity;
@@ -9,7 +9,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/course/{courseId}/assignments")
-class AssignmentController {
+public class AssignmentController {
     private final AssignmentService service;
 
     public AssignmentController(AssignmentService service) {

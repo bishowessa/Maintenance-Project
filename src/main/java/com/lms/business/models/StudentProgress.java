@@ -1,9 +1,12 @@
-package com.lms.persistence.entities;
+package com.lms.business.models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.lms.persistence.entities.AssignmentSubmissionEntity;
+import com.lms.persistence.entities.QuizSubmission;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 
 @Repository
+@Scope("singleton")
 public class AssignmentSubmissionRepository {
     private final List<AssignmentSubmissionEntity> submissions = new ArrayList<>();
     private final AtomicInteger idGenerator = new AtomicInteger(1);

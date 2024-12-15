@@ -1,14 +1,10 @@
-package com.lms.web;
+package com.lms.presentation;
 
 import com.lms.business.models.QuestionRequest;
-import com.lms.persistence.entities.questions.MCQQuestion;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.entities.questions.QuestionFactory;
-import com.lms.persistence.entities.questions.ShortAnswerQuestion;
-import com.lms.persistence.entities.questions.TrueFalseQuestion;
 import com.lms.service.impl.QuestionBankService;
 import java.util.List;
-import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

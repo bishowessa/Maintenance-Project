@@ -1,4 +1,4 @@
-package com.lms.web;
+package com.lms.presentation;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;

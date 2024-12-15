@@ -1,6 +1,9 @@
 package com.lms.persistence.entities;
 
 import java.util.List;
+
+import com.lms.business.models.StudentAnswer;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

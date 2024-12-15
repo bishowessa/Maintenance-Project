@@ -1,6 +1,5 @@
-package com.lms.persistence.entities;
+package com.lms.business.models;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
