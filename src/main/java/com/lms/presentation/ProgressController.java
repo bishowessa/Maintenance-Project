@@ -4,8 +4,7 @@ import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.service.impl.AssignmentSubmissionService;
-import com.lms.service.impl.QuizSubmissionService;
+import com.lms.service.impl.ServiceFacade;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,16 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/progress")
 public class ProgressController {
 
-  // private final ProgressService progressService;
-  private final AssignmentSubmissionService assignmentSubmissionService;
-  private final QuizSubmissionService quizSubmissionService;
+  private final ServiceFacade service;
 
-  public ProgressController(
-    AssignmentSubmissionService assignmentSubmissionService,
-    QuizSubmissionService quizSubmissionService
-  ) {
-    this.assignmentSubmissionService = assignmentSubmissionService;
-    this.quizSubmissionService = quizSubmissionService;
+  public ProgressController(ServiceFacade service) {
+    this.service = service;
   }
 
   // Get all student progress
@@ -43,11 +36,11 @@ public class ProgressController {
 
       List<String> regestedCourcesIds = Arrays.asList("1", "2", "3");
       for (String courseId : regestedCourcesIds) {
-        List<QuizSubmission> quizSubmissionsForCourse = quizSubmissionService.getSubmissionsByStudentAndCourse(
+        List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
           studentId,
           courseId
         );
-        List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = assignmentSubmissionService.getSubmissionsByStudentAndCourse(
+        List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
           studentId,
           courseId
         );
@@ -79,11 +72,11 @@ public class ProgressController {
 
     List<String> regestedCourcesIds = Arrays.asList("1", "2", "3");
     for (String courseId : regestedCourcesIds) {
-      List<QuizSubmission> quizSubmissionsForCourse = quizSubmissionService.getSubmissionsByStudentAndCourse(
+      List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
-      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = assignmentSubmissionService.getSubmissionsByStudentAndCourse(
+      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
@@ -110,11 +103,11 @@ public class ProgressController {
     @PathVariable String studentId,
     @PathVariable String courseId
   ) {
-    List<QuizSubmission> quizSubmissionsForCourse = quizSubmissionService.getSubmissionsByStudentAndCourse(
+    List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
       studentId,
       courseId
     );
-    List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = assignmentSubmissionService.getSubmissionsByStudentAndCourse(
+    List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
       studentId,
       courseId
     );
@@ -146,17 +139,20 @@ public class ProgressController {
 
     for (String studentId : studentIds) {
       //get the submissions and the attended lessons by the for the studentID and courseId
-      List<QuizSubmission> quizSubmissionsForCourse = quizSubmissionService.getSubmissionsByStudentAndCourse(
+      List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
-      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = assignmentSubmissionService.getSubmissionsByStudentAndCourse(
+      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
 
       StudentsQuizesSubmissions.put(studentId, quizSubmissionsForCourse);
-      StudentsAssignmentSubmissions.put(studentId, assignmentSubmissionsForCourse);
+      StudentsAssignmentSubmissions.put(
+        studentId,
+        assignmentSubmissionsForCourse
+      );
     }
     CourseProgress courseProgress = new CourseProgress(
       courseId,

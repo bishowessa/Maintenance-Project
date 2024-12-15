@@ -2,7 +2,9 @@ package com.lms.presentation;
 
 import com.lms.business.models.AssignmentModel;
 import com.lms.persistence.entities.AssignmentEntity;
-import com.lms.service.impl.AssignmentService;
+// import com.lms.service.impl.AssignmentService;
+import com.lms.service.impl.ServiceFacade;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -10,9 +12,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/course/{courseId}/assignments")
 public class AssignmentController {
-    private final AssignmentService service;
+    private final ServiceFacade service;
 
-    public AssignmentController(AssignmentService service) {
+    public AssignmentController(ServiceFacade service) {
         this.service = service;
     }
 

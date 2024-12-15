@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QuestionBankService {
+class QuestionBankService {
 
   private final RepositoryFacade repository;
 

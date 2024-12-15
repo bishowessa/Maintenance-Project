@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QuizSubmissionService {
+class QuizSubmissionService {
 
   private final RepositoryFacade repository;
 
@@ -78,6 +78,9 @@ public class QuizSubmissionService {
     String studentId,
     String courseId
   ) {
-    return repository.findQuizSubmissionsByStudentAndCourse(studentId, courseId);
+    return repository.findQuizSubmissionsByStudentAndCourse(
+      studentId,
+      courseId
+    );
   }
 }

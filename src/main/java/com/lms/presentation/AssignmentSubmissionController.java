@@ -6,16 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.lms.business.models.AssignmentSubmissionModel;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
-import com.lms.service.impl.AssignmentSubmissionService;
+// import com.lms.service.impl.Assignmentservice;
+import com.lms.service.impl.ServiceFacade;
 
 @RestController
 @RequestMapping("/assignments/{assignmentId}/submissions")
 public class AssignmentSubmissionController {
 
-    private final AssignmentSubmissionService submissionService;
+    private final ServiceFacade service;
 
-    public AssignmentSubmissionController(AssignmentSubmissionService submissionService) {
-        this.submissionService = submissionService;
+    public AssignmentSubmissionController(ServiceFacade service) {
+        this.service = service;
     }
 
     @PostMapping("/submit/{studentId}")
@@ -24,7 +25,7 @@ public class AssignmentSubmissionController {
             @PathVariable String studentId,
             @RequestBody AssignmentSubmissionModel model) {
 
-        if (submissionService.submitAssignment(model, assignmentId, studentId)) {
+        if (service.submitAssignment(model, assignmentId, studentId)) {
             return ResponseEntity.ok("Assignment submitted successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to submit assignment.");
@@ -33,7 +34,7 @@ public class AssignmentSubmissionController {
 
     @GetMapping
     public ResponseEntity<List<AssignmentSubmissionEntity>> getSubmissionsByAssignment(@PathVariable int assignmentId) {
-        List<AssignmentSubmissionEntity> submissions = submissionService.getSubmissionsByAssignment(assignmentId);
+        List<AssignmentSubmissionEntity> submissions = service.getAssignmentSubmissionsByAssignment(assignmentId);
         return ResponseEntity.ok(submissions);
     }
 }

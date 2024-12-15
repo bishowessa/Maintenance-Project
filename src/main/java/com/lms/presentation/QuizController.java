@@ -3,8 +3,8 @@ package com.lms.presentation;
 import com.lms.business.models.QuizRequest;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.service.impl.QuizService;
-import com.lms.service.impl.QuizSubmissionService;
+import com.lms.service.impl.ServiceFacade;
+
 import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,20 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/quizzes")
 public class QuizController {
 
-  private final QuizService quizService;
-  private final QuizSubmissionService quizSubmissionService;
-
+  private final ServiceFacade service;
   public QuizController(
-    QuizService quizService,
-    QuizSubmissionService quizSubmissionService
+    ServiceFacade service
   ) {
-    this.quizService = quizService;
-    this.quizSubmissionService = quizSubmissionService;
+    this.service = service;
   }
 
   @PostMapping
   public ResponseEntity<Quiz> createQuiz(@RequestBody QuizRequest quizRequest) {
-    Quiz quiz = quizService.createQuiz(
+    Quiz quiz = service.createQuiz(
       quizRequest.getCourseId(),
       quizRequest.getTitle(),
       quizRequest.getQuestionsNumber(),
@@ -38,17 +34,17 @@ public class QuizController {
 
   @GetMapping
   public ResponseEntity<List<Quiz>> getAllQuizzes() {
-    return ResponseEntity.ok(quizService.getAllQuizzes());
+    return ResponseEntity.ok(service.getAllQuizzes());
   }
 
   @DeleteMapping("/{quizId}")
   public void deleteQuiz(@PathVariable String quizId) {
-    quizService.markQuizAsDeleted(quizId);
+    service.markQuizAsDeleted(quizId);
   }
 
   @PostMapping("/{quizId}/assign")
   public void assignQuiz(@PathVariable String quizId) {
-    quizService.markQuizAsOpened(quizId);
+    service.markQuizAsOpened(quizId);
   }
 
   @PostMapping("/{quizId}/submit")
@@ -62,7 +58,7 @@ public class QuizController {
       answers.put(entry.getKey(), entry.getValue().toString());
     }
     try {
-      QuizSubmission submission = quizSubmissionService.submitQuiz(
+      QuizSubmission submission = service.submitQuiz(
         quizId,
         studentId,
         answers
@@ -81,7 +77,7 @@ public class QuizController {
 
   @GetMapping("/submissions")
   public ResponseEntity<List<QuizSubmission>> getAllSubmissions() {
-    return ResponseEntity.ok(quizSubmissionService.getAllSubmissions());
+    return ResponseEntity.ok(service.getAllSubmissions());
   }
 
   @GetMapping("/submissions/{quizId}")
@@ -89,13 +85,13 @@ public class QuizController {
     @PathVariable String quizId
   ) {
     return ResponseEntity.ok(
-      quizSubmissionService.getSubmissionsByQuiz(quizId)
+      service.getQuizSubmissionsByQuiz(quizId)
     );
   }
 
   @GetMapping("/{quizId}")
   public ResponseEntity<Object> getQuizById(@PathVariable String quizId) {
-    Quiz quiz = quizService.getQuizById(quizId);
+    Quiz quiz = service.getQuizById(quizId);
     if (quiz != null) {
       return ResponseEntity.ok(quiz);
     } else {

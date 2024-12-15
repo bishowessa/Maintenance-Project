@@ -3,7 +3,8 @@ package com.lms.presentation;
 import com.lms.business.models.QuestionRequest;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.entities.questions.QuestionFactory;
-import com.lms.service.impl.QuestionBankService;
+import com.lms.service.impl.ServiceFacade;
+
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/questionBank")
 public class QuestionBankController {
 
-  private final QuestionBankService questionBankService;
+  private final ServiceFacade service;
 
-  public QuestionBankController(QuestionBankService questionBankService) {
-    this.questionBankService = questionBankService;
+  public QuestionBankController(ServiceFacade service) {
+    this.service = service;
   }
 
   @PostMapping("/{courseId}/questions")
@@ -27,7 +28,7 @@ public class QuestionBankController {
       questionRequest.getType(),
       questionRequest
     );
-    questionBankService.addQuestion(courseId, question);
+    service.addQuestion(courseId, question);
     return ResponseEntity.ok("Question added successfully.");
   }
 
@@ -36,7 +37,7 @@ public class QuestionBankController {
     @PathVariable String courseId,
     @PathVariable String questionId
   ) {
-    questionBankService.deleteQuestion(courseId, questionId);
+    service.deleteQuestion(courseId, questionId);
     return ResponseEntity.ok("Question deleted successfully.");
   }
 
@@ -44,6 +45,6 @@ public class QuestionBankController {
   public ResponseEntity<List<Question>> getQuestions(
     @PathVariable String courseId
   ) {
-    return ResponseEntity.ok(questionBankService.getQuestions(courseId));
+    return ResponseEntity.ok(service.getQuestions(courseId));
   }
 }

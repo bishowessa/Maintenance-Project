@@ -8,7 +8,7 @@ import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QuizService {
+class QuizService {
 
   private final RepositoryFacade repository;
 

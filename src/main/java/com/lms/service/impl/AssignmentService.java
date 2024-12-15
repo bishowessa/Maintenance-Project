@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AssignmentService {
+class AssignmentService {
 
   private final RepositoryFacade repository;
 
