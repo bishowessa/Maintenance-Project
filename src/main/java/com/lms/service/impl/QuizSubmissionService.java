@@ -4,8 +4,7 @@ import com.lms.business.models.StudentAnswer;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
-import com.lms.persistence.repositories.QuizRepository;
-import com.lms.persistence.repositories.QuizSubmissionRepository;
+import com.lms.persistence.repositories.RepositoryFacade;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuizSubmissionService {
 
-  private final QuizSubmissionRepository submissionRepository;
-  private final QuizRepository quizRepository;
+  private final RepositoryFacade repository;
 
-  public QuizSubmissionService(
-    QuizSubmissionRepository submissionRepository,
-    QuizRepository quizRepository
-  ) {
-    this.submissionRepository = submissionRepository;
-    this.quizRepository = quizRepository;
+  public QuizSubmissionService(RepositoryFacade repository) {
+    this.repository = repository;
   }
 
   public QuizSubmission submitQuiz(
@@ -31,7 +25,7 @@ public class QuizSubmissionService {
     String studentId,
     Map<String, String> studentAnswers
   ) {
-    Quiz quiz = quizRepository.findById(quizId).orElse(null);
+    Quiz quiz = repository.findQuizById(quizId).orElse(null);
     if (quiz != null) {
       List<Question> questions = quiz.getSelectedQuestions();
       QuizSubmission submission = new QuizSubmission();
@@ -47,7 +41,7 @@ public class QuizSubmissionService {
           .findFirst()
           .orElse(null);
 
-          if (question != null) {
+        if (question != null) {
           answers.add(
             new StudentAnswer(
               entry.getKey(),
@@ -61,7 +55,7 @@ public class QuizSubmissionService {
       }
 
       submission.setStudentAnswers(answers);
-      submissionRepository.save(submission);
+      repository.saveQuizSubmission(submission);
       return submission;
     } else {
       return null;
@@ -69,19 +63,21 @@ public class QuizSubmissionService {
   }
 
   public List<QuizSubmission> getSubmissionsByStudent(String studentId) {
-    return submissionRepository.findByStudentId(studentId);
+    return repository.findQuizSubmissionsByStudentId(studentId);
   }
 
   public List<QuizSubmission> getAllSubmissions() {
-    return submissionRepository.findAll();
+    return repository.findAllQuizSubmissions();
   }
 
   public List<QuizSubmission> getSubmissionsByQuiz(String quizId) {
-    return submissionRepository.findByQuizId(quizId);
+    return repository.findQuizSubmissionsByQuizId(quizId);
   }
 
-  public List<QuizSubmission> getSubmissionsByStudentAndCourse(String studentId, String courseId) {
-    return submissionRepository.findByStudentAndCourse(studentId, courseId);
+  public List<QuizSubmission> getSubmissionsByStudentAndCourse(
+    String studentId,
+    String courseId
+  ) {
+    return repository.findQuizSubmissionsByStudentAndCourse(studentId, courseId);
   }
-
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")
-public class AssignmentRepository {
+class AssignmentRepository {
 
   private final List<AssignmentEntity> store = new ArrayList<>();
   private final AtomicInteger idGenerator = new AtomicInteger(1);

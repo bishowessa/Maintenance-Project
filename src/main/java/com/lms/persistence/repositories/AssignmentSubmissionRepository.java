@@ -10,7 +10,7 @@ import com.lms.persistence.entities.AssignmentSubmissionEntity;
 
 @Repository
 @Scope("singleton")
-public class AssignmentSubmissionRepository {
+class AssignmentSubmissionRepository {
     private final List<AssignmentSubmissionEntity> submissions = new ArrayList<>();
     private final AtomicInteger idGenerator = new AtomicInteger(1);
 

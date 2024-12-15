@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")
-public class QuestionBankRepository {
+class QuestionBankRepository {
 
   private final Map<String, QuestionBank> questionBanks = new HashMap<>();
 

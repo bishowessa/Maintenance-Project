@@ -3,23 +3,20 @@ package com.lms.service.impl;
 import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.questions.Question;
-import com.lms.persistence.repositories.QuestionBankRepository;
-import com.lms.persistence.repositories.QuizRepository;
+import com.lms.persistence.repositories.RepositoryFacade;
 import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class QuizService {
 
-  private final QuizRepository quizRepository;
-  private final QuestionBankRepository questionBankRepository;
+  private final RepositoryFacade repository;
 
   public QuizService(
-    QuizRepository quizRepository,
-    QuestionBankRepository questionBankRepository
+    RepositoryFacade repository
   ) {
-    this.quizRepository = quizRepository;
-    this.questionBankRepository = questionBankRepository;
+    this.repository = repository;
+
   }
 
   public Quiz createQuiz(
@@ -29,7 +26,7 @@ public class QuizService {
     int duration,
     String status
   ) {
-    QuestionBank questionBank = questionBankRepository.findByCourseId(courseId);
+    QuestionBank questionBank = repository.findQuestionBankByCourseId(courseId);
 
     if (questionBank == null) {
       throw new IllegalArgumentException(
@@ -60,33 +57,33 @@ public class QuizService {
       selectedQuestions
     );
 
-    quizRepository.save(quiz);
+    repository.saveQuiz(quiz);
     return quiz;
   }
 
   public void markQuizAsDeleted(String quizId) {
-    quizRepository
-      .findById(quizId)
+    repository
+      .findQuizById(quizId)
       .ifPresent(quiz -> {
         quiz.setStatus("deleted");
-        quizRepository.update(quiz);
+        repository.updateQuiz(quiz);
       });
   }
 
   public void markQuizAsOpened(String quizId) {
-    quizRepository
-      .findById(quizId)
+    repository
+      .findQuizById(quizId)
       .ifPresent(quiz -> {
         quiz.setStatus("opened");
-        quizRepository.update(quiz);
+        repository.updateQuiz(quiz);
       });
   }
 
   public List<Quiz> getAllQuizzes() {
-    return quizRepository.findAll();
+    return repository.findAllQuizzes();
   }
 
   public Quiz getQuizById(String quizId) {
-    return quizRepository.findById(quizId).orElse(null);
+    return repository.findQuizById(quizId).orElse(null);
   }
 }

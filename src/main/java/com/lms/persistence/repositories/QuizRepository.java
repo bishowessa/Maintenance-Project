@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")
-public class QuizRepository {
+class QuizRepository {
 
   private List<Quiz> quizzes = new ArrayList<>();
 
