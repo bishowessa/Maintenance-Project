@@ -4,7 +4,6 @@ import com.lms.business.models.QuizRequest;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.ServiceFacade;
-
 import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +13,25 @@ import org.springframework.web.bind.annotation.*;
 public class QuizController {
 
   private final ServiceFacade service;
-  public QuizController(
-    ServiceFacade service
-  ) {
+
+  public QuizController(ServiceFacade service) {
     this.service = service;
   }
 
   @PostMapping
-  public ResponseEntity<Quiz> createQuiz(@RequestBody QuizRequest quizRequest) {
-    Quiz quiz = service.createQuiz(
-      quizRequest.getCourseId(),
-      quizRequest.getTitle(),
-      quizRequest.getQuestionsNumber(),
-      quizRequest.getDuration(),
-      quizRequest.getStatus()
-    );
-    return ResponseEntity.ok(quiz);
+  public ResponseEntity<Object> createQuiz(@RequestBody QuizRequest quizRequest) {
+    try {
+      Quiz quiz = service.createQuiz(
+        quizRequest.getCourseId(),
+        quizRequest.getTitle(),
+        quizRequest.getQuestionsNumber(),
+        quizRequest.getDuration(),
+        quizRequest.getStatus()
+      );
+      return ResponseEntity.ok(quiz);
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @GetMapping
@@ -84,9 +86,7 @@ public class QuizController {
   public ResponseEntity<List<QuizSubmission>> getSubmissionsByQuiz(
     @PathVariable String quizId
   ) {
-    return ResponseEntity.ok(
-      service.getQuizSubmissionsByQuiz(quizId)
-    );
+    return ResponseEntity.ok(service.getQuizSubmissionsByQuiz(quizId));
   }
 
   @GetMapping("/{quizId}")
