@@ -16,4 +16,5 @@ public abstract class Question {
   private String type;
   private String questionText;
   public abstract boolean validate();
+  public abstract String getCorrectAnswer();
 }

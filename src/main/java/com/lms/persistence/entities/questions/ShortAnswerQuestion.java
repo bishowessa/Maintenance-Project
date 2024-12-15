@@ -17,4 +17,9 @@ public class ShortAnswerQuestion extends Question {
   public boolean validate() {
       return correctAnswer != null && !correctAnswer.isEmpty();
   }
+
+  @Override
+  public String getCorrectAnswer() {
+    return correctAnswer;
+  }
 }

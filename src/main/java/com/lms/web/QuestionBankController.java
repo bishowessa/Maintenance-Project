@@ -22,7 +22,7 @@ public class QuestionBankController {
   }
 
   @PostMapping("/{courseId}/questions")
-  public ResponseEntity<Void> addQuestion(
+  public ResponseEntity<String> addQuestion(
     @PathVariable String courseId,
     @RequestBody QuestionRequest questionRequest
   ) {
@@ -59,16 +59,16 @@ public class QuestionBankController {
     }
 
     questionBankService.addQuestion(courseId, question);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok("Question added successfully.");
   }
 
   @DeleteMapping("/{courseId}/questions/{questionId}")
-  public ResponseEntity<Void> deleteQuestion(
+  public ResponseEntity<String> deleteQuestion(
     @PathVariable String courseId,
     @PathVariable String questionId
   ) {
     questionBankService.deleteQuestion(courseId, questionId);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok("Question deleted successfully.");
   }
 
   @GetMapping("/{courseId}/questions")

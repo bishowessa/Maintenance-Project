@@ -2,13 +2,20 @@ package com.lms.web;
 
 import com.lms.business.models.QuizRequest;
 import com.lms.persistence.entities.Quiz;
+import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.QuizService;
+import com.lms.service.impl.QuizSubmissionService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,9 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuizController {
 
   private final QuizService quizService;
+  private final QuizSubmissionService quizSubmissionService;
 
-  public QuizController(QuizService quizService) {
+  public QuizController(
+    QuizService quizService,
+    QuizSubmissionService quizSubmissionService
+  ) {
     this.quizService = quizService;
+    this.quizSubmissionService = quizSubmissionService;
   }
 
   @PostMapping
@@ -36,5 +48,43 @@ public class QuizController {
   @GetMapping
   public ResponseEntity<List<Quiz>> getAllQuizzes() {
     return ResponseEntity.ok(quizService.getAllQuizzes());
+  }
+
+  @DeleteMapping("/{quizId}")
+  public void deleteQuiz(@PathVariable String quizId) {
+    quizService.markQuizAsDeleted(quizId);
+  }
+
+  @PostMapping("/{quizId}/assign")
+  public void assignQuiz(@PathVariable String quizId) {
+    quizService.markQuizAsOpened(quizId);
+  }
+
+  @PostMapping("/{quizId}/submit")
+  public ResponseEntity<Object> submitQuiz(
+    @PathVariable String quizId,
+    @RequestParam String studentId,
+    @RequestBody Map<String, Object> studentAnswers
+  ) {
+    Map<String, String> answers = new HashMap<>();
+    for (Map.Entry<String, Object> entry : studentAnswers.entrySet()) {
+      answers.put(entry.getKey(), entry.getValue().toString());
+    }
+    try {
+      QuizSubmission submission = quizSubmissionService.submitQuiz(
+        quizId,
+        studentId,
+        answers
+      );
+      if (submission != null) {
+        return ResponseEntity.ok(submission);
+      } else {
+        return ResponseEntity.status(404).body("Submission not found.");
+      }
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(500)
+        .body("Error submitting quiz: " + e.getMessage());
+    }
   }
 }

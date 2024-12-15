@@ -1,11 +1,10 @@
 package com.lms.persistence.repositories;
 
 import com.lms.persistence.entities.Quiz;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +12,22 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 public class QuizRepository {
 
-  private final Map<String, Quiz> quizzes = new HashMap<>();
+  private List<Quiz> quizzes = new ArrayList<>();
 
-  public void save(Quiz quiz) {
-    quizzes.put(quiz.getId(), quiz);
+  public Optional<Quiz> findById(String quizId) {
+    return quizzes.stream().filter(q -> q.getId().equals(quizId)).findFirst();
   }
 
-  public Quiz findById(String id) {
-    return quizzes.get(id);
+  public void save(Quiz quiz) {
+    quizzes.add(quiz);
   }
 
   public List<Quiz> findAll() {
-    return new ArrayList<>(quizzes.values());
+    return quizzes;
   }
+
+  public void update(Quiz quiz) {
+    quizzes.replaceAll(q -> q.getId().equals(quiz.getId()) ? quiz : q);
+  }
+
 }

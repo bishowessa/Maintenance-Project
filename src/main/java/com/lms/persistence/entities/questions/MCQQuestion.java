@@ -28,5 +28,10 @@ public class MCQQuestion extends Question {
       options != null && !options.isEmpty() && options.contains(correctAnswer)
     );
   }
+
+  @Override
+  public String getCorrectAnswer() {
+    return correctAnswer;
+  }
 }
 

@@ -6,7 +6,6 @@ import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.QuestionBankRepository;
 import com.lms.persistence.repositories.QuizRepository;
 import java.util.*;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,6 +62,24 @@ public class QuizService {
 
     quizRepository.save(quiz);
     return quiz;
+  }
+
+  public void markQuizAsDeleted(String quizId) {
+    quizRepository
+      .findById(quizId)
+      .ifPresent(quiz -> {
+        quiz.setStatus("deleted");
+        quizRepository.update(quiz);
+      });
+  }
+
+  public void markQuizAsOpened(String quizId) {
+    quizRepository
+      .findById(quizId)
+      .ifPresent(quiz -> {
+        quiz.setStatus("opened");
+        quizRepository.update(quiz);
+      });
   }
 
   public List<Quiz> getAllQuizzes() {

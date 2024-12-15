@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class TrueFalseQuestion extends Question {
 
-  private boolean correctAnswer;
+  private Boolean correctAnswer;
 
   public TrueFalseQuestion(
     String id,
@@ -21,5 +21,10 @@ public class TrueFalseQuestion extends Question {
   @Override
   public boolean validate() {
     return true;
+  }
+
+  @Override
+  public String getCorrectAnswer() {
+    return correctAnswer.toString();
   }
 }
