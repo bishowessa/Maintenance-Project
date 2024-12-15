@@ -2,6 +2,8 @@ package com.lms.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+
+import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.repositories.AssignmentRepository;
 import com.lms.persistence.repositories.AssignmentSubmissionRepository;
@@ -36,6 +38,20 @@ public class AssignmentSubmissionService {
                 .collect(Collectors.toList());
     }
 
+     public List<AssignmentSubmissionEntity> getSubmissionsByCourse(int courseId) {
+        return submissionRepos.findAll().stream()
+                .filter(s -> {
+                    AssignmentEntity assignment = assrepos.findById(s.getRelatedId());
+                    return assignment != null && Integer.parseInt(assignment.getCourseId()) == courseId;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<AssignmentSubmissionEntity> getSubmissionsByStudent(int studentId) {
+        return submissionRepos.findAll().stream()
+                .filter(s -> s.getStudentId() == studentId)
+                .collect(Collectors.toList());
+    }
     
     public boolean updateSubmission(int submissionId, AssignmentSubmissionModel updatedModel) {
         AssignmentSubmissionEntity entity = submissionRepos.findById(submissionId);
