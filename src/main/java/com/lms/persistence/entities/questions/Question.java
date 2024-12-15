@@ -15,6 +15,7 @@ public abstract class Question {
   private String id;
   private String type;
   private String questionText;
+  private int grade;
   public abstract boolean validate();
   public abstract String getCorrectAnswer();
 }

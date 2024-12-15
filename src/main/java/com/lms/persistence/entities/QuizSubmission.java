@@ -1,8 +1,6 @@
 package com.lms.persistence.entities;
 
-import com.lms.persistence.entities.questions.Question;
 import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,5 +18,22 @@ public class QuizSubmission {
   private String studentId;
   private String quizId;
   private Double score;
-  private Map<String, String> studentAnswers;
+  private Double grade;
+  private List<StudentAnswer> studentAnswers;
+
+  public void setStudentAnswers(List<StudentAnswer> studentAnswers) {
+    this.studentAnswers = studentAnswers;
+    calcScore();
+  }
+
+  private void calcScore() {
+    score = 0D;
+    grade = 0D;
+    for (StudentAnswer answer : studentAnswers) {
+      if (answer.getStatus() == "correct") {
+        score += answer.getQuestionGrade();
+      }
+      grade += answer.getQuestionGrade();
+    }
+  }
 }

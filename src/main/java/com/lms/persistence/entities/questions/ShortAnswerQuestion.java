@@ -8,8 +8,8 @@ import lombok.Setter;
 public class ShortAnswerQuestion extends Question {
   private String correctAnswer;
 
-  public ShortAnswerQuestion(String id, String questionText, String correctAnswer) {
-      super(id, "ShortAnswer", questionText);
+  public ShortAnswerQuestion(String id, String questionText, int grade, String correctAnswer) {
+      super(id, "ShortAnswer", questionText, grade);
       this.correctAnswer = correctAnswer;
   }
 

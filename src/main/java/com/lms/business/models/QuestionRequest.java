@@ -11,6 +11,7 @@ public class QuestionRequest {
 
   private String type;
   private String questionText;
+  private int grade;
   private List<String> options;
   private String correctAnswer;
   private Boolean correctAnswerBoolean;

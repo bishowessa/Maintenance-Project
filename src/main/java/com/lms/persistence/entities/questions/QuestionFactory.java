@@ -15,6 +15,7 @@ public class QuestionFactory {
         return new MCQQuestion(
           UUID.randomUUID().toString(),
           questionRequest.getQuestionText(),
+          questionRequest.getGrade(),
           questionRequest.getOptions(),
           questionRequest.getCorrectAnswer()
         );
@@ -22,12 +23,14 @@ public class QuestionFactory {
         return new TrueFalseQuestion(
           UUID.randomUUID().toString(),
           questionRequest.getQuestionText(),
+          questionRequest.getGrade(),
           questionRequest.getCorrectAnswerBoolean()
         );
       case "ShortAnswer":
         return new ShortAnswerQuestion(
           UUID.randomUUID().toString(),
           questionRequest.getQuestionText(),
+          questionRequest.getGrade(),
           questionRequest.getCorrectAnswer()
         );
       default:

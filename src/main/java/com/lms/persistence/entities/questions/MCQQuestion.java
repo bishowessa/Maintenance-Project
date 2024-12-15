@@ -14,10 +14,11 @@ public class MCQQuestion extends Question {
   public MCQQuestion(
     String id,
     String questionText,
+    int grade,
     List<String> options,
     String answer
   ) {
-    super(id, "MCQ", questionText);
+    super(id, "MCQ", questionText, grade);
     this.options = options;
     this.correctAnswer = answer;
   }
