@@ -2,6 +2,8 @@ package com.lms.persistence.repositories;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Repository;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 
@@ -39,4 +41,11 @@ public class AssignmentSubmissionRepository {
     public int generateUniqueId() {
         return idGenerator.getAndIncrement();
     }
+
+    public List<AssignmentSubmissionEntity> findByStudentAndCourse(String studentId, String courseId) {
+    return submissions
+        .stream()
+        .filter(submission -> submission.getStudentId().equals(studentId) && submission.getCourseId().equals(courseId))
+        .collect(Collectors.toList());
+}
 }

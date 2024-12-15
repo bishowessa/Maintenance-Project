@@ -17,6 +17,7 @@ public class QuizSubmission {
   private String id;
   private String studentId;
   private String quizId;
+  private String courseId;
   private Double score;
   private Double grade;
   private List<StudentAnswer> studentAnswers;

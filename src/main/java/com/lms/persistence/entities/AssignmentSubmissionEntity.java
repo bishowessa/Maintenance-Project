@@ -12,10 +12,11 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class AssignmentSubmissionEntity {
     private int id;
-    private int studentId;
+    private String studentId;
+    private String courseId;
     private int score;
-    private String fileURL; 
+    private String fileURL;
     private String feedback;
     private String status;
-    private int relatedId; 
+    private int relatedId;
 }

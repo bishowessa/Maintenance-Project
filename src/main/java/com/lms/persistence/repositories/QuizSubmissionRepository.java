@@ -32,4 +32,17 @@ public class QuizSubmissionRepository {
       .filter(submission -> submission.getQuizId().equals(quizId))
       .collect(Collectors.toList());
   }
+
+  public List<QuizSubmission> findByStudentAndCourse(
+    String studentId,
+    String courseId
+  ) {
+    return submissions
+      .stream()
+      .filter(submission ->
+        submission.getStudentId().equals(studentId) &&
+        submission.getCourseId().equals(courseId)
+      )
+      .collect(Collectors.toList());
+  }
 }

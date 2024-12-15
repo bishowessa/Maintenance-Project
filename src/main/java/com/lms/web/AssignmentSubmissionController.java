@@ -27,7 +27,7 @@ public class AssignmentSubmissionController {
     @PostMapping("/submit/{studentId}")
     public ResponseEntity<String> submitAssignment(
             @PathVariable int assignmentId,
-            @PathVariable int studentId,
+            @PathVariable String studentId,
             @RequestBody AssignmentSubmissionModel model) {
 
         if (submissionService.submitAssignment(model, assignmentId, studentId)) {

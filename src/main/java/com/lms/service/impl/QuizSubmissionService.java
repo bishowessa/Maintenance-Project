@@ -80,4 +80,8 @@ public class QuizSubmissionService {
     return submissionRepository.findByQuizId(quizId);
   }
 
+  public List<QuizSubmission> getSubmissionsByStudentAndCourse(String studentId, String courseId) {
+    return submissionRepository.findByStudentAndCourse(studentId, courseId);
+  }
+
 }

@@ -18,11 +18,12 @@ public class AssignmentSubmissionService {
         this.assrepos = assrepos;
     }
 
-    public boolean submitAssignment(AssignmentSubmissionModel model, int assignmentId, int studentId) {
+    public boolean submitAssignment(AssignmentSubmissionModel model, int assignmentId, String studentId) {
         if (assrepos.isExist(assignmentId) ){
         AssignmentSubmissionEntity entity = new AssignmentSubmissionEntity();
         entity.setStudentId(studentId);
-        entity.setFileURL(model.getFileUrl()); 
+        entity.setCourseId(assrepos.findById(assignmentId).getCourseId());
+        entity.setFileURL(model.getFileUrl());
         entity.setRelatedId(assignmentId);
         entity.setStatus("Pending");
         return submissionRepos.add(entity);
@@ -47,7 +48,7 @@ public class AssignmentSubmissionService {
                 .collect(Collectors.toList());
     }
 
-    public List<AssignmentSubmissionEntity> getSubmissionsByStudent(int studentId) {
+    public List<AssignmentSubmissionEntity> getSubmissionsByStudent(String studentId) {
         return submissionRepos.findAll().stream()
                 .filter(s -> s.getStudentId() == studentId)
                 .collect(Collectors.toList());
@@ -62,6 +63,10 @@ public class AssignmentSubmissionService {
             return submissionRepos.update(entity);
         }
         return false;
+    }
+
+    public List<AssignmentSubmissionEntity> getSubmissionsByStudentAndCourse(String studentId, String courseId) {
+      return submissionRepos.findByStudentAndCourse(studentId, courseId);
     }
 
 }
