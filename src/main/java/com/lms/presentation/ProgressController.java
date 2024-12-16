@@ -29,7 +29,6 @@ public class ProgressController {
   }
 
   // Get all student progress
-  // Get all student progress
   @GetMapping("/students")
   public ResponseEntity<Object> getAllStudentProgress() {
     Optional<User> currentUser = service.getCurrentUser();
