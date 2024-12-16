@@ -4,12 +4,14 @@ import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.questions.Question;
 // import com.lms.persistence.repositories.repository;
 import com.lms.persistence.repositories.RepositoryFacade;
+import com.lms.service.QuestionBankService;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-class QuestionBankServiceImpl {
+class QuestionBankServiceImpl implements QuestionBankService {
 
   private final RepositoryFacade repository;
 
@@ -17,6 +19,7 @@ class QuestionBankServiceImpl {
     this.repository = repository;
   }
 
+  @Override
   public void addQuestion(String courseId, Question question) {
     if (!question.validate()) {
       throw new IllegalArgumentException("Invalid question data.");
@@ -34,6 +37,7 @@ class QuestionBankServiceImpl {
     repository.saveQuestionBank(questionBank);
   }
 
+  @Override
   public void deleteQuestion(String courseId, String questionId) {
     QuestionBank questionBank = repository.findQuestionBankByCourseId(courseId);
     if (questionBank == null) {
@@ -44,6 +48,7 @@ class QuestionBankServiceImpl {
     questionBank.deleteQuestion(questionId);
   }
 
+  @Override
   public List<Question> getQuestions(String courseId) {
     QuestionBank questionBank = repository.findQuestionBankByCourseId(courseId);
     if (questionBank == null) {

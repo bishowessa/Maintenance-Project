@@ -8,6 +8,7 @@ import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
+import com.lms.service.AssignmentService;
 import com.lms.service.UserService;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ServiceFacade {
 
-  private final AssignmentServiceImpl assignmentService;
+  private final AssignmentService assignmentService;
   private final QuizServiceImpl quizService;
   private final AssignmentSubmissionServiceImpl assignmentSubmissionService;
   private final QuestionBankServiceImpl questionBankService;

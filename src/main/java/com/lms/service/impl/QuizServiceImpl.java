@@ -4,11 +4,13 @@ import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.RepositoryFacade;
+import com.lms.service.QuizService;
+
 import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
-class QuizServiceImpl {
+class QuizServiceImpl implements QuizService {
 
   private final RepositoryFacade repository;
 
@@ -16,6 +18,7 @@ class QuizServiceImpl {
     this.repository = repository;
   }
 
+  @Override
   public Quiz createQuiz(
     String courseId,
     String name,
@@ -58,6 +61,7 @@ class QuizServiceImpl {
     return quiz;
   }
 
+  @Override
   public void markQuizAsDeleted(String quizId) {
     repository
       .findQuizById(quizId)
@@ -67,6 +71,7 @@ class QuizServiceImpl {
       });
   }
 
+  @Override
   public void markQuizAsOpened(String quizId) {
     repository
       .findQuizById(quizId)
@@ -76,10 +81,12 @@ class QuizServiceImpl {
       });
   }
 
+  @Override
   public List<Quiz> getAllQuizzes() {
     return repository.findAllQuizzes();
   }
 
+  @Override
   public Quiz getQuizById(String quizId) {
     return repository.findQuizById(quizId).orElse(null);
   }

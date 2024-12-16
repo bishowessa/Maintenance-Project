@@ -5,6 +5,8 @@ import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.RepositoryFacade;
+import com.lms.service.QuizSubmissionService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-class QuizSubmissionServiceImpl {
+class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
   private final RepositoryFacade repository;
 
@@ -20,6 +22,7 @@ class QuizSubmissionServiceImpl {
     this.repository = repository;
   }
 
+  @Override
   public QuizSubmission submitQuiz(
     String quizId,
     String studentId,
@@ -62,18 +65,22 @@ class QuizSubmissionServiceImpl {
     }
   }
 
+  @Override
   public List<QuizSubmission> getSubmissionsByStudent(String studentId) {
     return repository.findQuizSubmissionsByStudentId(studentId);
   }
 
+  @Override
   public List<QuizSubmission> getAllSubmissions() {
     return repository.findAllQuizSubmissions();
   }
 
+  @Override
   public List<QuizSubmission> getSubmissionsByQuiz(String quizId) {
     return repository.findQuizSubmissionsByQuizId(quizId);
   }
 
+  @Override
   public List<QuizSubmission> getSubmissionsByStudentAndCourse(
     String studentId,
     String courseId

@@ -4,12 +4,14 @@ import com.lms.business.models.AssignmentSubmissionModel;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.repositories.RepositoryFacade;
+import com.lms.service.AssignmentSubmissionService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-class AssignmentSubmissionServiceImpl {
+class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
 
   private final RepositoryFacade repository;
 
@@ -17,6 +19,7 @@ class AssignmentSubmissionServiceImpl {
     this.repository = repository;
   }
 
+  @Override
   public boolean submitAssignment(
     AssignmentSubmissionModel model,
     int assignmentId,
@@ -35,6 +38,7 @@ class AssignmentSubmissionServiceImpl {
     } else return false;
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getSubmissionsByAssignment(
     int assignmentId
   ) {
@@ -45,6 +49,7 @@ class AssignmentSubmissionServiceImpl {
       .collect(Collectors.toList());
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getSubmissionsByCourse(
     String courseId
   ) {
@@ -60,6 +65,7 @@ class AssignmentSubmissionServiceImpl {
       .collect(Collectors.toList());
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getSubmissionsByStudent(
     String studentId
   ) {
@@ -70,6 +76,7 @@ class AssignmentSubmissionServiceImpl {
       .collect(Collectors.toList());
   }
 
+  @Override
   public boolean updateSubmission(
     int submissionId,
     AssignmentSubmissionModel updatedModel
@@ -86,6 +93,7 @@ class AssignmentSubmissionServiceImpl {
     return false;
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getSubmissionsByStudentAndCourse(
     String studentId,
     String courseId

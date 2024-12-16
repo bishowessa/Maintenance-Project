@@ -3,12 +3,14 @@ package com.lms.service.impl;
 import com.lms.business.models.AssignmentModel;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.repositories.RepositoryFacade;
+import com.lms.service.AssignmentService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-class AssignmentServiceImpl {
+class AssignmentServiceImpl implements AssignmentService {
 
   private final RepositoryFacade repository;
 
@@ -16,6 +18,7 @@ class AssignmentServiceImpl {
     this.repository = repository;
   }
 
+  @Override
   public boolean createAssignment(AssignmentModel model, String courseId) {
     AssignmentEntity entity = new AssignmentEntity(
       0,
@@ -29,6 +32,7 @@ class AssignmentServiceImpl {
     return repository.addAssignment(entity);
   }
 
+  @Override
   public boolean deleteAssignment(int id, String courseId) {
     AssignmentEntity entity = repository.findAssignmentById(id);
     if (entity != null && entity.getCourseId().equals(courseId)) {
@@ -38,6 +42,7 @@ class AssignmentServiceImpl {
     return false;
   }
 
+  @Override
   public boolean editAssignment(
     int id,
     String courseId,
@@ -67,6 +72,7 @@ class AssignmentServiceImpl {
     return false;
   }
 
+  @Override
   public List<AssignmentEntity> getAssignmentsByCourse(String courseId) {
     return repository
       .findAllAssignments()
