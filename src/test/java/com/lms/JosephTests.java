@@ -165,7 +165,8 @@ public class JosephTests {
       System.out.println("InstructorToken: " + instructorToken);
 
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      System.out.println(e.getMessage() + "\nRun the Learning Management System First");
+
     }
   }
 }
