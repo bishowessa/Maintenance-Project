@@ -9,11 +9,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-class QuestionBankService {
+class QuestionBankServiceImpl {
 
   private final RepositoryFacade repository;
 
-  public QuestionBankService(RepositoryFacade repository) {
+  public QuestionBankServiceImpl(RepositoryFacade repository) {
     this.repository = repository;
   }
 

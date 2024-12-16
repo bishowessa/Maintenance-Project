@@ -12,11 +12,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-class QuizSubmissionService {
+class QuizSubmissionServiceImpl {
 
   private final RepositoryFacade repository;
 
-  public QuizSubmissionService(RepositoryFacade repository) {
+  public QuizSubmissionServiceImpl(RepositoryFacade repository) {
     this.repository = repository;
   }
 

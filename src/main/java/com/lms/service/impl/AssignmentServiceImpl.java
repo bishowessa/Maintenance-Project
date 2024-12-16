@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-class AssignmentService {
+class AssignmentServiceImpl {
 
   private final RepositoryFacade repository;
 
-  public AssignmentService(RepositoryFacade repository) {
+  public AssignmentServiceImpl(RepositoryFacade repository) {
     this.repository = repository;
   }
 

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +32,14 @@ public class ProgressController {
   public ResponseEntity<Object> getAllStudentProgress() {
     Optional<User> currentUser = service.getCurrentUser();
     if (currentUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
+      return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body(Collections.emptyList());
     }
     if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body("Access Denied: You are unauthorized");
     }
     List<StudentProgress> studentsProgresses = new ArrayList<>();
 
@@ -84,7 +87,9 @@ public class ProgressController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body("Access Denied: You are unauthorized");
     }
     Map<String, List<QuizSubmission>> coursesQuizesSubmissions = new HashMap<>();
     Map<String, List<AssignmentSubmissionEntity>> coursesAssignmentsSubmissions = new HashMap<>();
@@ -127,7 +132,9 @@ public class ProgressController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body("Access Denied: You are unauthorized");
     }
     List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
       studentId,
@@ -162,7 +169,9 @@ public class ProgressController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
     if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body("Access Denied: You are unauthorized");
     }
     //get all students Ids
     List<String> studentIds = Arrays.asList("123", "456", "789");

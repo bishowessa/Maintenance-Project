@@ -22,11 +22,11 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ServiceFacade {
 
-  private final AssignmentService assignmentService;
-  private final QuizService quizService;
-  private final AssignmentSubmissionService assignmentSubmissionService;
-  private final QuestionBankService questionBankService;
-  private final QuizSubmissionService quizSubmissionService;
+  private final AssignmentServiceImpl assignmentService;
+  private final QuizServiceImpl quizService;
+  private final AssignmentSubmissionServiceImpl assignmentSubmissionService;
+  private final QuestionBankServiceImpl questionBankService;
+  private final QuizSubmissionServiceImpl quizSubmissionService;
   private final UserService userService;
 
   // Quiz operations

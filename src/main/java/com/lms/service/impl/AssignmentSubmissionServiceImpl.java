@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-class AssignmentSubmissionService {
+class AssignmentSubmissionServiceImpl {
 
   private final RepositoryFacade repository;
 
-  public AssignmentSubmissionService(RepositoryFacade repository) {
+  public AssignmentSubmissionServiceImpl(RepositoryFacade repository) {
     this.repository = repository;
   }
 
