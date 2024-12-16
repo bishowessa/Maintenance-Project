@@ -4,7 +4,8 @@ import com.lms.business.models.QuizRequest;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.service.impl.ServiceFacade;
+import com.lms.service.ServiceFacade;
+
 import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

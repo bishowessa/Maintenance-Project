@@ -5,7 +5,8 @@ import com.lms.business.models.StudentProgress;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.service.impl.ServiceFacade;
+import com.lms.service.ServiceFacade;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

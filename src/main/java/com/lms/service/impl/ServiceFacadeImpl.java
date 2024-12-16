@@ -9,6 +9,7 @@ import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.service.AssignmentService;
+import com.lms.service.ServiceFacade;
 import com.lms.service.UserService;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class ServiceFacade {
+public class ServiceFacadeImpl implements ServiceFacade {
 
   private final AssignmentService assignmentService;
   private final QuizServiceImpl quizService;
@@ -31,6 +32,7 @@ public class ServiceFacade {
   private final UserService userService;
 
   // Quiz operations
+  @Override
   public Quiz createQuiz(
     String courseId,
     String name,
@@ -47,23 +49,28 @@ public class ServiceFacade {
     );
   }
 
+  @Override
   public void markQuizAsDeleted(String quizId) {
     quizService.markQuizAsDeleted(quizId);
   }
 
+  @Override
   public void markQuizAsOpened(String quizId) {
     quizService.markQuizAsOpened(quizId);
   }
 
+  @Override
   public List<Quiz> getAllQuizzes() {
     return quizService.getAllQuizzes();
   }
 
+  @Override
   public Quiz getQuizById(String quizId) {
     return quizService.getQuizById(quizId);
   }
 
   // Assignment submission operations
+  @Override
   public boolean submitAssignment(
     AssignmentSubmissionModel model,
     int assignmentId,
@@ -76,24 +83,28 @@ public class ServiceFacade {
     );
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByAssignment(
     int assignmentId
   ) {
     return assignmentSubmissionService.getSubmissionsByAssignment(assignmentId);
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByCourse(
     String courseId
   ) {
     return assignmentSubmissionService.getSubmissionsByCourse(courseId);
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByStudent(
     String studentId
   ) {
     return assignmentSubmissionService.getSubmissionsByStudent(studentId);
   }
 
+  @Override
   public boolean updateSubmission(
     int submissionId,
     AssignmentSubmissionModel updatedModel
@@ -104,6 +115,7 @@ public class ServiceFacade {
     );
   }
 
+  @Override
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByStudentAndCourse(
     String studentId,
     String courseId
@@ -115,19 +127,23 @@ public class ServiceFacade {
   }
 
   // Question bank operations
+  @Override
   public void addQuestion(String courseId, Question question) {
     questionBankService.addQuestion(courseId, question);
   }
 
+  @Override
   public void deleteQuestion(String courseId, String questionId) {
     questionBankService.deleteQuestion(courseId, questionId);
   }
 
+  @Override
   public List<Question> getQuestions(String courseId) {
     return questionBankService.getQuestions(courseId);
   }
 
   // Quiz submission operations
+  @Override
   public QuizSubmission submitQuiz(
     String quizId,
     String studentId,
@@ -136,18 +152,22 @@ public class ServiceFacade {
     return quizSubmissionService.submitQuiz(quizId, studentId, studentAnswers);
   }
 
+  @Override
   public List<QuizSubmission> getQuizSubmissionsByStudent(String studentId) {
     return quizSubmissionService.getSubmissionsByStudent(studentId);
   }
 
+  @Override
   public List<QuizSubmission> getAllSubmissions() {
     return quizSubmissionService.getAllSubmissions();
   }
 
+  @Override
   public List<QuizSubmission> getQuizSubmissionsByQuiz(String quizId) {
     return quizSubmissionService.getSubmissionsByQuiz(quizId);
   }
 
+  @Override
   public List<QuizSubmission> getQuizSubmissionsByStudentAndCourse(
     String studentId,
     String courseId
@@ -159,14 +179,17 @@ public class ServiceFacade {
   }
 
   // Assignment operations
+  @Override
   public boolean createAssignment(AssignmentModel model, String courseId) {
     return assignmentService.createAssignment(model, courseId);
   }
 
+  @Override
   public boolean deleteAssignment(int id, String courseId) {
     return assignmentService.deleteAssignment(id, courseId);
   }
 
+  @Override
   public boolean editAssignment(
     int id,
     String courseId,
@@ -175,10 +198,12 @@ public class ServiceFacade {
     return assignmentService.editAssignment(id, courseId, model);
   }
 
+  @Override
   public List<AssignmentEntity> getAssignmentsByCourse(String courseId) {
     return assignmentService.getAssignmentsByCourse(courseId);
   }
 
+  @Override
   public Optional<User> getCurrentUser() {
     Authentication authentication = SecurityContextHolder
       .getContext()
