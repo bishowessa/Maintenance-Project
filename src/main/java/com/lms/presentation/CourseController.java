@@ -123,5 +123,21 @@ public class CourseController {
         }
         return ResponseEntity.ok(courseService.getLessonsForCourse(courseId));
     }
+
+    @GetMapping("/availableCourses")
+    public ResponseEntity<?> getAllCourses() {
+        // Retrieve the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(404).build();
+        }
+
+        List<Course> courses = courseService.getAllCourses();
+
+        return ResponseEntity.ok(courses);
+    }
+
 }
 

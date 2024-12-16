@@ -13,4 +13,6 @@ public interface CourseService {
     void addLessonToCourse(Long courseId, Lesson lesson);
     List<Lesson> getLessonsForCourse(Long courseId);
     Course findCourseById(Long courseId);
+
+    public List<Course> getAllCourses();
 }
