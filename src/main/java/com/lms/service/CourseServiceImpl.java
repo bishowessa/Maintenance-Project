@@ -83,4 +83,8 @@ public class CourseServiceImpl implements CourseService {
                 .findFirst()
                 .orElse(null);
     }
+    @Override
+    public List<Course> getAllCourses() {
+        return new ArrayList<>(courseList);
+    }
 }
