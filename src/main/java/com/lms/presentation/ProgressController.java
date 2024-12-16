@@ -2,14 +2,19 @@ package com.lms.presentation;
 
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
+import com.lms.persistence.User;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.ServiceFacade;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +29,17 @@ public class ProgressController {
   }
 
   // Get all student progress
+  // Get all student progress
   @GetMapping("/students")
-  public ResponseEntity<List<StudentProgress>> getAllStudentProgress() {
-    List<StudentProgress> StudentsProgresses = new ArrayList<>();
+  public ResponseEntity<Object> getAllStudentProgress() {
+    Optional<User> currentUser = service.getCurrentUser();
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+    }
+    List<StudentProgress> studentsProgresses = new ArrayList<>();
 
     List<String> studentIds = Arrays.asList("1", "2", "3");
 
@@ -57,16 +70,23 @@ public class ProgressController {
         coursesAssignmentsSubmissions
       );
 
-      StudentsProgresses.add(studentProgress);
+      studentsProgresses.add(studentProgress);
     }
-    return ResponseEntity.ok(StudentsProgresses);
+    return ResponseEntity.ok(studentsProgresses);
   }
 
   // Get student progress by studentId
   @GetMapping("/students/{studentId}")
-  public ResponseEntity<StudentProgress> getStudentProgressByCourseId(
+  public ResponseEntity<Object> getStudentProgressByCourseId(
     @PathVariable String studentId
   ) {
+    Optional<User> currentUser = service.getCurrentUser();
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+    }
     Map<String, List<QuizSubmission>> coursesQuizesSubmissions = new HashMap<>();
     Map<String, List<AssignmentSubmissionEntity>> coursesAssignmentsSubmissions = new HashMap<>();
 
@@ -99,10 +119,17 @@ public class ProgressController {
 
   // Get student progress by courseId
   @GetMapping("/students/{studentId}/{courseId}")
-  public ResponseEntity<StudentProgress> getStudentProgressByCourseId(
+  public ResponseEntity<Object> getStudentProgressByCourseId(
     @PathVariable String studentId,
     @PathVariable String courseId
   ) {
+    Optional<User> currentUser = service.getCurrentUser();
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+    }
     List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
       studentId,
       courseId
@@ -128,9 +155,16 @@ public class ProgressController {
 
   // Get course progress
   @GetMapping("/courses/{courseId}")
-  public ResponseEntity<CourseProgress> getCourseProgress(
+  public ResponseEntity<Object> getCourseProgress(
     @PathVariable String courseId
   ) {
+    Optional<User> currentUser = service.getCurrentUser();
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: You are unauthorized");
+    }
     //get all students Ids
     List<String> studentIds = Arrays.asList("123", "456", "789");
 
