@@ -4,7 +4,6 @@ import com.lms.persistence.entities.QuizSubmission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +46,14 @@ class QuizSubmissionRepository {
         submission.getCourseId().equals(courseId)
       )
       .collect(Collectors.toList());
+  }
+
+  public boolean existsByStudentIdAndQuizId(String studentId, String quizId) {
+    return submissions
+      .stream()
+      .anyMatch(submission ->
+        submission.getStudentId().equals(studentId) &&
+        submission.getQuizId().equals(quizId)
+      );
   }
 }

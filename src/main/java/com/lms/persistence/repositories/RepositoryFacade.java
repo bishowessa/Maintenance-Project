@@ -1,5 +1,6 @@
 package com.lms.persistence.repositories;
 
+import com.lms.persistence.UserRepository;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuestionBank;
@@ -7,56 +8,134 @@ import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
-public interface RepositoryFacade {
+@Service
+@Scope("singleton")
+@AllArgsConstructor
+public class RepositoryFacade {
+
+  private final AssignmentRepository assignmentRepository;
+  private final AssignmentSubmissionRepository assignmentSubmissionRepository;
+  private final QuestionBankRepository questionBankRepository;
+  private final QuizRepository quizRepository;
+  private final QuizSubmissionRepository quizSubmissionRepository;
+  private final UserRepository userRepository;
+
   // Assignment operations
-  boolean addAssignment(AssignmentEntity entity);
 
-  List<AssignmentEntity> findAllAssignments();
+  public boolean addAssignment(AssignmentEntity entity) {
+    return assignmentRepository.add(entity);
+  }
 
-  AssignmentEntity findAssignmentById(int id);
+  public List<AssignmentEntity> findAllAssignments() {
+    return assignmentRepository.findAll();
+  }
+
+  public AssignmentEntity findAssignmentById(int id) {
+    return assignmentRepository.findById(id);
+  }
 
   // Assignment Submission operations
-  boolean addAssignmentSubmission(AssignmentSubmissionEntity submission);
 
-  List<AssignmentSubmissionEntity> findAllAssignmentSubmissions();
+  public boolean addAssignmentSubmission(
+    AssignmentSubmissionEntity submission
+  ) {
+    return assignmentSubmissionRepository.add(submission);
+  }
 
-  AssignmentSubmissionEntity findAssignmentSubmissionById(int id);
+  public List<AssignmentSubmissionEntity> findAllAssignmentSubmissions() {
+    return assignmentSubmissionRepository.findAll();
+  }
 
-  List<AssignmentSubmissionEntity> findAssignmentSubmissionsByStudentAndCourse(
+  public AssignmentSubmissionEntity findAssignmentSubmissionById(int id) {
+    return assignmentSubmissionRepository.findById(id);
+  }
+
+  public List<AssignmentSubmissionEntity> findAssignmentSubmissionsByStudentAndCourse(
     String studentId,
     String courseId
-  );
+  ) {
+    return assignmentSubmissionRepository.findByStudentAndCourse(
+      studentId,
+      courseId
+    );
+  }
 
   // Question Bank operations
-  void saveQuestionBank(QuestionBank questionBank);
 
-  QuestionBank findQuestionBankByCourseId(String courseId);
+  public void saveQuestionBank(QuestionBank questionBank) {
+    questionBankRepository.save(questionBank);
+  }
+
+  public QuestionBank findQuestionBankByCourseId(String courseId) {
+    return questionBankRepository.findByCourseId(courseId);
+  }
 
   // Quiz operations
-  void saveQuiz(Quiz quiz);
 
-  Optional<Quiz> findQuizById(String quizId);
+  public void saveQuiz(Quiz quiz) {
+    quizRepository.save(quiz);
+  }
 
-  List<Quiz> findAllQuizzes();
+  public Optional<Quiz> findQuizById(String quizId) {
+    return quizRepository.findById(quizId);
+  }
+
+  public List<Quiz> findAllQuizzes() {
+    return quizRepository.findAll();
+  }
 
   // Quiz Submission operations
-  void saveQuizSubmission(QuizSubmission submission);
 
-  List<QuizSubmission> findAllQuizSubmissions();
+  public void saveQuizSubmission(QuizSubmission submission) {
+    quizSubmissionRepository.save(submission);
+  }
 
-  List<QuizSubmission> findQuizSubmissionsByStudentId(String studentId);
+  public List<QuizSubmission> findAllQuizSubmissions() {
+    return quizSubmissionRepository.findAll();
+  }
 
-  List<QuizSubmission> findQuizSubmissionsByQuizId(String quizId);
+  public List<QuizSubmission> findQuizSubmissionsByStudentId(String studentId) {
+    return quizSubmissionRepository.findByStudentId(studentId);
+  }
 
-  List<QuizSubmission> findQuizSubmissionsByStudentAndCourse(
+  public List<QuizSubmission> findQuizSubmissionsByQuizId(String quizId) {
+    return quizSubmissionRepository.findByQuizId(quizId);
+  }
+
+  public List<QuizSubmission> findQuizSubmissionsByStudentAndCourse(
     String studentId,
     String courseId
-  );
+  ) {
+    return quizSubmissionRepository.findByStudentAndCourse(studentId, courseId);
+  }
 
-  boolean isAssignmentExist(int assignmentId);
+  public boolean isAssignmentExist(int assignmentId) {
+    return assignmentRepository.isExist(assignmentId);
+  }
 
-  boolean updateAssignmentSubmission(AssignmentSubmissionEntity entity);
+  public boolean updateAssignmentSubmission(AssignmentSubmissionEntity entity) {
+    return assignmentSubmissionRepository.update(entity);
+  }
 
-  void updateQuiz(Quiz quiz);
+  public void updateQuiz(Quiz quiz) {
+    quizRepository.update(quiz);
+  }
+
+  public boolean studentExistsById(String studentId) {
+    return userRepository.existsById(studentId);
+  }
+
+  public boolean findQuizSubmissionByStudentIdAndQuizId(
+    String studentId,
+    String quizId
+  ) {
+    return quizSubmissionRepository.existsByStudentIdAndQuizId(
+      studentId,
+      quizId
+    );
+  }
 }

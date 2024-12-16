@@ -4,19 +4,21 @@ import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.RepositoryFacade;
+import com.lms.service.CourseService;
 import com.lms.service.QuizService;
+
+import lombok.AllArgsConstructor;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 class QuizServiceImpl implements QuizService {
 
   private final RepositoryFacade repository;
+  private final CourseService courseService;
 
-  public QuizServiceImpl(RepositoryFacade repository) {
-    this.repository = repository;
-  }
 
   @Override
   public Quiz createQuiz(
@@ -26,6 +28,11 @@ class QuizServiceImpl implements QuizService {
     int duration,
     String status
   ) {
+    if (courseService.findCourseById(courseId) == null) {
+      throw new IllegalArgumentException(
+        "Course with id " + courseId + " does not exist"
+      );
+    }
     QuestionBank questionBank = repository.findQuestionBankByCourseId(courseId);
 
     if (questionBank == null) {
@@ -48,7 +55,7 @@ class QuizServiceImpl implements QuizService {
     );
 
     Quiz quiz = new Quiz(
-      UUID.randomUUID().toString(),
+      UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
       courseId,
       name,
       questionsNumber,

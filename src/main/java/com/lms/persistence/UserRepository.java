@@ -1,5 +1,6 @@
 package com.lms.persistence;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -54,6 +55,11 @@ public class UserRepository {
 
     public List<User> findAll() {
         return new ArrayList<>(users);
+    }
+
+    public boolean existsById(String id) {
+        return users.stream()
+                .anyMatch(user -> user.getId().equals(id));
     }
 }
 

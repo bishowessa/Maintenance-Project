@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface CourseService {
     void createCourse(Course course);
-    void uploadMedia(Long courseId, MultipartFile file);
-    List<String> getMediaForCourse(Long courseId);
-    void addLessonToCourse(Long courseId, Lesson lesson);
-    List<Lesson> getLessonsForCourse(Long courseId);
-    Course findCourseById(Long courseId);
+    void uploadMedia(String courseId, MultipartFile file);
+    List<String> getMediaForCourse(String courseId);
+    void addLessonToCourse(String courseId, Lesson lesson);
+    List<Lesson> getLessonsForCourse(String courseId);
+    Course findCourseById(String courseId);
 
     public List<Course> getAllCourses();
 }

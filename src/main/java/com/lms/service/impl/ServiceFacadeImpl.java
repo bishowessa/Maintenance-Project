@@ -2,15 +2,10 @@ package com.lms.service.impl;
 
 import com.lms.business.models.AssignmentModel;
 import com.lms.business.models.AssignmentSubmissionModel;
-import com.lms.persistence.User;
-import com.lms.persistence.entities.AssignmentEntity;
-import com.lms.persistence.entities.AssignmentSubmissionEntity;
-import com.lms.persistence.entities.Quiz;
-import com.lms.persistence.entities.QuizSubmission;
-import com.lms.persistence.entities.questions.Question;
-import com.lms.service.AssignmentService;
-import com.lms.service.ServiceFacade;
-import com.lms.service.UserService;
+import com.lms.persistence.*;
+import com.lms.persistence.entities.*;
+import com.lms.persistence.entities.questions.*;
+import com.lms.service.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +26,8 @@ public class ServiceFacadeImpl implements ServiceFacade {
   private final QuestionBankServiceImpl questionBankService;
   private final QuizSubmissionServiceImpl quizSubmissionService;
   private final UserService userService;
+  private final CourseService courseService;
+  private final EnrollmentService enrollmentService;
 
   // Quiz operations
   @Override
@@ -210,5 +208,62 @@ public class ServiceFacadeImpl implements ServiceFacade {
       .getAuthentication();
     UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
     return userService.findByEmail(currentUserDetails.getUsername());
+  }
+
+  // Course operations
+  @Override
+  public void createCourse(Course course) {
+    courseService.createCourse(course);
+  }
+
+  @Override
+  public void uploadMedia(String courseId, MultipartFile file) {
+    courseService.uploadMedia(courseId, file);
+  }
+
+  @Override
+  public List<String> getMediaForCourse(String courseId) {
+    return courseService.getMediaForCourse(courseId);
+  }
+
+  @Override
+  public void addLessonToCourse(String courseId, Lesson lesson) {
+    courseService.addLessonToCourse(courseId, lesson);
+  }
+
+  @Override
+  public List<Lesson> getLessonsForCourse(String courseId) {
+    return courseService.getLessonsForCourse(courseId);
+  }
+
+  @Override
+  public Course findCourseById(String courseId) {
+    return courseService.findCourseById(courseId);
+  }
+
+  @Override
+  public List<Course> getAllCourses() {
+    return courseService.getAllCourses();
+  }
+
+  // Enrollment operations
+  @Override
+  public void enrollStudent(String studentId, String courseId) {
+    enrollmentService.enrollStudent(studentId, courseId);
+  }
+
+  @Override
+  public List<Enrollment> getEnrollmentsByCourse(String courseId) {
+    return enrollmentService.getEnrollmentsByCourse(courseId);
+  }
+
+  @Override
+  public List<Enrollment> getEnrollmentsByStudent(String studentId) {
+    return enrollmentService.getEnrollmentsByStudent(studentId);
+  }
+
+  @Override
+  public Map<String, List<User>> getCourseStudentMap() {
+    return enrollmentService.getCourseStudentMap();
   }
 }

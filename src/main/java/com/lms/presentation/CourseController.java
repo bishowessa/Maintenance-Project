@@ -49,7 +49,7 @@ public class CourseController {
     }
 
     @PostMapping("/{courseId}/media")
-    public ResponseEntity<String> uploadMedia(@PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadMedia(@PathVariable String courseId, @RequestParam("file") MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
@@ -85,7 +85,7 @@ public class CourseController {
 
 
     @GetMapping("/{courseId}/media")
-    public ResponseEntity<List<String>> getMediaForCourse(@PathVariable Long courseId) {
+    public ResponseEntity<List<String>> getMediaForCourse(@PathVariable String courseId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
@@ -98,7 +98,7 @@ public class CourseController {
     }
 
     @PostMapping("/{courseId}/lessons")
-    public ResponseEntity<String> addLessonToCourse(@PathVariable Long courseId, @RequestBody Lesson lesson) {
+    public ResponseEntity<String> addLessonToCourse(@PathVariable String courseId, @RequestBody Lesson lesson) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
@@ -113,7 +113,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}/lessons")
-    public ResponseEntity<List<Lesson>> getLessonsForCourse(@PathVariable Long courseId) {
+    public ResponseEntity<List<Lesson>> getLessonsForCourse(@PathVariable String courseId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());

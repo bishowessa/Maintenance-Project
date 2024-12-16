@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -23,15 +24,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
-    private long currentId = 1; // Counter for unique IDs
+    // private long currentId = 1; // Counter for unique IDs
 
     @Override
     public void createCourse(Course course) {
-        course.setId(currentId++); // Assign and increment the ID
+        course.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6)); // Generate unique ID
         courseList.add(course);
     }
     @Override
-    public void uploadMedia(Long courseId, MultipartFile file) {
+    public void uploadMedia(String courseId, MultipartFile file) {
         Course course = findCourseById(courseId);
         if (course != null) {
             try {
@@ -48,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<String> getMediaForCourse(Long courseId) {
+    public List<String> getMediaForCourse(String courseId) {
         Course course = findCourseById(courseId);
         if (course != null) {
             return course.getMediaPaths();
@@ -58,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void addLessonToCourse(Long courseId, Lesson lesson) {
+    public void addLessonToCourse(String courseId, Lesson lesson) {
         Course course = findCourseById(courseId);
         if (course != null) {
             course.addLesson(lesson);
@@ -68,7 +69,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Lesson> getLessonsForCourse(Long courseId) {
+    public List<Lesson> getLessonsForCourse(String courseId) {
         Course course = findCourseById(courseId);
         if (course != null) {
             return course.getLessons();
@@ -77,12 +78,14 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
-    public Course findCourseById(Long courseId) {
+    @Override
+    public Course findCourseById(String courseId) {
         return courseList.stream()
                 .filter(course -> course.getId().equals(courseId))
                 .findFirst()
                 .orElse(null);
     }
+
     @Override
     public List<Course> getAllCourses() {
         return new ArrayList<>(courseList);
