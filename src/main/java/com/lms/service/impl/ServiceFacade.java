@@ -2,42 +2,32 @@ package com.lms.service.impl;
 
 import com.lms.business.models.AssignmentModel;
 import com.lms.business.models.AssignmentSubmissionModel;
+import com.lms.persistence.User;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
+import com.lms.service.UserService;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Optional;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ServiceFacade {
-
-  // private final RepositoryFacade repository;
 
   private final AssignmentService assignmentService;
   private final QuizService quizService;
   private final AssignmentSubmissionService assignmentSubmissionService;
   private final QuestionBankService questionBankService;
   private final QuizSubmissionService quizSubmissionService;
-
-  public ServiceFacade(
-    // RepositoryFacade repository,
-    QuizService quizService,
-    AssignmentService assignmentService,
-    AssignmentSubmissionService assignmentSubmissionService,
-    QuestionBankService questionBankService,
-    QuizSubmissionService quizSubmissionService
-  ) {
-    // this.repository = repository;
-    this.quizService = quizService;
-    this.assignmentService = assignmentService;
-    this.assignmentSubmissionService = assignmentSubmissionService;
-    this.questionBankService = questionBankService;
-    this.quizSubmissionService = quizSubmissionService;
-  }
+  private final UserService userService;
 
   // Quiz operations
   public Quiz createQuiz(
@@ -188,5 +178,11 @@ public class ServiceFacade {
     return assignmentService.getAssignmentsByCourse(courseId);
   }
 
-
+  public Optional<User> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder
+      .getContext()
+      .getAuthentication();
+    UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+    return userService.findByEmail(currentUserDetails.getUsername());
+  }
 }

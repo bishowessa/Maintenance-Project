@@ -1,6 +1,7 @@
 package com.lms.presentation;
 
 import com.lms.business.models.QuizRequest;
+import com.lms.persistence.User;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.ServiceFacade;
@@ -19,7 +20,19 @@ public class QuizController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> createQuiz(@RequestBody QuizRequest quizRequest) {
+  public ResponseEntity<Object> createQuiz(
+    @RequestBody QuizRequest quizRequest
+  ) {
+    Optional<User> currentUser = service.getCurrentUser();
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(403)
+        .body("Access Denied: You are unauthorized");
+    }
+
     try {
       Quiz quiz = service.createQuiz(
         quizRequest.getCourseId(),
@@ -36,17 +49,47 @@ public class QuizController {
 
   @GetMapping
   public ResponseEntity<List<Quiz>> getAllQuizzes() {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+
     return ResponseEntity.ok(service.getAllQuizzes());
   }
 
   @DeleteMapping("/{quizId}")
-  public void deleteQuiz(@PathVariable String quizId) {
+  public ResponseEntity<Object> deleteQuiz(@PathVariable String quizId) {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(403)
+        .body("Access Denied: You are unauthorized");
+    }
+
     service.markQuizAsDeleted(quizId);
+    return ResponseEntity.ok().body("Quiz " + quizId + " mark as deleted");
   }
 
   @PostMapping("/{quizId}/assign")
-  public void assignQuiz(@PathVariable String quizId) {
+  public ResponseEntity<Object> assignQuiz(@PathVariable String quizId) {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(403)
+        .body("Access Denied: You are unauthorized");
+    }
+
     service.markQuizAsOpened(quizId);
+    return ResponseEntity.ok().body("Quiz " + quizId + " mark as opened");
   }
 
   @PostMapping("/{quizId}/submit")
@@ -55,6 +98,17 @@ public class QuizController {
     @RequestParam String studentId,
     @RequestBody Map<String, Object> studentAnswers
   ) {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+    if (!"Student".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(403)
+        .body("Access Denied: You are unauthorized");
+    }
+
     Map<String, String> answers = new HashMap<>();
     for (Map.Entry<String, Object> entry : studentAnswers.entrySet()) {
       answers.put(entry.getKey(), entry.getValue().toString());
@@ -78,19 +132,49 @@ public class QuizController {
   }
 
   @GetMapping("/submissions")
-  public ResponseEntity<List<QuizSubmission>> getAllSubmissions() {
+  public ResponseEntity<Object> getAllSubmissions() {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(403)
+        .body("Access Denied: You are unauthorized");
+    }
+
     return ResponseEntity.ok(service.getAllSubmissions());
   }
 
   @GetMapping("/submissions/{quizId}")
-  public ResponseEntity<List<QuizSubmission>> getSubmissionsByQuiz(
+  public ResponseEntity<Object> getSubmissionsByQuiz(
     @PathVariable String quizId
   ) {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(403)
+        .body("Access Denied: You are unauthorized");
+    }
+
     return ResponseEntity.ok(service.getQuizSubmissionsByQuiz(quizId));
   }
 
   @GetMapping("/{quizId}")
   public ResponseEntity<Object> getQuizById(@PathVariable String quizId) {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity.status(404).build();
+    }
+
     Quiz quiz = service.getQuizById(quizId);
     if (quiz != null) {
       return ResponseEntity.ok(quiz);
