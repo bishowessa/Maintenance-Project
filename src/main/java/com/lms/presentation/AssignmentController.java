@@ -3,7 +3,7 @@ package com.lms.presentation;
 import com.lms.business.models.AssignmentModel;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.AssignmentEntity;
-import com.lms.service.ServiceFacade;
+import com.lms.service.impl.ServiceFacade;
 
 import java.util.*;
 import org.springframework.http.HttpStatus;

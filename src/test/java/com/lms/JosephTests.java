@@ -161,7 +161,7 @@ public class JosephTests {
 
       JResponse loginInstructor = login(instructorEmail, instructorPassword);
       String instructorToken = getToken(loginInstructor.body);
-
+      System.out.println("Authorization Bearer");
       System.out.println("InstructorToken: " + instructorToken);
 
     } catch (Exception e) {

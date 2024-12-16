@@ -1,46 +1,28 @@
-package com.lms.presentation;
+package com.lms.service.impl;
 
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
-import com.lms.persistence.User;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
-import com.lms.service.impl.ServiceFacade;
+
+import lombok.AllArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/progress")
-public class ProgressController {
+@Service
+@AllArgsConstructor
+class ProgressService {
 
   private final ServiceFacade service;
 
-  public ProgressController(ServiceFacade service) {
-    this.service = service;
-  }
-
   // Get all student progress
-  @GetMapping("/students")
-  public ResponseEntity<Object> getAllStudentProgress() {
-    Optional<User> currentUser = service.getCurrentUser();
-    if (currentUser.isEmpty()) {
-      return ResponseEntity
-        .status(HttpStatus.UNAUTHORIZED)
-        .body(Collections.emptyList());
-    }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity
-        .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
-    }
+  public List<StudentProgress> getAllStudentProgress() {
+
     List<StudentProgress> studentsProgresses = new ArrayList<>();
 
     List<String> studentIds = Arrays.asList("1", "2", "3");
@@ -66,31 +48,19 @@ public class ProgressController {
         );
       }
 
-      StudentProgress studentProgress = new StudentProgress(
-        studentId,
-        coursesQuizesSubmissions,
-        coursesAssignmentsSubmissions
+      studentsProgresses.add(
+        new StudentProgress(
+          studentId,
+          coursesQuizesSubmissions,
+          coursesAssignmentsSubmissions
+        )
       );
-
-      studentsProgresses.add(studentProgress);
     }
-    return ResponseEntity.ok(studentsProgresses);
+    return studentsProgresses;
   }
 
   // Get student progress by studentId
-  @GetMapping("/students/{studentId}")
-  public ResponseEntity<Object> getStudentProgressByCourseId(
-    @PathVariable String studentId
-  ) {
-    Optional<User> currentUser = service.getCurrentUser();
-    if (currentUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity
-        .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
-    }
+  public StudentProgress getStudentProgressByStudentId(String studentId) {
     Map<String, List<QuizSubmission>> coursesQuizesSubmissions = new HashMap<>();
     Map<String, List<AssignmentSubmissionEntity>> coursesAssignmentsSubmissions = new HashMap<>();
 
@@ -104,7 +74,6 @@ public class ProgressController {
         studentId,
         courseId
       );
-
       coursesQuizesSubmissions.put(courseId, quizSubmissionsForCourse);
       coursesAssignmentsSubmissions.put(
         courseId,
@@ -118,24 +87,14 @@ public class ProgressController {
       coursesAssignmentsSubmissions
     );
 
-    return ResponseEntity.ok(studentProgress);
+    return studentProgress;
   }
 
   // Get student progress by courseId
-  @GetMapping("/students/{studentId}/{courseId}")
-  public ResponseEntity<Object> getStudentProgressByCourseId(
-    @PathVariable String studentId,
-    @PathVariable String courseId
+  public StudentProgress getStudentProgressByStudentIdAndCourseId(
+    String studentId,
+    String courseId
   ) {
-    Optional<User> currentUser = service.getCurrentUser();
-    if (currentUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity
-        .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
-    }
     List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
       studentId,
       courseId
@@ -156,23 +115,11 @@ public class ProgressController {
       courseAssignmentsSubmissions
     );
 
-    return ResponseEntity.ok(studentProgress);
+    return studentProgress;
   }
 
   // Get course progress
-  @GetMapping("/courses/{courseId}")
-  public ResponseEntity<Object> getCourseProgress(
-    @PathVariable String courseId
-  ) {
-    Optional<User> currentUser = service.getCurrentUser();
-    if (currentUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
-      return ResponseEntity
-        .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
-    }
+  public CourseProgress getCourseProgress(String courseId) {
     //get all students Ids
     List<String> studentIds = Arrays.asList("123", "456", "789");
 
@@ -202,6 +149,6 @@ public class ProgressController {
       StudentsAssignmentSubmissions
     );
 
-    return ResponseEntity.ok(courseProgress);
+    return courseProgress;
   }
 }

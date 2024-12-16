@@ -4,7 +4,7 @@ import com.lms.business.models.QuestionRequest;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.entities.questions.QuestionFactory;
-import com.lms.service.ServiceFacade;
+import com.lms.service.impl.ServiceFacade;
 
 import java.util.Collections;
 import java.util.List;
