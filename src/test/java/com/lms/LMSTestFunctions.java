@@ -10,9 +10,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class JosephTests {
+public class LMSTestFunctions {
 
-  public static JResponse signup(
+  public static LMSResponse signup(
     String id,
     String firstName,
     String lastName,
@@ -45,10 +45,10 @@ public class JosephTests {
     Request request = new Request.Builder().url(url).post(body).build();
 
     Response response = client.newCall(request).execute();
-    return new JResponse(response.code(), response.body().string());
+    return new LMSResponse(response.code(), response.body().string());
   }
 
-  public static JResponse login(String email, String password)
+  public static LMSResponse login(String email, String password)
     throws IOException {
     String url = "http://localhost:8080/auth/login";
     OkHttpClient client = new OkHttpClient();
@@ -63,7 +63,7 @@ public class JosephTests {
     Request request = new Request.Builder().url(url).post(body).build();
 
     Response response = client.newCall(request).execute();
-    return new JResponse(response.code(), response.body().string());
+    return new LMSResponse(response.code(), response.body().string());
   }
 
   public static String getToken(String body)
@@ -73,7 +73,7 @@ public class JosephTests {
     return rootNode.get("token").asText();
   }
 
-  public static JResponse createUser(
+  public static LMSResponse createUser(
     String adminToken,
     String id,
     String firstName,
@@ -112,9 +112,8 @@ public class JosephTests {
       .build();
 
     Response response = client.newCall(request).execute();
-    return new JResponse(response.code(), response.body().string());
+    return new LMSResponse(response.code(), response.body().string());
   }
-
   // public static void main(String[] args) {
   //   try {
   //     String adminEmail = "admin@example.com";
