@@ -55,7 +55,11 @@ public class ProgressController {
     }
 
     // check if studentId is exist
-    if (service.isUserExist(studentId)) {}
+    if (!service.isUserExist(studentId)) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Student not found");
+    }
 
     StudentProgress studentProgress = service.getStudentProgressByStudentId(
       studentId
@@ -79,6 +83,23 @@ public class ProgressController {
         .body("Access Denied: You are unauthorized");
     }
 
+    if (!service.isUserExist(studentId)) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Student not found");
+    }
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Course not found");
+    }
+
+    // if (!service.isStudentEnrolledInCourse(studentId, courseId)) {
+    //   return  ResponseEntity
+    //   .status(HttpStatus.FORBIDDEN)
+    //   .body("Student is not enrolled in this course");
+    // }
+
     StudentProgress studentProgress = service.getStudentProgressByStudentIdAndCourseId(
       studentId,
       courseId
@@ -92,14 +113,23 @@ public class ProgressController {
     @PathVariable String courseId
   ) {
     Optional<User> currentUser = service.getCurrentUser();
+
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+
     if (!"Instructor".equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
     }
+
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Course not found");
+    }
+
     CourseProgress courseProgress = service.getCourseProgress(courseId);
     return ResponseEntity.ok(courseProgress);
   }
