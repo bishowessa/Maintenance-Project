@@ -4,6 +4,7 @@ import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
+import com.lms.persistence.repositories.RepositoryFacade;
 
 import lombok.AllArgsConstructor;
 
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 class ProgressService {
 
-  private final ServiceFacade service;
+  private final RepositoryFacade repository;
 
   // Get all student progress
   public List<StudentProgress> getAllStudentProgress() {
@@ -33,11 +34,11 @@ class ProgressService {
 
       List<String> regestedCourcesIds = Arrays.asList("1", "2", "3");
       for (String courseId : regestedCourcesIds) {
-        List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
+        List<QuizSubmission> quizSubmissionsForCourse = repository.findQuizSubmissionsByStudentAndCourse(
           studentId,
           courseId
         );
-        List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
+        List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = repository.findAssignmentSubmissionsByStudentAndCourse(
           studentId,
           courseId
         );
@@ -66,11 +67,11 @@ class ProgressService {
 
     List<String> regestedCourcesIds = Arrays.asList("1", "2", "3");
     for (String courseId : regestedCourcesIds) {
-      List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
+      List<QuizSubmission> quizSubmissionsForCourse = repository.findQuizSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
-      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
+      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = repository.findAssignmentSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
@@ -95,11 +96,11 @@ class ProgressService {
     String studentId,
     String courseId
   ) {
-    List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
+    List<QuizSubmission> quizSubmissionsForCourse = repository.findQuizSubmissionsByStudentAndCourse(
       studentId,
       courseId
     );
-    List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
+    List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = repository.findAssignmentSubmissionsByStudentAndCourse(
       studentId,
       courseId
     );
@@ -128,11 +129,11 @@ class ProgressService {
 
     for (String studentId : studentIds) {
       //get the submissions and the attended lessons by the for the studentID and courseId
-      List<QuizSubmission> quizSubmissionsForCourse = service.getQuizSubmissionsByStudentAndCourse(
+      List<QuizSubmission> quizSubmissionsForCourse = repository.findQuizSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
-      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = service.getAssignmentSubmissionsByStudentAndCourse(
+      List<AssignmentSubmissionEntity> assignmentSubmissionsForCourse = repository.findAssignmentSubmissionsByStudentAndCourse(
         studentId,
         courseId
       );
