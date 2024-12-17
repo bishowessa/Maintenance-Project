@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lms.persistence.Course;
+import com.lms.persistence.Lesson;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
 
@@ -16,7 +18,7 @@ import lombok.*;
 public class StudentProgress {
 
   private String studentId;
-  private Map<String, List<QuizSubmission>> quizSubmission = new HashMap<>();
-  private Map<String, List<AssignmentSubmissionEntity>> assignmentSubmission = new HashMap<>();
-  // private List<String> attendedLessonsIds = new ArrayList<>();
+  private Map<Course, List<QuizSubmission>> quizSubmissionByCourse = new HashMap<>();
+  private Map<Course, List<AssignmentSubmissionEntity>> assignmentSubmissionByCourse = new HashMap<>();
+  private Map<Course, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
 }

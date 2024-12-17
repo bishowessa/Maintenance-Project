@@ -62,4 +62,10 @@ public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId)
         .collect(Collectors.toList());
 }
 
+    public List<AssignmentSubmissionEntity> findByAssignmentSubmissionsByAssignmentId(int id) {
+        return submissions
+            .stream()
+            .filter(submission -> submission.getAssignmentId() == id)
+            .collect(Collectors.toList());
+    }
 }

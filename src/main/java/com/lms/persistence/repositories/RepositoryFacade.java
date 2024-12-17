@@ -1,5 +1,6 @@
 package com.lms.persistence.repositories;
 
+import com.lms.persistence.Course;
 import com.lms.persistence.Enrollment;
 import com.lms.persistence.UserRepository;
 import com.lms.persistence.entities.AssignmentEntity;
@@ -7,6 +8,7 @@ import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
+import com.lms.service.CourseService;
 import com.lms.service.EnrollmentService;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ public class RepositoryFacade {
   private final QuizSubmissionRepository quizSubmissionRepository;
   private final UserRepository userRepository;
   private final EnrollmentService enrollmentService;
+  private final CourseService courseService;
 
   // Assignment operations
 
@@ -65,6 +68,14 @@ public class RepositoryFacade {
     return assignmentSubmissionRepository.findByStudentAndCourse(
       studentId,
       courseId
+    );
+  }
+
+  public List<AssignmentSubmissionEntity> findByAssignmentSubmissionsByAssignmentId(
+    int assignmentId
+  ) {
+    return assignmentSubmissionRepository.findByAssignmentSubmissionsByAssignmentId(
+      assignmentId
     );
   }
 
@@ -177,4 +188,16 @@ public class RepositoryFacade {
       .collect(Collectors.toList());
   }
 
+  public List<Course> getAllRegisteredCourses(String studentId) {
+    List<String> courseIds = enrollmentService
+      .getEnrollmentsByStudent(studentId)
+      .stream()
+      .map(Enrollment::getcId)
+      .collect(Collectors.toList());
+
+    return courseIds
+      .stream()
+      .map(courseId -> courseService.findCourseById(courseId))
+      .collect(Collectors.toList());
+  }
 }
