@@ -55,8 +55,7 @@ public class ProgressController {
     }
 
     // check if studentId is exist
-    /////////////////////////////////////////////////////
-    // service.studentExistsById()
+    if (service.isUserExist(studentId)) {}
 
     StudentProgress studentProgress = service.getStudentProgressByStudentId(
       studentId

@@ -32,7 +32,6 @@ public class ServiceFacade {
   private final EnrollmentService enrollmentService;
   private final ProgressService progressService;
 
-
   // Quiz operations
 
   public Quiz createQuiz(
@@ -119,7 +118,7 @@ public class ServiceFacade {
     );
   }
 
-  public boolean isStudentExist(String studentId) {
+  public boolean isUserExist(String studentId) {
     return userService.existsById(studentId);
   }
 
