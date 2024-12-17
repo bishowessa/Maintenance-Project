@@ -31,6 +31,10 @@ public class UserService {
     public List<String> getAllStudentIds() {
         return userRepository.getAllStudentIds();
     }
+
+    public boolean existsById(String studentId) {
+        return userRepository.existsById(studentId);
+    }
 }
 
 

@@ -7,7 +7,6 @@ import com.lms.business.models.StudentProgress;
 import com.lms.persistence.*;
 import com.lms.persistence.entities.*;
 import com.lms.persistence.entities.questions.*;
-import com.lms.persistence.repositories.AssignmentRepository;
 import com.lms.service.*;
 import java.util.List;
 import java.util.Map;
@@ -24,15 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class ServiceFacade {
 
   private final AssignmentService assignmentService;
-  private final QuizServiceImpl quizService;
-  private final AssignmentSubmissionServiceImpl assignmentSubmissionService;
-  private final QuestionBankServiceImpl questionBankService;
-  private final QuizSubmissionServiceImpl quizSubmissionService;
+  private final QuizService quizService;
+  private final AssignmentSubmissionService assignmentSubmissionService;
+  private final QuestionBankService questionBankService;
+  private final QuizSubmissionService quizSubmissionService;
   private final UserService userService;
   private final CourseService courseService;
   private final EnrollmentService enrollmentService;
   private final ProgressService progressService;
-  private final UserRepository userRepository;
+
 
   // Quiz operations
 
@@ -121,7 +120,7 @@ public class ServiceFacade {
   }
 
   public boolean isStudentExist(String studentId) {
-    return userRepository.existsById(studentId);
+    return userService.existsById(studentId);
   }
 
   public boolean hasStudentSubmittedAssignment(
