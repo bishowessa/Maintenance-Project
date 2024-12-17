@@ -1,13 +1,16 @@
 package com.lms.persistence.repositories;
 
+import com.lms.persistence.Enrollment;
 import com.lms.persistence.UserRepository;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
+import com.lms.service.EnrollmentService;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class RepositoryFacade {
   private final QuizRepository quizRepository;
   private final QuizSubmissionRepository quizSubmissionRepository;
   private final UserRepository userRepository;
+  private final EnrollmentService enrollmentService;
 
   // Assignment operations
 
@@ -64,8 +68,14 @@ public class RepositoryFacade {
     );
   }
 
-  public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId) {
-    return assignmentSubmissionRepository.hasStudentSubmittedAssignment(studentId, assignmentId);
+  public boolean hasStudentSubmittedAssignment(
+    String studentId,
+    int assignmentId
+  ) {
+    return assignmentSubmissionRepository.hasStudentSubmittedAssignment(
+      studentId,
+      assignmentId
+    );
   }
 
   public boolean existsByStudentId(String studentId) {
@@ -137,6 +147,10 @@ public class RepositoryFacade {
     return userRepository.existsById(studentId);
   }
 
+  public List<String> getAllStudentIds() {
+    return userRepository.getAllStudentIds();
+  }
+
   public boolean findQuizSubmissionByStudentIdAndQuizId(
     String studentId,
     String quizId
@@ -146,4 +160,21 @@ public class RepositoryFacade {
       quizId
     );
   }
+
+  public List<String> getAllRegestedStudentIds(String courseId) {
+    return enrollmentService
+      .getEnrollmentsByCourse(courseId)
+      .stream()
+      .map(Enrollment::getsId)
+      .collect(Collectors.toList());
+  }
+
+  public List<String> getAllRegestedCoursesIds(String studentId) {
+    return enrollmentService
+      .getEnrollmentsByCourse(studentId)
+      .stream()
+      .map(Enrollment::getcId)
+      .collect(Collectors.toList());
+  }
+
 }

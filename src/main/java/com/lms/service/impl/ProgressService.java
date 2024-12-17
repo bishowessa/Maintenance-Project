@@ -9,10 +9,10 @@ import com.lms.persistence.repositories.RepositoryFacade;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,18 +21,20 @@ class ProgressService {
 
   private final RepositoryFacade repository;
 
+
   // Get all student progress
   public List<StudentProgress> getAllStudentProgress() {
 
     List<StudentProgress> studentsProgresses = new ArrayList<>();
 
-    List<String> studentIds = Arrays.asList("1", "2", "3");
+    List<String> studentIds = repository.getAllStudentIds();
 
     for (String studentId : studentIds) {
       Map<String, List<QuizSubmission>> coursesQuizesSubmissions = new HashMap<>();
       Map<String, List<AssignmentSubmissionEntity>> coursesAssignmentsSubmissions = new HashMap<>();
 
-      List<String> regestedCourcesIds = Arrays.asList("1", "2", "3");
+      List<String> regestedCourcesIds = repository.getAllRegestedCoursesIds(studentId);
+
       for (String courseId : regestedCourcesIds) {
         List<QuizSubmission> quizSubmissionsForCourse = repository.findQuizSubmissionsByStudentAndCourse(
           studentId,
@@ -65,7 +67,7 @@ class ProgressService {
     Map<String, List<QuizSubmission>> coursesQuizesSubmissions = new HashMap<>();
     Map<String, List<AssignmentSubmissionEntity>> coursesAssignmentsSubmissions = new HashMap<>();
 
-    List<String> regestedCourcesIds = Arrays.asList("1", "2", "3");
+    List<String> regestedCourcesIds = repository.getAllRegestedCoursesIds(studentId);
     for (String courseId : regestedCourcesIds) {
       List<QuizSubmission> quizSubmissionsForCourse = repository.findQuizSubmissionsByStudentAndCourse(
         studentId,
@@ -122,7 +124,7 @@ class ProgressService {
   // Get course progress
   public CourseProgress getCourseProgress(String courseId) {
     //get all students Ids
-    List<String> studentIds = Arrays.asList("123", "456", "789");
+    List<String> studentIds = repository.getAllRegestedStudentIds(courseId);
 
     Map<String, List<QuizSubmission>> StudentsQuizesSubmissions = new HashMap<>();
     Map<String, List<AssignmentSubmissionEntity>> StudentsAssignmentSubmissions = new HashMap<>();

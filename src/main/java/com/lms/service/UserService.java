@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -27,6 +28,9 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<String> getAllStudentIds() {
+        return userRepository.getAllStudentIds();
+    }
 }
 
 

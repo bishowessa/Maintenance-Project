@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -60,6 +61,14 @@ public class UserRepository {
     public boolean existsById(String id) {
         return users.stream()
                 .anyMatch(user -> user.getId().equals(id));
+    }
+
+    public List<String> getAllStudentIds() {
+        return users
+        .stream()
+        .filter(user -> "Student".equals(user.getRole()))
+        .map(User::getId)
+        .collect(Collectors.toList());
     }
 }
 
