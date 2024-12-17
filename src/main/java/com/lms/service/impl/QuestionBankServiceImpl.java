@@ -3,7 +3,6 @@ package com.lms.service.impl;
 import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.RepositoryFacade;
-import com.lms.presentation.CourseController;
 import com.lms.service.CourseService;
 import com.lms.service.QuestionBankService;
 import java.util.ArrayList;
