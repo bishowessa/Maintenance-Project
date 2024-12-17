@@ -7,7 +7,6 @@ import com.lms.persistence.entities.questions.QuestionFactory;
 import com.lms.service.impl.ServiceFacade;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
