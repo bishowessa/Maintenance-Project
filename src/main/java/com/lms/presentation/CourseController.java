@@ -37,6 +37,7 @@ public class CourseController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
+        
 
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();

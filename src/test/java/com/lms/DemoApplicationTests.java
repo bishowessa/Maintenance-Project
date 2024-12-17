@@ -1,37 +1,40 @@
 package com.lms;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
+import static com.lms.JosephTests.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class DemoApplicationTests {
 
-    @Test
-    void testSignupAdmin() throws IOException {
-        OkHttpClient client = new OkHttpClient();
 
-        String url = "http://localhost:8080/auth/signup";
-        String jsonData = "{\"id\":\"A01\",\"firstName\":\"John\",\"lastName\":\"Doe\",\"email\":\"admin@example.com\",\"password\":\"securePassword123\",\"role\":\"Admin\"},{\"id\":\"A01\",\"firstName\":\"John\",\"lastName\":\"Doe\",\"email\":\"admin@example.com\",\"password\":\"securePassword123\",\"role\":\"Admin\"}";
+  @Test
+  void testSignupAdmin() throws IOException {
+    String adminEmail = "admin@example.com";
+    String adminPassword = "password123";
 
-        RequestBody body = RequestBody.create(jsonData, okhttp3.MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
+    JResponse signUpAdmin = signup(
+      "A01",
+      "John",
+      "Doe",
+      adminEmail,
+      adminPassword,
+      "Admin"
+    );
 
-        Response response = client.newCall(request).execute();
+    System.out.println(
+      signUpAdmin.code == 200 ? "Admin created" : "Admin creation failed"
+    );
 
-        System.out.println("Response Code: " + response.code());
-        System.out.println("Response Body: " + response.body().string());
+    JResponse loginAdmin = login(adminEmail, adminPassword);
+    String adminToken = getToken(loginAdmin.body);
 
-        assertEquals(200, response.code());
-    }
+    System.out.println("AdminToken: " + adminToken);
+    // the prented text in the debug console
+    assertEquals(200, loginAdmin.code);
+  }
+
 }
