@@ -5,7 +5,6 @@ import com.lms.persistence.User;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.entities.questions.QuestionFactory;
 import com.lms.service.impl.ServiceFacade;
-
 import java.util.Collections;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
@@ -38,6 +37,11 @@ public class QuestionBankController {
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
     }
+
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity.badRequest().body("Course not found");
+    }
+
     Question question = QuestionFactory.createQuestion(
       questionRequest.getType(),
       questionRequest
@@ -62,6 +66,9 @@ public class QuestionBankController {
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
     }
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity.badRequest().body("Course not found");
+    }
     service.deleteQuestion(courseId, questionId);
     return ResponseEntity.ok("Question deleted successfully.");
   }
@@ -81,6 +88,9 @@ public class QuestionBankController {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
+    }
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity.badRequest().body("Course not found");
     }
     return ResponseEntity.ok(service.getQuestions(courseId));
   }

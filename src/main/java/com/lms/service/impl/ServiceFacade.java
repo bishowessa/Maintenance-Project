@@ -260,4 +260,5 @@ public class ServiceFacade {
   public CourseProgress getCourseProgress(String courseId) {
     return progressService.getCourseProgress(courseId);
   }
+
 }

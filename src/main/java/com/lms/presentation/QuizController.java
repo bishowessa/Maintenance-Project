@@ -5,7 +5,6 @@ import com.lms.persistence.User;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.ServiceFacade;
-
 import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +95,6 @@ public class QuizController {
   @PostMapping("/{quizId}/submit")
   public ResponseEntity<Object> submitQuiz(
     @PathVariable String quizId,
-    @RequestParam String studentId,
     @RequestBody Map<String, Object> studentAnswers
   ) {
     Optional<User> currentUser = service.getCurrentUser();
@@ -117,7 +115,7 @@ public class QuizController {
     try {
       QuizSubmission submission = service.submitQuiz(
         quizId,
-        studentId,
+        currentUser.get().getId(),
         answers
       );
       if (submission != null) {
