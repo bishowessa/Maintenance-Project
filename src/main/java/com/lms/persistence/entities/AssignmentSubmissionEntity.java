@@ -9,6 +9,7 @@ import lombok.*;
 public class AssignmentSubmissionEntity {
     private int id;
     private String studentId;
+    private int assignmentId;
     private String courseId;
     private int score;
     private String fileURL;

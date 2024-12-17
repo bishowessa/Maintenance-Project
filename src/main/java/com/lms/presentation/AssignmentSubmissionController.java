@@ -24,48 +24,58 @@ public class AssignmentSubmissionController {
 
   @PostMapping("/submit/{studentId}")
   public ResponseEntity<String> submitAssignment(
-    @PathVariable int assignmentId,
-    @PathVariable String studentId,
-    @RequestBody AssignmentSubmissionModel model
-  ) {
+      @PathVariable int assignmentId,
+      @PathVariable String studentId,
+      @RequestBody AssignmentSubmissionModel model) {
     Optional<User> currentUser = service.getCurrentUser();
     if (currentUser.isEmpty()) {
       return ResponseEntity
-        .status(HttpStatus.UNAUTHORIZED)
-        .body("Not authenticated");
+          .status(HttpStatus.UNAUTHORIZED)
+          .body("Not authenticated");
     }
     if (!"Student".equals(currentUser.get().getRole())) {
       return ResponseEntity
-        .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+          .status(HttpStatus.FORBIDDEN)
+          .body("Access Denied: You are unauthorized");
     }
+
+    if (!service.isStudentExist(studentId)) {
+      return ResponseEntity
+          .status(HttpStatus.NOT_FOUND)
+          .body("Student does not exist");
+    }
+
+    if (service.hasStudentSubmittedAssignment(studentId, assignmentId)) {
+      return ResponseEntity
+          .status(HttpStatus.CONFLICT)
+          .body("Assignment already submitted");
+    }
+
     if (service.submitAssignment(model, assignmentId, studentId)) {
       return ResponseEntity.ok("Assignment submitted successfully.");
     } else {
       return ResponseEntity
-        .status(HttpStatus.BAD_REQUEST)
-        .body("Failed to submit assignment.");
+          .status(HttpStatus.BAD_REQUEST)
+          .body("Failed to submit assignment.");
     }
   }
 
   @GetMapping
   public ResponseEntity<Object> getSubmissionsByAssignment(
-    @PathVariable int assignmentId
-  ) {
+      @PathVariable int assignmentId) {
     Optional<User> currentUser = service.getCurrentUser();
     if (currentUser.isEmpty()) {
       return ResponseEntity
-        .status(HttpStatus.UNAUTHORIZED)
-        .body(Collections.emptyList());
+          .status(HttpStatus.UNAUTHORIZED)
+          .body(Collections.emptyList());
     }
     if (!"Instructor".equals(currentUser.get().getRole())) {
       return ResponseEntity
-        .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+          .status(HttpStatus.FORBIDDEN)
+          .body("Access Denied: You are unauthorized");
     }
     List<AssignmentSubmissionEntity> submissions = service.getAssignmentSubmissionsByAssignment(
-      assignmentId
-    );
+        assignmentId);
     return ResponseEntity.ok(submissions);
   }
 }

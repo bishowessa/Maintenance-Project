@@ -103,4 +103,14 @@ class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
       courseId
     );
   }
+
+  @Override
+  public boolean existsByStudentId(String studentId) {
+    return repository.existsByStudentId(studentId);
+  }
+
+  @Override
+  public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId) {
+    return repository.hasStudentSubmittedAssignment(studentId, assignmentId);
+}
 }

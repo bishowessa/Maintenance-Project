@@ -39,6 +39,17 @@ class AssignmentSubmissionRepository {
         }
         return false;
     }
+// Check if a student has already submitted for an assignment
+public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId) {
+    return submissions.stream()
+        .anyMatch(submission -> submission.getStudentId().equals(studentId) 
+                                && submission.getId() == assignmentId);
+}
+
+    public boolean existsByStudentId(String studentId) {
+        return submissions.stream()
+            .anyMatch(submission -> submission.getStudentId().equals(studentId));
+    }
 
     public int generateUniqueId() {
         return idGenerator.getAndIncrement();
@@ -50,4 +61,5 @@ class AssignmentSubmissionRepository {
         .filter(submission -> submission.getStudentId().equals(studentId) && submission.getCourseId().equals(courseId))
         .collect(Collectors.toList());
 }
+
 }

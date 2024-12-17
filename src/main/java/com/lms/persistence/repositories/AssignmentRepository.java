@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")
-class AssignmentRepository {
+public class AssignmentRepository {
 
   private final List<AssignmentEntity> store = new ArrayList<>();
   private final AtomicInteger idGenerator = new AtomicInteger(1);
@@ -30,5 +30,4 @@ class AssignmentRepository {
   public boolean isExist(int id) {
     return store.stream().anyMatch(e -> e.getId() == id);
   }
-
 }

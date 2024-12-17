@@ -64,6 +64,14 @@ public class RepositoryFacade {
     );
   }
 
+  public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId) {
+    return assignmentSubmissionRepository.hasStudentSubmittedAssignment(studentId, assignmentId);
+  }
+
+  public boolean existsByStudentId(String studentId) {
+    return assignmentSubmissionRepository.existsByStudentId(studentId);
+  }
+
   // Question Bank operations
 
   public void saveQuestionBank(QuestionBank questionBank) {

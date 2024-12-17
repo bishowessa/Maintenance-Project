@@ -26,4 +26,7 @@ public interface AssignmentSubmissionService {
     String studentId,
     String courseId
   );
+
+ boolean existsByStudentId(String studentId);
+ public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId);
 }

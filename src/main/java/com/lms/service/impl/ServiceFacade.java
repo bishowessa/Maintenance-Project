@@ -1,5 +1,6 @@
 package com.lms.service.impl;
 
+import com.lms.persistence.repositories.AssignmentRepository;
 import com.lms.business.models.AssignmentModel;
 import com.lms.business.models.AssignmentSubmissionModel;
 import com.lms.business.models.CourseProgress;
@@ -31,23 +32,22 @@ public class ServiceFacade {
   private final CourseService courseService;
   private final EnrollmentService enrollmentService;
   private final ProgressService progressService;
+  private final UserRepository userRepository;
 
   // Quiz operations
 
   public Quiz createQuiz(
-    String courseId,
-    String name,
-    int questionsNumber,
-    int duration,
-    String status
-  ) {
+      String courseId,
+      String name,
+      int questionsNumber,
+      int duration,
+      String status) {
     return quizService.createQuiz(
-      courseId,
-      name,
-      questionsNumber,
-      duration,
-      status
-    );
+        courseId,
+        name,
+        questionsNumber,
+        duration,
+        status);
   }
 
   public void markQuizAsDeleted(String quizId) {
@@ -69,54 +69,53 @@ public class ServiceFacade {
   // Assignment submission operations
 
   public boolean submitAssignment(
-    AssignmentSubmissionModel model,
-    int assignmentId,
-    String studentId
-  ) {
+      AssignmentSubmissionModel model,
+      int assignmentId,
+      String studentId) {
     return assignmentSubmissionService.submitAssignment(
-      model,
-      assignmentId,
-      studentId
-    );
+        model,
+        assignmentId,
+        studentId);
   }
 
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByAssignment(
-    int assignmentId
-  ) {
+      int assignmentId) {
     return assignmentSubmissionService.getSubmissionsByAssignment(assignmentId);
   }
 
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByCourse(
-    String courseId
-  ) {
+      String courseId) {
     return assignmentSubmissionService.getSubmissionsByCourse(courseId);
   }
 
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByStudent(
-    String studentId
-  ) {
+      String studentId) {
     return assignmentSubmissionService.getSubmissionsByStudent(studentId);
   }
 
   public boolean updateSubmission(
-    int submissionId,
-    AssignmentSubmissionModel updatedModel
-  ) {
+      int submissionId,
+      AssignmentSubmissionModel updatedModel) {
     return assignmentSubmissionService.updateSubmission(
-      submissionId,
-      updatedModel
-    );
+        submissionId,
+        updatedModel);
   }
 
   public List<AssignmentSubmissionEntity> getAssignmentSubmissionsByStudentAndCourse(
-    String studentId,
-    String courseId
-  ) {
+      String studentId,
+      String courseId) {
     return assignmentSubmissionService.getSubmissionsByStudentAndCourse(
-      studentId,
-      courseId
-    );
+        studentId,
+        courseId);
   }
+
+  public boolean isStudentExist(String studentId) {
+    return userRepository.existsById(studentId);
+  }
+
+  public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId) {
+    return assignmentSubmissionService.hasStudentSubmittedAssignment(studentId, assignmentId);
+}
 
   // Question bank operations
 
@@ -135,10 +134,9 @@ public class ServiceFacade {
   // Quiz submission operations
 
   public QuizSubmission submitQuiz(
-    String quizId,
-    String studentId,
-    Map<String, String> studentAnswers
-  ) {
+      String quizId,
+      String studentId,
+      Map<String, String> studentAnswers) {
     return quizSubmissionService.submitQuiz(quizId, studentId, studentAnswers);
   }
 
@@ -155,13 +153,11 @@ public class ServiceFacade {
   }
 
   public List<QuizSubmission> getQuizSubmissionsByStudentAndCourse(
-    String studentId,
-    String courseId
-  ) {
+      String studentId,
+      String courseId) {
     return quizSubmissionService.getSubmissionsByStudentAndCourse(
-      studentId,
-      courseId
-    );
+        studentId,
+        courseId);
   }
 
   // Assignment operations
@@ -175,10 +171,9 @@ public class ServiceFacade {
   }
 
   public boolean editAssignment(
-    int id,
-    String courseId,
-    AssignmentModel model
-  ) {
+      int id,
+      String courseId,
+      AssignmentModel model) {
     return assignmentService.editAssignment(id, courseId, model);
   }
 
@@ -188,11 +183,13 @@ public class ServiceFacade {
 
   public Optional<User> getCurrentUser() {
     Authentication authentication = SecurityContextHolder
-      .getContext()
-      .getAuthentication();
+        .getContext()
+        .getAuthentication();
     UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
     return userService.findByEmail(currentUserDetails.getUsername());
   }
+
+  
 
   // Course operations
 
@@ -253,13 +250,11 @@ public class ServiceFacade {
   }
 
   public StudentProgress getStudentProgressByStudentIdAndCourseId(
-    String studentId,
-    String courseId
-  ) {
+      String studentId,
+      String courseId) {
     return progressService.getStudentProgressByStudentIdAndCourseId(
-      studentId,
-      courseId
-    );
+        studentId,
+        courseId);
   }
 
   public CourseProgress getCourseProgress(String courseId) {
