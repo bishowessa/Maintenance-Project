@@ -6,6 +6,7 @@ import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.entities.questions.QuestionFactory;
 import com.lms.service.impl.ServiceFacade;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class QuestionBankController {
     this.service = service;
   }
 
-  @PostMapping("/{courseId}/questions")
+  @PostMapping("/{courseId}/add1")
   public ResponseEntity<String> addQuestion(
     @PathVariable String courseId,
     @RequestBody QuestionRequest questionRequest
@@ -32,6 +33,7 @@ public class QuestionBankController {
         .status(HttpStatus.UNAUTHORIZED)
         .body("Not authenticated");
     }
+
     if (!"Instructor".equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
@@ -48,6 +50,40 @@ public class QuestionBankController {
     );
     service.addQuestion(courseId, question);
     return ResponseEntity.ok("Question added successfully.");
+  }
+
+  @PostMapping("/{courseId}/add")
+  public ResponseEntity<String> addQuestions(
+    @PathVariable String courseId,
+    @RequestBody List<QuestionRequest> questionRequests
+  ) {
+    Optional<User> currentUser = service.getCurrentUser();
+
+    if (currentUser.isEmpty()) {
+      return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body("Not authenticated");
+    }
+
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body("Access Denied: You are unauthorized");
+    }
+
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity.badRequest().body("Course not found");
+    }
+
+    for (QuestionRequest questionRequest : questionRequests) {
+      Question question = QuestionFactory.createQuestion(
+        questionRequest.getType(),
+        questionRequest
+      );
+      service.addQuestion(courseId, question);
+    }
+
+    return ResponseEntity.ok("Questions added successfully.");
   }
 
   @DeleteMapping("/{courseId}/questions/{questionId}")
