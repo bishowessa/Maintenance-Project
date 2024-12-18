@@ -99,12 +99,10 @@ public class ServiceFacade {
   }
 
   public boolean updateSubmission(
-    int submissionId,
-    AssignmentSubmissionModel updatedModel
+    AssignmentSubmissionEntity updatedEntity
   ) {
     return assignmentSubmissionService.updateSubmission(
-      submissionId,
-      updatedModel
+      updatedEntity
     );
   }
 
@@ -180,7 +178,7 @@ public class ServiceFacade {
 
   // Assignment operations
 
-  public boolean createAssignment(AssignmentModel model, String courseId) {
+  public AssignmentEntity createAssignment(AssignmentModel model, String courseId) {
     return assignmentService.createAssignment(model, courseId);
   }
 
@@ -278,5 +276,15 @@ public class ServiceFacade {
 
   public CourseProgress getCourseProgress(String courseId) {
     return progressService.getCourseProgress(courseId);
+  }
+
+  public AssignmentSubmissionEntity getAssignmentSubmission(int submissionId) {
+    return  assignmentSubmissionService.getAssignmentSubmission(submissionId);
+
+  }
+
+  public boolean updateAssignmentSubmission(AssignmentSubmissionEntity submission) {
+    return  assignmentSubmissionService.updateSubmission(submission);
+
   }
 }

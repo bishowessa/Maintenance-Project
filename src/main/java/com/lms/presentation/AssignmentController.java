@@ -4,7 +4,6 @@ import com.lms.business.models.AssignmentModel;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.service.impl.ServiceFacade;
-
 import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,15 +35,25 @@ public class AssignmentController {
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
     }
-    if (service.createAssignment(model, courseId)) {
-      return ResponseEntity.ok("Assignment created successfully.");
+
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Course not found");
+    }
+    AssignmentEntity entity = service.createAssignment(model, courseId);
+
+    if (entity != null) {
+      return ResponseEntity.ok(
+        "Assignment " + entity.getId() + " created successfully."
+      );
     } else {
       return ResponseEntity.badRequest().body("Failed to create assignment.");
     }
   }
 
   @GetMapping
-  public ResponseEntity<List<AssignmentEntity>> getAssignmentsByCourse(
+  public ResponseEntity<Object> getAssignmentsByCourse(
     @PathVariable String courseId
   ) {
     Optional<User> currentUser = service.getCurrentUser();
@@ -52,6 +61,11 @@ public class AssignmentController {
       return ResponseEntity
         .status(HttpStatus.UNAUTHORIZED)
         .body(Collections.emptyList());
+    }
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Course not found");
     }
     return ResponseEntity.ok(service.getAssignmentsByCourse(courseId));
   }
@@ -71,6 +85,11 @@ public class AssignmentController {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
+    }
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Course not found");
     }
     boolean isDeleted = service.deleteAssignment(id, courseId);
     if (isDeleted) {
@@ -99,6 +118,13 @@ public class AssignmentController {
         .status(HttpStatus.FORBIDDEN)
         .body("Access Denied: You are unauthorized");
     }
+
+    if (service.findCourseById(courseId) == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Course not found");
+    }
+
     boolean isUpdated = service.editAssignment(id, courseId, model);
     if (isUpdated) {
       return ResponseEntity.ok("Assignment updated successfully.");

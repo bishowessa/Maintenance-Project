@@ -18,8 +18,7 @@ public interface AssignmentSubmissionService {
   List<AssignmentSubmissionEntity> getSubmissionsByStudent(String studentId);
 
   boolean updateSubmission(
-    int submissionId,
-    AssignmentSubmissionModel updatedModel
+    AssignmentSubmissionEntity updatedEntity
   );
 
   List<AssignmentSubmissionEntity> getSubmissionsByStudentAndCourse(
@@ -29,4 +28,6 @@ public interface AssignmentSubmissionService {
 
  boolean existsByStudentId(String studentId);
  public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId);
+
+AssignmentSubmissionEntity getAssignmentSubmission(int submissionId);
 }

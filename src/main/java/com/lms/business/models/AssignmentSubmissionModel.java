@@ -9,7 +9,7 @@ import lombok.*;
 public class AssignmentSubmissionModel {
     private String studentId;
     private String fileUrl;
-    private String score;
+    private int score;
     private String feedBack;
     private String status;
 }

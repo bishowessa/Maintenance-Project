@@ -14,9 +14,9 @@ public class AssignmentRepository {
   private final List<AssignmentEntity> store = new ArrayList<>();
   private final AtomicInteger idGenerator = new AtomicInteger(1);
 
-  public boolean add(AssignmentEntity entity) {
+  public AssignmentEntity add(AssignmentEntity entity) {
     entity.setId(idGenerator.getAndIncrement());
-    return store.add(entity);
+    return store.add(entity) ? entity : null;
   }
 
   public List<AssignmentEntity> findAll() {

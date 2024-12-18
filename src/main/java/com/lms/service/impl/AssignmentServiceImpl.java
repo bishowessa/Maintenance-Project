@@ -19,7 +19,7 @@ class AssignmentServiceImpl implements AssignmentService {
   }
 
   @Override
-  public boolean createAssignment(AssignmentModel model, String courseId) {
+  public AssignmentEntity createAssignment(AssignmentModel model, String courseId) {
     AssignmentEntity entity = new AssignmentEntity(
       0,
       model.getTitle(),

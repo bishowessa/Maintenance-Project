@@ -5,7 +5,6 @@ import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.repositories.RepositoryFacade;
 import com.lms.service.AssignmentSubmissionService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -77,17 +76,16 @@ class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
   }
 
   @Override
-  public boolean updateSubmission(
-    int submissionId,
-    AssignmentSubmissionModel updatedModel
-  ) {
+  public boolean updateSubmission(AssignmentSubmissionEntity updatedEntity) {
     AssignmentSubmissionEntity entity = repository.findAssignmentSubmissionById(
-      submissionId
+      updatedEntity.getId()
     );
+
     if (entity != null) {
-      entity.setScore(Integer.parseInt(updatedModel.getScore()));
-      entity.setFileURL(updatedModel.getFileUrl());
-      entity.setFeedback(updatedModel.getFeedBack());
+      entity.setScore(updatedEntity.getScore());
+      // entity.setFileURL(updatedEntity.getFileURL());
+      entity.setFeedback(updatedEntity.getFeedback());
+      entity.setStatus(updatedEntity.getStatus());
       return repository.updateAssignmentSubmission(entity);
     }
     return false;
@@ -110,7 +108,15 @@ class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
   }
 
   @Override
-  public boolean hasStudentSubmittedAssignment(String studentId, int assignmentId) {
+  public boolean hasStudentSubmittedAssignment(
+    String studentId,
+    int assignmentId
+  ) {
     return repository.hasStudentSubmittedAssignment(studentId, assignmentId);
-}
+  }
+
+  @Override
+  public AssignmentSubmissionEntity getAssignmentSubmission(int submissionId) {
+    return repository.findAssignmentSubmissionById(submissionId);
+  }
 }

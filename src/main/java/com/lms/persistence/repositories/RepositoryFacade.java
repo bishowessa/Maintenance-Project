@@ -33,7 +33,7 @@ public class RepositoryFacade {
 
   // Assignment operations
 
-  public boolean addAssignment(AssignmentEntity entity) {
+  public AssignmentEntity addAssignment(AssignmentEntity entity) {
     return assignmentRepository.add(entity);
   }
 

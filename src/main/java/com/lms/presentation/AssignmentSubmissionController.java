@@ -21,10 +21,9 @@ public class AssignmentSubmissionController {
     this.service = service;
   }
 
-  @PostMapping("/submit/{studentId}")
+  @PostMapping("/submit")
   public ResponseEntity<String> submitAssignment(
     @PathVariable int assignmentId,
-    @PathVariable String studentId,
     @RequestBody AssignmentSubmissionModel model
   ) {
     Optional<User> currentUser = service.getCurrentUser();
@@ -39,19 +38,20 @@ public class AssignmentSubmissionController {
         .body("Access Denied: You are unauthorized");
     }
 
-    if (!service.isUserExist(studentId)) {
-      return ResponseEntity
-        .status(HttpStatus.NOT_FOUND)
-        .body("Student does not exist");
-    }
-
-    if (service.hasStudentSubmittedAssignment(studentId, assignmentId)) {
+    if (
+      service.hasStudentSubmittedAssignment(
+        currentUser.get().getId(),
+        assignmentId
+      )
+    ) {
       return ResponseEntity
         .status(HttpStatus.CONFLICT)
         .body("Assignment already submitted");
     }
 
-    if (service.submitAssignment(model, assignmentId, studentId)) {
+    if (
+      service.submitAssignment(model, assignmentId, currentUser.get().getId())
+    ) {
       return ResponseEntity.ok("Assignment submitted successfully.");
     } else {
       return ResponseEntity
@@ -79,5 +79,50 @@ public class AssignmentSubmissionController {
       assignmentId
     );
     return ResponseEntity.ok(submissions);
+  }
+
+  @PatchMapping("/{submissionId}")
+  public ResponseEntity<String> editAssignmentSubmission(
+    @PathVariable int assignmentId,
+    @PathVariable int submissionId,
+    @RequestBody AssignmentSubmissionModel model
+  ) {
+    Optional<User> currentUser = service.getCurrentUser();
+    if (currentUser.isEmpty()) {
+      return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body("Not authenticated");
+    }
+    if (!"Instructor".equals(currentUser.get().getRole())) {
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body("Access Denied: You are unauthorized");
+    }
+
+    AssignmentSubmissionEntity submission = service.getAssignmentSubmission(
+      submissionId
+    );
+    if (submission == null) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body("Submission not found");
+    }
+
+    if (submission.getRelatedId() != assignmentId) {
+      return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body("Submission does not belong to this assignment");
+    }
+
+    submission.setFeedback(model.getFeedBack());
+    submission.setScore(model.getScore());
+
+    if (service.updateAssignmentSubmission(submission)) {
+      return ResponseEntity.ok("Assignment submission updated successfully.");
+    } else {
+      return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body("Failed to update assignment submission.");
+    }
   }
 }
