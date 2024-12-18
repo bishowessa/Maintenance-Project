@@ -45,7 +45,7 @@ class LMSTests {
       LMSResponse loginAdmin = login(adminEmail, adminPassword);
       adminToken = getToken(loginAdmin.body);
 
-      System.out.println("AdminToken: " + adminToken);
+      System.out.println("AdminToken: \n" + "Bearer " + adminToken);
       // the prented text in the debug console
       assertEquals(200, loginAdmin.code);
     }
@@ -82,7 +82,7 @@ class LMSTests {
     LMSResponse loginInstructor = login(instructorEmail, instructorPassword);
     instructorToken = getToken(loginInstructor.body);
 
-    System.out.println("InstructorToken: " + instructorToken);
+    System.out.println("InstructorToken: \n" + "Bearer " + instructorToken);
     assertEquals(200, loginInstructor.code);
   }
 
@@ -116,7 +116,7 @@ class LMSTests {
     LMSResponse loginStudent = login(studentEmail, studentPassword);
     studentToken = getToken(loginStudent.body);
 
-    System.out.println("StudentToken: " + studentToken);
+    System.out.println("StudentToken: \n" + "Bearer " + studentToken);
     assertEquals(200, loginStudent.code);
   }
 }
