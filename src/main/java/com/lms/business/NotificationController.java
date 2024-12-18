@@ -4,11 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lms.persistence.Notification;
 import com.lms.service.NotificationServiceImpl;
@@ -17,8 +13,11 @@ import com.lms.service.NotificationServiceImpl;
 @RequestMapping("/notifications")
 public class NotificationController {
 
-    @Autowired
-    private NotificationServiceImpl notificationService;
+    private final NotificationServiceImpl notificationService;
+
+    public NotificationController(NotificationServiceImpl notificationService) {
+        this.notificationService = notificationService;
+    }
 
     // Add a new notification
     @PostMapping
@@ -43,5 +42,26 @@ public class NotificationController {
     @GetMapping("/unread")
     public ResponseEntity<List<Notification>> getUnreadNotifications() {
         return ResponseEntity.ok(notificationService.getUnreadNotifications());
+    }
+
+    @GetMapping("/{userId}/all")
+    public ResponseEntity<List<Notification>> getAllNotifications(@PathVariable String userId) {
+        return ResponseEntity.ok(notificationService.getAllUserNotifications(userId));
+    }
+
+    @GetMapping("/{userId}/unread")
+    public ResponseEntity<List<Notification>> getUnreadNotifications(@PathVariable String userId) {
+        return ResponseEntity.ok(notificationService.getUserUnreadNotifications(userId));
+    }
+
+    @GetMapping("/{userId}/read")
+    public ResponseEntity<List<Notification>> getReadNotifications(@PathVariable String userId) {
+        return ResponseEntity.ok(notificationService.getUserReadNotifications(userId));
+    }
+
+    @PostMapping("/{notificationId}/mark-read")
+    public ResponseEntity<Void> markNotificationAsRead(@PathVariable String notificationId) {
+        notificationService.markNotificationAsRead(notificationId);
+        return ResponseEntity.ok().build();
     }
 }

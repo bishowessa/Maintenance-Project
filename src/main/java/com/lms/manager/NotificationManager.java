@@ -5,18 +5,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.lms.persistence.Notification;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class NotificationManager {
-    private List<Notification> notifications;
-
-    public NotificationManager() {
-        this.notifications = new ArrayList<>();
-    }
+    private final List<Notification> notifications = new ArrayList<>();
 
     // Add a notification
     public void addNotification(Notification notification) {
         notifications.add(notification);
-        sendEmail(notification.getUserId(), "New Notification", notification.getMessage());
+//        sendEmail(notification.getUserId(), "New Notification", notification.getMessage());
     }
 
     // Get all notifications
@@ -27,22 +25,49 @@ public class NotificationManager {
     // Get read notifications
     public List<Notification> getReadNotifications() {
         return notifications.stream()
-            .filter(Notification::isRead)
-            .collect(Collectors.toList());
+                .filter(Notification::isRead)
+                .collect(Collectors.toList());
     }
 
     // Get unread notifications
     public List<Notification> getUnreadNotifications() {
         return notifications.stream()
-            .filter(notification -> !notification.isRead())
-            .collect(Collectors.toList());
+                .filter(notification -> !notification.isRead())
+                .collect(Collectors.toList());
     }
 
-    // Joseph
+    public List<Notification> findByUserId(String userId) {
+        return notifications.stream()
+                .filter(notification -> notification.getUserId().equals(userId))
+                .collect(Collectors.toList());
+    }
+
+    public List<Notification> findUnreadByUserId(String userId) {
+        return notifications.stream()
+                .filter(notification -> notification.getUserId().equals(userId) && !notification.isRead())
+                .collect(Collectors.toList());
+    }
+
+    public List<Notification> findReadByUserId(String userId) {
+        return notifications.stream()
+                .filter(notification -> notification.getUserId().equals(userId) && notification.isRead())
+                .collect(Collectors.toList());
+    }
+
+    public void markAsRead(String notificationId) {
+        notifications.stream()
+                .filter(notification -> notification.getId().equals(notificationId))
+                .findFirst()
+                .ifPresent(notification -> notification.setRead(true));
+    }
+
+    /*
+ Joseph
     private void sendEmail(String userId, String subject, String body) {
         // Replace this with actual email sending logic
         System.out.println("Sending email to user " + userId);
         System.out.println("Subject: " + subject);
         System.out.println("Body: " + body);
     }
+*/
 }

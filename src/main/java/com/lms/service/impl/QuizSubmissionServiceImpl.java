@@ -1,6 +1,7 @@
 package com.lms.service.impl;
 
 import com.lms.business.models.StudentAnswer;
+import com.lms.events.NotificationEvent;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +25,8 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;
+  private final ApplicationEventPublisher eventPublisher;
+
 
   @Override
   public QuizSubmission submitQuiz(
@@ -30,7 +35,7 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
     Map<String, String> studentAnswers
   ) {
     // check for the studentId
-    if (repository.studentExistsById(studentId) == false) {
+    if (!repository.studentExistsById(studentId)) {
       throw new RuntimeException("Student does not exist");
     }
 
@@ -74,12 +79,17 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
     submission.setStudentAnswers(answers);
     repository.saveQuizSubmission(submission);
+
+    // Publish a notification event
+    String message = "Your quiz has been submitted successfully. Your score is: " + submission.getScore();
+    eventPublisher.publishEvent(new NotificationEvent(studentId, message, "IN_APP"));
+
     return submission;
   }
 
   @Override
   public List<QuizSubmission> getSubmissionsByStudent(String studentId) {
-    if (repository.studentExistsById(studentId) == false) {
+    if (!repository.studentExistsById(studentId)) {
       throw new RuntimeException("Student does not exist");
     }
     return repository.findQuizSubmissionsByStudentId(studentId);
@@ -100,7 +110,7 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
     String studentId,
     String courseId
   ) {
-    if (repository.studentExistsById(studentId) == false) {
+    if (!repository.studentExistsById(studentId)) {
       throw new RuntimeException("Student does not exist");
     }
     if (courseService.findCourseById(courseId) == null) {
