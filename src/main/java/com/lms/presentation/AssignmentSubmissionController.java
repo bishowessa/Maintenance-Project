@@ -108,13 +108,13 @@ public class AssignmentSubmissionController {
         .body("Submission not found");
     }
 
-    if (submission.getRelatedId() != assignmentId) {
+    if (submission.getAssignmentId() != assignmentId) {
       return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
         .body("Submission does not belong to this assignment");
     }
 
-    submission.setFeedback(model.getFeedBack());
+    submission.setFeedback(model.getFeedback());
     submission.setScore(model.getScore());
 
     if (service.updateAssignmentSubmission(submission)) {

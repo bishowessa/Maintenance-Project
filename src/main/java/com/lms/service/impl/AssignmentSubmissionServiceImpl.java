@@ -30,8 +30,8 @@ class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
       entity.setCourseId(
         repository.findAssignmentById(assignmentId).getCourseId()
       );
-      entity.setFileURL(model.getFileUrl());
-      entity.setRelatedId(assignmentId);
+      entity.setFileUrl(model.getFileUrl());
+      entity.setAssignmentId(assignmentId);
       entity.setStatus("Pending");
       return repository.addAssignmentSubmission(entity);
     } else return false;
@@ -44,7 +44,7 @@ class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
     return repository
       .findAllAssignmentSubmissions()
       .stream()
-      .filter(s -> s.getRelatedId() == assignmentId)
+      .filter(s -> s.getAssignmentId() == assignmentId)
       .collect(Collectors.toList());
   }
 
@@ -57,7 +57,7 @@ class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
       .stream()
       .filter(s -> {
         AssignmentEntity assignment = repository.findAssignmentById(
-          s.getRelatedId()
+          s.getAssignmentId()
         );
         return assignment != null && assignment.getCourseId() == courseId;
       })

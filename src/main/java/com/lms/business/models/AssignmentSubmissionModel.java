@@ -10,6 +10,6 @@ public class AssignmentSubmissionModel {
     private String studentId;
     private String fileUrl;
     private int score;
-    private String feedBack;
+    private String feedback;
     private String status;
 }
