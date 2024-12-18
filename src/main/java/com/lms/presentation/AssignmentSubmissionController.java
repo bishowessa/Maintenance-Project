@@ -116,6 +116,7 @@ public class AssignmentSubmissionController {
 
     submission.setFeedback(model.getFeedback());
     submission.setScore(model.getScore());
+    submission.setStatus(model.getStatus());
 
     if (service.updateAssignmentSubmission(submission)) {
       return ResponseEntity.ok("Assignment submission updated successfully.");
