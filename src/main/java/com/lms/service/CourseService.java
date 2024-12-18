@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface CourseService {
-    void createCourse(Course course);
+    Course createCourse(Course course);
     void uploadMedia(String courseId, MultipartFile file);
     List<String> getMediaForCourse(String courseId);
     void addLessonToCourse(String courseId, Lesson lesson);

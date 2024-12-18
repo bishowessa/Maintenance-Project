@@ -45,8 +45,8 @@ public class CourseController {
         if (!"Instructor".equals(currentUser.get().getRole())) {
             return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
         }
-        courseService.createCourse(course);
-        return ResponseEntity.ok("Course created successfully!");
+        Course newCourse = courseService.createCourse(course);
+        return ResponseEntity.ok("Course " + newCourse.getId() + " created successfully!");
     }
 
     @PostMapping("/{courseId}/media")

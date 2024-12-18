@@ -27,9 +27,10 @@ public class CourseServiceImpl implements CourseService {
     // private long currentId = 1; // Counter for unique IDs
 
     @Override
-    public void createCourse(Course course) {
+    public Course createCourse(Course course) {
         course.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6)); // Generate unique ID
         courseList.add(course);
+        return course;
     }
     @Override
     public void uploadMedia(String courseId, MultipartFile file) {
