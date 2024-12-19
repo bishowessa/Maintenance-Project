@@ -1,13 +1,17 @@
 package com.lms.listeners;
 
 import com.lms.events.NotificationEvent;
+import com.lms.persistence.OtpRequest;
 import com.lms.persistence.User;
+import com.lms.service.SmsService;
 import com.lms.service.impl.EmailService;
 import com.lms.service.impl.ServiceFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import com.lms.service.NotificationServiceImpl;
+
+import java.util.Optional;
 
 
 @Component
@@ -16,6 +20,7 @@ public class NotificationEventListener {
 
     private final NotificationServiceImpl notificationService;
     private final EmailService emailService;
+    private final SmsService smsService;
     private final ServiceFacade service;
 
     @EventListener
@@ -50,7 +55,17 @@ public class NotificationEventListener {
     }
 
     private void sendSMSNotification(NotificationEvent event) {
-        System.out.println("Sending SMS to student " + event.getUserId() + ": " + event.getMessage());
+        User user = service.findUserById(event.getUserId());
+        String lessonName= event.getMessage();
+        OtpRequest otpRequest = new OtpRequest(
+                "maya",
+                "+201014367954",
+                lessonName
+        );
+        new Thread(() -> {
+            smsService.sendSMS(otpRequest, Optional.of(user));
+        }).start();
+        System.out.println("Sending SMS to student " + event.getUserId() + " for attendance otp of lesson : " + event.getMessage());
     }
 
     private void sendInAppNotification(NotificationEvent event) {
