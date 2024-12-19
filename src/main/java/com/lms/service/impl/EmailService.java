@@ -30,10 +30,9 @@ public class EmailService {
 
         System.out.println("Sending email to " + to);
         try {
-        mailSender.send(preparator);
-        System.out.println("Email sent successfully to " + to);
-        }
-        catch (Exception e) {
+            mailSender.send(preparator);
+            System.out.println("Email sent successfully to " + to);
+        } catch (Exception e) {
             System.out.println("Email could not be sent to " + to);
         }
     }

@@ -44,7 +44,9 @@ public class NotificationEventListener {
     private void sendEmailNotification(NotificationEvent event) {
         String subject = "Notification for " + event.getUserId();
         User user = service.findUserById(event.getUserId());
-        emailService.sendEmail(user.getEmail(), subject, event.getMessage());
+        new Thread(() -> {
+            emailService.sendEmail(user.getEmail(), subject, event.getMessage());
+        }).start();
     }
 
     private void sendSMSNotification(NotificationEvent event) {
