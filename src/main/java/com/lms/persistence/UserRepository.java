@@ -70,6 +70,13 @@ public class UserRepository {
         .map(User::getId)
         .collect(Collectors.toList());
     }
+
+    public User findById(String userId) {
+        return users.stream()
+                .filter(user -> user.getId().equals(userId))
+                .findFirst()
+                .orElse(null);
+    }
 }
 
 

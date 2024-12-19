@@ -16,7 +16,7 @@ class LMSTests {
   static String instructorEmail = "instructor@example.com";
   static String instructorPassword = "password123";
 
-  static String studentEmail = "student@example.com";
+  static String studentEmail = "jojo.1922005@gmail.com";
   static String studentPassword = "password123";
 
   static String adminToken;

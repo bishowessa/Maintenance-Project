@@ -55,6 +55,7 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
     );
     submission.setQuizId(quizId);
     submission.setStudentId(studentId);
+    submission.setCourseId(quiz.getCourseId());
     List<StudentAnswer> answers = new ArrayList<>();
 
     for (Map.Entry<String, String> entry : studentAnswers.entrySet()) {
@@ -82,7 +83,9 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
     // Publish a notification event
     String message = "Your quiz has been submitted successfully. Your score is: " + submission.getScore();
-    eventPublisher.publishEvent(new NotificationEvent(studentId, message, "IN_APP"));
+    new Thread(() -> {
+    eventPublisher.publishEvent(new NotificationEvent(studentId, message, "EMAIL"));
+    }).start();
 
     return submission;
   }

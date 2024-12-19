@@ -1,26 +1,29 @@
 package com.lms.listeners;
 
 import com.lms.events.NotificationEvent;
+import com.lms.persistence.User;
+import com.lms.service.impl.EmailService;
+import com.lms.service.impl.ServiceFacade;
+import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import com.lms.service.NotificationServiceImpl;
 
 
 @Component
+@AllArgsConstructor
 public class NotificationEventListener {
 
     private final NotificationServiceImpl notificationService;
-
-    public NotificationEventListener(NotificationServiceImpl notificationService) {
-        this.notificationService = notificationService;
-    }
+    private final EmailService emailService;
+    private final ServiceFacade service;
 
     @EventListener
     public void handleNotificationEvent(NotificationEvent event) {
-        notificationService.saveNotification(event.getStudentId(), event.getMessage());
+        notificationService.saveNotification(event.getUserId(), event.getMessage());
 
         System.out.println("Notification Event Received:");
-        System.out.println("Student ID: " + event.getStudentId());
+        System.out.println("Student ID: " + event.getUserId());
         System.out.println("Message: " + event.getMessage());
         System.out.println("Notification Type: " + event.getNotificationType());
 
@@ -39,14 +42,16 @@ public class NotificationEventListener {
     }
 
     private void sendEmailNotification(NotificationEvent event) {
-        System.out.println("Sending EMAIL to student " + event.getStudentId() + ": " + event.getMessage());
+        String subject = "Notification for " + event.getUserId();
+        User user = service.findUserById(event.getUserId());
+        emailService.sendEmail(user.getEmail(), subject, event.getMessage());
     }
 
     private void sendSMSNotification(NotificationEvent event) {
-        System.out.println("Sending SMS to student " + event.getStudentId() + ": " + event.getMessage());
+        System.out.println("Sending SMS to student " + event.getUserId() + ": " + event.getMessage());
     }
 
     private void sendInAppNotification(NotificationEvent event) {
-        System.out.println("Sending IN-APP notification to student " + event.getStudentId() + ": " + event.getMessage());
+        System.out.println("Sending IN-APP notification to student " + event.getUserId() + ": " + event.getMessage());
     }
 }
