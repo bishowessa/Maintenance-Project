@@ -65,11 +65,14 @@ class QuestionBankServiceImpl implements QuestionBankService {
       );
     }
     QuestionBank questionBank = repository.findQuestionBankByCourseId(courseId);
+
     if (questionBank == null) {
-      throw new IllegalArgumentException(
-        "Question bank not found for the course."
-      );
+      questionBank = new QuestionBank();
+      questionBank.setCourseId(courseId);
+      questionBank.setQuestions(new ArrayList<>());
+      repository.saveQuestionBank(questionBank);
     }
+
     return questionBank.getQuestions();
   }
 }

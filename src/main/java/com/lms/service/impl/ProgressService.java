@@ -1,5 +1,6 @@
 package com.lms.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
 import com.lms.persistence.Course;
@@ -40,9 +41,9 @@ class ProgressService {
 
   // // Get student progress by studentId
   // public StudentProgress getStudentProgressByStudentId(String studentId) {
-  //   Map<Course, List<QuizSubmission>> quizSubmissionByCourse = new HashMap<>();
-  //   Map<Course, List<AssignmentSubmissionEntity>> assignmentSubmissionByCourse = new HashMap<>();
-  //   Map<Course, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
+  //   Map<String, List<QuizSubmission>> quizSubmissionByCourse = new HashMap<>();
+  //   Map<String, List<AssignmentSubmissionEntity>> assignmentSubmissionByCourse = new HashMap<>();
+  //   Map<String, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
 
   //   List<Course> regestedCources = repository.getAllRegisteredCourses(
   //     studentId
@@ -97,9 +98,9 @@ class ProgressService {
   //   String studentId,
   //   String courseId
   // ) {
-  //   Map<Course, List<QuizSubmission>> quizSubmissionByCourse = new HashMap<>();
-  //   Map<Course, List<AssignmentSubmissionEntity>> assignmentSubmissionByCourse = new HashMap<>();
-  //   Map<Course, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
+  //   Map<String, List<QuizSubmission>> quizSubmissionByCourse = new HashMap<>();
+  //   Map<String, List<AssignmentSubmissionEntity>> assignmentSubmissionByCourse = new HashMap<>();
+  //   Map<String, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
 
   //   Course course = courseService.findCourseById(courseId);
 
@@ -166,27 +167,27 @@ class ProgressService {
     String studentId,
     List<Course> courses
   ) {
-    Map<Course, List<QuizSubmission>> quizSubmissionsByCourse = new HashMap<>();
-    Map<Course, List<AssignmentSubmissionEntity>> assignmentSubmissionsByCourse = new HashMap<>();
-    Map<Course, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
+    Map<String, List<QuizSubmission>> quizSubmissionsByCourse = new HashMap<>();
+    Map<String, List<AssignmentSubmissionEntity>> assignmentSubmissionsByCourse = new HashMap<>();
+    Map<String, List<Lesson>> attendedLessonsByCourse = new HashMap<>();
 
     for (Course course : courses) {
       quizSubmissionsByCourse.put(
-        course,
+        course.getId(),
         repository.findQuizSubmissionsByStudentAndCourse(
           studentId,
           course.getId()
         )
       );
       assignmentSubmissionsByCourse.put(
-        course,
+        course.getId(),
         repository.findAssignmentSubmissionsByStudentAndCourse(
           studentId,
           course.getId()
         )
       );
       attendedLessonsByCourse.put(
-        course,
+        course.getId(),
         getAttendedLessonsForCourse(studentId, course)
       );
     }
@@ -224,24 +225,24 @@ class ProgressService {
   public CourseProgress getCourseProgress(String courseId) {
     Course course = courseService.findCourseById(courseId);
 
-    Map<Quiz, List<QuizSubmission>> quizSubmissionsByQuiz = repository
+    Map<String, List<QuizSubmission>> quizSubmissionsByQuiz = repository
       .findAllQuizzes()
       .stream()
       .filter(quiz -> quiz.getCourseId().equals(courseId))
       .collect(
         Collectors.toMap(
-          Function.identity(),
+          Quiz::getId,
           quiz -> repository.findQuizSubmissionsByQuizId(quiz.getId())
         )
       );
 
-    Map<AssignmentEntity, List<AssignmentSubmissionEntity>> assignmentSubmissionsByAssignment = repository
+    Map<Integer, List<AssignmentSubmissionEntity>> assignmentSubmissionsByAssignment = repository
       .findAllAssignments()
       .stream()
       .filter(assignment -> assignment.getCourseId().equals(courseId))
       .collect(
         Collectors.toMap(
-          Function.identity(),
+          AssignmentEntity::getId,
           assignment ->
             repository.findByAssignmentSubmissionsByAssignmentId(
               assignment.getId()
@@ -249,12 +250,12 @@ class ProgressService {
         )
       );
 
-    Map<Lesson, List<User>> lessonsAttendanceByLesson = course
+    Map<String, List<User>> lessonsAttendanceByLesson = course
       .getLessons()
       .stream()
       .collect(
         Collectors.toMap(
-          Function.identity(),
+          Lesson::getId,
           lesson -> {
             List<User> users = SmsService
               .viewAttendance()

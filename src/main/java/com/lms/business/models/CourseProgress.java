@@ -18,7 +18,7 @@ import lombok.*;
 public class CourseProgress {
 
   private String courseId;
-  private Map<Quiz, List<QuizSubmission>> quizSubmissionByStudent = new HashMap<>(); // studentId -> list of quiz submissions
-  private Map<AssignmentEntity, List<AssignmentSubmissionEntity>> assignmentSubmissionByStudent = new HashMap<>(); // studentId -> list of assignment submissions
-  private Map<Lesson, List<User>> attendedLessonsByStudent = new HashMap<>(); // studentId -> list of attended lessons
+  private Map<String, List<QuizSubmission>> quizSubmissionByStudent = new HashMap<>(); // studentId -> list of quiz submissions
+  private Map<Integer, List<AssignmentSubmissionEntity>> assignmentSubmissionByStudent = new HashMap<>(); // studentId -> list of assignment submissions
+  private Map<String, List<User>> attendedLessonsByStudent = new HashMap<>(); // studentId -> list of attended lessons
 }

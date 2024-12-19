@@ -1,5 +1,6 @@
 package com.lms.presentation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
 import com.lms.persistence.User;
@@ -94,16 +95,17 @@ public class ProgressController {
         .body("Course not found");
     }
 
-    // if (!service.isStudentEnrolledInCourse(studentId, courseId)) {
-    //   return  ResponseEntity
-    //   .status(HttpStatus.FORBIDDEN)
-    //   .body("Student is not enrolled in this course");
-    // }
+     if (service.getEnrollmentsByCourse(courseId).stream().noneMatch(enrollment -> enrollment.getsId().equals(studentId) )) {
+       return  ResponseEntity
+       .status(HttpStatus.FORBIDDEN)
+       .body("Student is not enrolled in this course");
+     }
 
     StudentProgress studentProgress = service.getStudentProgressByStudentIdAndCourseId(
       studentId,
       courseId
     );
+
     return ResponseEntity.ok(studentProgress);
   }
 
