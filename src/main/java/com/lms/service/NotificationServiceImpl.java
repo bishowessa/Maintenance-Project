@@ -58,4 +58,9 @@ public class NotificationServiceImpl {
     public void markNotificationAsRead(String notificationId) {
         notificationManager.markAsRead(notificationId);
     }
+
+    public boolean isUserNotification(String id, String notificationId) {
+        return notificationManager.findByUserId(id).stream()
+                .anyMatch(notification -> notification.getId().equals(notificationId));
+    }
 }
