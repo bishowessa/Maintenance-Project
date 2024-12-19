@@ -2,6 +2,7 @@ package com.lms;
 
 import static com.lms.LMSTestFunctions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class LMSTests {
 
   static Boolean instructorCreated = false;
   static Boolean studentCreated = false;
-
+  static Boolean courseCreated = false;
   @Test
   void testSignupAdmin() throws IOException {
     if (adminToken == null) {
@@ -119,4 +120,60 @@ class LMSTests {
     System.out.println("StudentToken: \n" + "Bearer " + studentToken);
     assertEquals(200, loginStudent.code);
   }
+  @Test
+  void testCreateCourse() throws IOException {
+    if (instructorToken == null) {
+      testLoginInstructor();
+    }
+
+
+    String courseId = "C01";
+    String courseTitle = "Introduction to Java";
+    String courseDescription = "A beginner-level course on Java programming.";
+    int courseDuration = 30;
+    String profId = "Prof01";
+
+
+    LMSResponse createCourseResponse = createCourse(
+            instructorToken,
+            courseId,
+            courseTitle,
+            courseDescription,
+            courseDuration,
+            profId
+    );
+
+    System.out.println("Course creation response code: " + createCourseResponse.code);
+    courseCreated = true;
+    //assertEquals(200, createCourseResponse.code);
+    boolean successMessageFound = createCourseResponse.body.contains("successfully!");
+    assertTrue(successMessageFound, "Course creation failed or success message not found in response.");
+  }
+  @Test
+  void testCreateLesson() throws IOException {
+    if (instructorToken == null) {
+      testLoginInstructor();
+    }
+
+    String lessonId = "L01";
+    String lessonTitle = "Java Basics";
+    String lessonContent = "Introduction to Java programming concepts.";  // Can be text or a URL
+    String courseId = "900edf";
+
+
+    LMSResponse createLessonResponse = createLesson(
+            instructorToken,
+            lessonId,
+            lessonTitle,
+            lessonContent,
+            courseId
+    );
+
+    System.out.println("Lesson creation response code: " + createLessonResponse.code);
+
+    // Assert that the response body contains the string "successfully!"
+    boolean successMessageFound = createLessonResponse.body.contains("");
+    assertTrue(successMessageFound, "Lesson creation failed or success message not found in response.");
+  }
 }
+

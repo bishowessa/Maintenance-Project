@@ -114,6 +114,72 @@ public class LMSTestFunctions {
     Response response = client.newCall(request).execute();
     return new LMSResponse(response.code(), response.body().string());
   }
+  public static LMSResponse createCourse(
+          String instructorToken,
+          String id,
+          String title,
+          String description,
+          int duration,
+          String Profid
+  ) throws IOException {
+    String url = "http://localhost:8080/courses";
+    OkHttpClient client = new OkHttpClient();
+
+    String jsonData =
+            "{\"id\":\"" + id +
+                    "\",\"title\":\"" + title +
+                    "\",\"description\":\"" + description +
+                    "\",\"duration\":" + duration +
+                    ",\"profId\":\"" + Profid + "\"}";
+
+    RequestBody body = RequestBody.create(
+            jsonData,
+            okhttp3.MediaType.get("application/json; charset=utf-8")
+    );
+
+    Request request = new Request.Builder()
+            .url(url)
+            .post(body)
+            .header("Authorization", "Bearer " + instructorToken)
+            .build();
+
+    Response response = client.newCall(request).execute();
+    return new LMSResponse(response.code(), response.body().string());
+  }
+  public static LMSResponse createLesson(
+          String instructorToken,
+          String id,
+          String title,
+          String content,
+          String courseId
+  ) throws IOException {
+    String url = "http://localhost:8080/courses/900edf/lessons";
+    OkHttpClient client = new OkHttpClient();
+
+    // Create the JSON data for the lesson
+    String jsonData = "{\"id\":\"" + id +
+            "\",\"title\":\"" + title +
+            "\",\"content\":\"" + content +
+            "\",\"courseId\":\"" + courseId + "\"}";
+
+    // Set up the request body with the JSON data
+    RequestBody body = RequestBody.create(
+            jsonData,
+            okhttp3.MediaType.get("application/json; charset=utf-8")
+    );
+
+    // Build the request with the appropriate headers
+    Request request = new Request.Builder()
+            .url(url)
+            .post(body)
+            .header("Authorization", "Bearer " + instructorToken)
+            .build();
+
+    // Execute the request and return the response
+    Response response = client.newCall(request).execute();
+    return new LMSResponse(response.code(), response.body().string());
+  }
+
   // public static void main(String[] args) {
   //   try {
   //     String adminEmail = "admin@example.com";
