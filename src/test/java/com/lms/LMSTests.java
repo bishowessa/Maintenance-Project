@@ -26,7 +26,10 @@ class LMSTests {
 
   static Boolean instructorCreated = false;
   static Boolean studentCreated = false;
+
   static Boolean courseCreated = false;
+  static String lastCourseIdCreated;
+
   @Test
   void testSignupAdmin() throws IOException {
     if (adminToken == null) {
@@ -144,21 +147,25 @@ class LMSTests {
     );
 
     System.out.println("Course creation response code: " + createCourseResponse.code);
-    courseCreated = true;
     //assertEquals(200, createCourseResponse.code);
     boolean successMessageFound = createCourseResponse.body.contains("successfully!");
+    if (successMessageFound){
+    String[] parts = createCourseResponse.body.split(" ");
+    lastCourseIdCreated = parts[1];
+    courseCreated = true;
+    System.out.println("Course " + lastCourseIdCreated + " created successfully.");
+    }
     assertTrue(successMessageFound, "Course creation failed or success message not found in response.");
   }
   @Test
   void testCreateLesson() throws IOException {
-    if (instructorToken == null) {
-      testLoginInstructor();
+    if (lastCourseIdCreated == null) {
+        testCreateCourse();
     }
 
     String lessonId = "L01";
     String lessonTitle = "Java Basics";
     String lessonContent = "Introduction to Java programming concepts.";  // Can be text or a URL
-    String courseId = "900edf";
 
 
     LMSResponse createLessonResponse = createLesson(
@@ -166,13 +173,15 @@ class LMSTests {
             lessonId,
             lessonTitle,
             lessonContent,
-            courseId
+            lastCourseIdCreated
     );
 
     System.out.println("Lesson creation response code: " + createLessonResponse.code);
 
     // Assert that the response body contains the string "successfully!"
-    boolean successMessageFound = createLessonResponse.body.contains("");
+    boolean successMessageFound = createLessonResponse.body.contains("successfully");
+    System.out.println(createLessonResponse.body);
+
     assertTrue(successMessageFound, "Lesson creation failed or success message not found in response.");
   }
 }

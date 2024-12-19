@@ -153,14 +153,13 @@ public class LMSTestFunctions {
           String content,
           String courseId
   ) throws IOException {
-    String url = "http://localhost:8080/courses/900edf/lessons";
+    String url = "http://localhost:8080/courses/"+courseId+"/lessons";
     OkHttpClient client = new OkHttpClient();
 
     // Create the JSON data for the lesson
     String jsonData = "{\"id\":\"" + id +
             "\",\"title\":\"" + title +
-            "\",\"content\":\"" + content +
-            "\",\"courseId\":\"" + courseId + "\"}";
+            "\",\"content\":\"" + content + "\"}";
 
     // Set up the request body with the JSON data
     RequestBody body = RequestBody.create(
