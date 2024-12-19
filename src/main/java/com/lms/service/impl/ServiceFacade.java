@@ -287,4 +287,8 @@ public class ServiceFacade {
     return  assignmentSubmissionService.updateSubmission(submission);
 
   }
+
+    public User findUserById(String userId) {
+    return userService.findById(userId);
+    }
 }
