@@ -2,6 +2,8 @@ package com.lms.service;
 
 import java.util.List;
 
+import com.lms.events.CourseNotificationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.lms.manager.NotificationManager;
@@ -11,9 +13,12 @@ import com.lms.persistence.Notification;
 public class NotificationServiceImpl {
 
     private final NotificationManager notificationManager;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public NotificationServiceImpl(NotificationManager notificationManager) {
+
+    public NotificationServiceImpl(NotificationManager notificationManager, ApplicationEventPublisher eventPublisher) {
         this.notificationManager = notificationManager;
+        this.eventPublisher = eventPublisher;
     }
 
     // Add a new notification
@@ -62,5 +67,10 @@ public class NotificationServiceImpl {
     public boolean isUserNotification(String id, String notificationId) {
         return notificationManager.findByUserId(id).stream()
                 .anyMatch(notification -> notification.getId().equals(notificationId));
+    }
+
+    public void notifyStudents(String courseId, String message) {
+        CourseNotificationEvent event = new CourseNotificationEvent(this, courseId, message);
+        eventPublisher.publishEvent(event);
     }
 }

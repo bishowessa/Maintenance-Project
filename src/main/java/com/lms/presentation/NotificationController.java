@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 import com.lms.persistence.User;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +13,17 @@ import com.lms.persistence.Notification;
 import com.lms.service.NotificationServiceImpl;
 import com.lms.service.impl.ServiceFacade;
 
+@Getter
+class NotificationRequest {
+    private String message;
+}
+
 @RestController
 @RequestMapping("/notifications")
 public class NotificationController {
 
     private final NotificationServiceImpl notificationService;
     private final ServiceFacade service;
-
 
 
     public NotificationController(NotificationServiceImpl notificationService, ServiceFacade service) {
@@ -120,4 +125,10 @@ public class NotificationController {
             return ResponseEntity.status(404).body("Notification not found");
         }
     }
+
+    @PostMapping("/course/{courseId}")
+    public void notifyStudentsInCourse(@PathVariable String courseId, @RequestBody NotificationRequest request) {
+        notificationService.notifyStudents(courseId, request.getMessage());
+    }
 }
+
