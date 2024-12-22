@@ -84,22 +84,24 @@ class EnrollmentControllerTest {
     }
 
     @Test
-    void testGetEnrollmentsByCourse() {
-        // Arrange
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("instructor@example.com");
-        User user = new User();
-        user.setRole("Instructor");
-        user.setId("I01");
-        when(userService.findByEmail("instructor@example.com")).thenReturn(Optional.of(user));
-        Enrollment enrollment = new Enrollment("E1", "I01", "101");
-        when(enrollmentService.getEnrollmentsByCourse("101")).thenReturn(List.of(enrollment));
+@Test
+void testGetEnrollmentsByCourse() {
 
-        // Act
-        ResponseEntity<?> response = enrollmentController.getEnrollmentsByCourse("101");
+    when(authentication.getPrincipal()).thenReturn(userDetails);
+    when(userDetails.getUsername()).thenReturn("instructor@example.com");
+    User user = new User();
+    user.setRole("Instructor");
+    user.setId("I01");
+    when(userService.findByEmail("instructor@example.com")).thenReturn(Optional.of(user));
+    Enrollment enrollment = new Enrollment("E1", "S01", "101");
+    List<Enrollment> enrollments = List.of(enrollment);
+    when(enrollmentService.getEnrollmentsByCourse("101")).thenReturn(enrollments);
 
-        // Assert
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(List.of(enrollment), response.getBody());
-    }
+    ResponseEntity<?> response = enrollmentController.getEnrollmentsByCourse("101");
+
+    assertEquals(200, response.getStatusCodeValue());
+    assertEquals(enrollments.toString(), response.getBody()); 
+    verify(enrollmentService, times(1)).getEnrollmentsByCourse("101");
+}
+
 }
