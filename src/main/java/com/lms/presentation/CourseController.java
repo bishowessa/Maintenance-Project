@@ -1,11 +1,14 @@
 package com.lms.presentation;
 
+import com.lms.events.CourseNotificationEvent;
+import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
 import com.lms.persistence.Lesson;
 import com.lms.persistence.User;
 import com.lms.service.AuthenticationService;
 import com.lms.service.CourseService;
 import com.lms.service.UserService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,11 +28,13 @@ public class CourseController {
     private final UserService userService;
     private final CourseService courseService;
     private final AuthenticationService authenticationService;
+    private ApplicationEventPublisher eventPublisher;
 
-    public CourseController(CourseService courseService, AuthenticationService auth, UserService user) {
+    public CourseController(CourseService courseService, AuthenticationService auth, UserService user, ApplicationEventPublisher eventPublisher) {
         this.courseService = courseService;
         this.authenticationService=auth;
         this.userService=user;
+        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping
@@ -37,7 +42,7 @@ public class CourseController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
-        
+
 
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
@@ -45,6 +50,10 @@ public class CourseController {
         if (!"Instructor".equals(currentUser.get().getRole())) {
             return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
         }
+
+        String message = "Course " + course.getId() + " \"" + course.getTitle() + "\"" + " created successfully" ;
+        eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message, "EMAIL"));
+        course.setProfid(currentUser.get().getId());
         Course newCourse = courseService.createCourse(course);
         return ResponseEntity.ok("Course " + newCourse.getId() + " created successfully!");
     }
@@ -76,6 +85,12 @@ public class CourseController {
             fout.write(file.getBytes());
             fout.close();
             course.addMedia(filePath);
+
+            String studentMessage = "course " + courseId + " \"" + course.getTitle() + "\"" + " media updated successfully";
+            eventPublisher.publishEvent(new CourseNotificationEvent(this, courseId, studentMessage));
+            String instructorMessage = "You updated course  " + courseId + " \"" + course.getTitle() + "\"" + " media successfully";
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+
             return ResponseEntity.ok("File uploaded successfully!");
         } catch (Exception e) {
             e.printStackTrace();

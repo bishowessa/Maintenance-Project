@@ -3,6 +3,7 @@ package com.lms.service;
 import java.util.List;
 
 import com.lms.events.CourseNotificationEvent;
+import com.lms.events.NotificationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class NotificationServiceImpl {
 
     // Add a new notification
     public void addNotification(Notification notification) {
-        notificationManager.addNotification(notification);
+        eventPublisher.publishEvent(new NotificationEvent(this, notification.getUserId(), notification.getMessage(), "EMAIL"));
     }
 
     // Get all notifications

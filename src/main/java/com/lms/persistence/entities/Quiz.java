@@ -18,6 +18,7 @@ public class Quiz {
   private String id;
   private String CourseId;
   private String name;
+  private String instructorId;
   private int numberOfQuestions;
   private int duration;
   private String status;

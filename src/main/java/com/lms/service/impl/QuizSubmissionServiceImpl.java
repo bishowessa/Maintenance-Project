@@ -80,11 +80,6 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
     submission.setStudentAnswers(answers);
     repository.saveQuizSubmission(submission);
-
-    // Publish a notification event
-    String message = "Your quiz has been submitted successfully. Your score is: " + submission.getScore();
-    eventPublisher.publishEvent(new NotificationEvent(studentId, message, "EMAIL"));
-
     return submission;
   }
 

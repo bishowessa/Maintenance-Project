@@ -24,6 +24,7 @@ class QuizServiceImpl implements QuizService {
   public Quiz createQuiz(
     String courseId,
     String name,
+    String instructorId,
     int questionsNumber,
     int duration,
     String status
@@ -58,6 +59,7 @@ class QuizServiceImpl implements QuizService {
       UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
       courseId,
       name,
+            instructorId,
       questionsNumber,
       duration,
       status,

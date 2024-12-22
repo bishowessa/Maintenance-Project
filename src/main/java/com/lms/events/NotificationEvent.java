@@ -1,12 +1,18 @@
 package com.lms.events;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.context.ApplicationEvent;
 
 @Getter
-@AllArgsConstructor
-public class NotificationEvent {
-    private String userId;
-    private String message;
-    private String notificationType;
+public class NotificationEvent extends ApplicationEvent {
+    private final String userId;
+    private final String message;
+    private final String notificationType;
+
+    public NotificationEvent(Object source, String userId, String message, String notificationType) {
+        super(source);
+        this.userId = userId;
+        this.message = message;
+        this.notificationType = notificationType;
+    }
 }

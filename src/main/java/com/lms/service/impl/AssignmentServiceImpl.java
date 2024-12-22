@@ -19,7 +19,7 @@ class AssignmentServiceImpl implements AssignmentService {
   }
 
   @Override
-  public AssignmentEntity createAssignment(AssignmentModel model, String courseId) {
+  public AssignmentEntity createAssignment(AssignmentModel model, String courseId, String instructorId) {
     AssignmentEntity entity = new AssignmentEntity(
       0,
       model.getTitle(),
@@ -27,7 +27,8 @@ class AssignmentServiceImpl implements AssignmentService {
       model.getDescription(),
       model.getGrade(),
       model.getDueDate(),
-      model.getStatus()
+      model.getStatus(),
+            instructorId
     );
     return repository.addAssignment(entity);
   }
@@ -79,5 +80,10 @@ class AssignmentServiceImpl implements AssignmentService {
       .stream()
       .filter(a -> a.getCourseId().equals(courseId))
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public AssignmentEntity findAssignmentById(int assignmentId) {
+    return repository.findAssignmentById(assignmentId);
   }
 }

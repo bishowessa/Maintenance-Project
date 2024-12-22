@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 class QuizRepository {
 
-  private List<Quiz> quizzes = new ArrayList<>();
+  private final List<Quiz> quizzes = new ArrayList<>();
 
   public Optional<Quiz> findById(String quizId) {
     return quizzes.stream().filter(q -> q.getId().equals(quizId)).findFirst();

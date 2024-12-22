@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.lms.persistence.User;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,10 @@ public class NotificationController {
             return ResponseEntity
                     .status(403)
                     .body("Access Denied: You are unauthorized");
+        }
+
+        if(service.findUserById(notification.getUserId()) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
         notificationService.addNotification(notification);
@@ -109,7 +114,7 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getUserReadNotifications(currentUser.get().getId()));
     }
 
-    @PostMapping("/{notificationId}/mark-read")
+    @PostMapping("/{notificationId}")
     public ResponseEntity<Object> markNotificationAsRead(@PathVariable String notificationId) {
         Optional<User> currentUser = service.getCurrentUser();
         if (currentUser.isEmpty()) {
@@ -127,8 +132,12 @@ public class NotificationController {
     }
 
     @PostMapping("/course/{courseId}")
-    public void notifyStudentsInCourse(@PathVariable String courseId, @RequestBody NotificationRequest request) {
+    public ResponseEntity<String> notifyStudentsInCourse(@PathVariable String courseId, @RequestBody NotificationRequest request) {
+        if(service.findCourseById(courseId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
         notificationService.notifyStudents(courseId, request.getMessage());
+        return ResponseEntity.ok("Course Notification added successfully!");
     }
 }
 

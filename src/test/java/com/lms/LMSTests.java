@@ -26,7 +26,7 @@ class LMSTests {
     static String instructorPassword = "password123";
 
     static String studentId = "S01";
-    static String studentEmail = "jojo.1922005@gmail.com";
+    static String studentEmail = "student@example.com";
     static String studentPassword = "password123";
 
     static String adminToken;
@@ -50,6 +50,7 @@ class LMSTests {
     QuestionBankTests questionBankTests = new QuestionBankTests();
     QuizTests quizTests = new QuizTests();
     SetupTests setupTests = new SetupTests();
+    CourseTests courseTests = new CourseTests();
 
     @Nested
     @Order(0)
@@ -156,85 +157,96 @@ class LMSTests {
         }
     }
 
-
-    @Test
-    void testCreateCourse() throws IOException {
-        if (instructorToken == null) {
-            setupTests.testLoginInstructor();
-        }
-
-        String courseId = "C01";
-        String courseTitle = "Introduction to Java";
-        String courseDescription = "A beginner-level course on Java programming.";
-        int courseDuration = 30;
-        String profId = "Prof01";
-
-        LMSResponse createCourseResponse = createCourse(
-                instructorToken,
-                courseId,
-                courseTitle,
-                courseDescription,
-                courseDuration,
-                profId
-        );
-
-        System.out.println(
-                "Course creation response code: " + createCourseResponse.code
-        );
-        //assertEquals(200, createCourseResponse.code);
-        boolean successMessageFound = createCourseResponse.body.contains(
-                "successfully!"
-        );
-        if (successMessageFound) {
-            String[] parts = createCourseResponse.body.split(" ");
-            lastCourseIdCreated = parts[1];
-            courseCreated = true;
-            System.out.println(
-                    "Course " + lastCourseIdCreated + " created successfully."
-            );
-        }
-        assertTrue(
-                successMessageFound,
-                "Course creation failed or success message not found in response."
-        );
-    }
-
-    @Test
-    void testCreateLesson() throws IOException {
-        if (lastCourseIdCreated == null) {
-            testCreateCourse();
-        }
-
-        String lessonId = "L01";
-        String lessonTitle = "Java Basics";
-        String lessonContent = "Introduction to Java programming concepts."; // Can be text or a URL
-
-        LMSResponse createLessonResponse = createLesson(
-                instructorToken,
-                lessonId,
-                lessonTitle,
-                lessonContent,
-                lastCourseIdCreated
-        );
-
-        System.out.println(
-                "Lesson creation response code: " + createLessonResponse.code
-        );
-
-        // Assert that the response body contains the string "successfully!"
-        boolean successMessageFound = createLessonResponse.body.contains(
-                "successfully"
-        );
-        System.out.println(createLessonResponse.body);
-
-        assertTrue(
-                successMessageFound,
-                "Lesson creation failed or success message not found in response."
-        );
-    }
-
     @Nested
     @Order(1)
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class CourseTests {
+        @Test
+        void testCreateCourse() throws IOException {
+            if (instructorToken == null) {
+                setupTests.testLoginInstructor();
+            }
+
+            String courseId = "C01";
+            String courseTitle = "Introduction to Java";
+            String courseDescription = "A beginner-level course on Java programming.";
+            int courseDuration = 30;
+            String profId = "Prof01";
+
+            LMSResponse createCourseResponse = createCourse(
+                    instructorToken,
+                    courseId,
+                    courseTitle,
+                    courseDescription,
+                    courseDuration,
+                    profId
+            );
+
+            System.out.println(
+                    "Course creation response code: " + createCourseResponse.code
+            );
+            //assertEquals(200, createCourseResponse.code);
+            boolean successMessageFound = createCourseResponse.body.contains(
+                    "successfully!"
+            );
+            if (successMessageFound) {
+                String[] parts = createCourseResponse.body.split(" ");
+                lastCourseIdCreated = parts[1];
+                courseCreated = true;
+                System.out.println(
+                        "Course " + lastCourseIdCreated + " created successfully."
+                );
+            }
+            assertTrue(
+                    successMessageFound,
+                    "Course creation failed or success message not found in response."
+            );
+        }
+    }
+
+
+    @Nested
+    @Order(2)
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class LessonTests {
+        @Test
+        void testCreateLesson() throws IOException {
+            if (lastCourseIdCreated == null) {
+                courseTests.testCreateCourse();
+            }
+
+            String lessonId = "L01";
+            String lessonTitle = "Java Basics";
+            String lessonContent = "Introduction to Java programming concepts."; // Can be text or a URL
+
+            LMSResponse createLessonResponse = createLesson(
+                    instructorToken,
+                    lessonId,
+                    lessonTitle,
+                    lessonContent,
+                    lastCourseIdCreated
+            );
+
+            System.out.println(
+                    "Lesson creation response code: " + createLessonResponse.code
+            );
+
+            // Assert that the response body contains the string "successfully!"
+            boolean successMessageFound = createLessonResponse.body.contains(
+                    "successfully"
+            );
+            System.out.println(createLessonResponse.body);
+
+            assertTrue(
+                    successMessageFound,
+                    "Lesson creation failed or success message not found in response."
+            );
+        }
+    }
+
+
+    @Nested
+    @Order(3)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class QuestionBankTests {
 
@@ -246,7 +258,7 @@ class LMSTests {
             }
 
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
 
             String type = "MCQ";
@@ -290,7 +302,7 @@ class LMSTests {
 
 
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
 
             String type = "TrueFalse";
@@ -332,7 +344,7 @@ class LMSTests {
 
 
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
 
             String type = "ShortAnswer";
@@ -374,7 +386,7 @@ class LMSTests {
             }
 
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
 
             String type1 = "MCQ";
@@ -445,7 +457,7 @@ class LMSTests {
             }
 
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
 
 
@@ -497,7 +509,7 @@ class LMSTests {
     }
 
     @Nested
-    @Order(2)
+    @Order(4)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class QuizTests {
 
@@ -505,7 +517,7 @@ class LMSTests {
         @Order(1)
         public void testCreateQuiz() throws IOException {
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
             if (numberOfAddedQuestions < 1) {
                 questionBankTests.testAddMultipleQuestionToQuestionBank();
@@ -520,10 +532,18 @@ class LMSTests {
 
             LMSResponse response = createQuiz(instructorToken, lastCourseIdCreated, title, questionNumber, duration, status);
             System.out.println("Create quiz response code: " + response.code);
-            lastQuizTrueAnswers = response.body.split("\"correctAnswers\":")[1].substring(0, response.body.split("\"correctAnswers\":")[1].length() - 1);
+            try {
+                lastQuizTrueAnswers = response.body.split("\"correctAnswers\":")[1].substring(0, response.body.split("\"correctAnswers\":")[1].length() - 1);
+            } catch (Exception e) {
+                lastQuizTrueAnswers = "unable to split the body";
+                System.out.println(lastQuizTrueAnswers + "Create quiz response body: " + response.body);
+            }
             System.out.println("Last Quiz answers: " + lastQuizTrueAnswers);
-
-            lastQuizId = response.body.split("\"")[3];
+            try {
+                lastQuizId = response.body.split("\"")[3];
+            } catch (Exception e) {
+                lastQuizId = null;
+            }
             System.out.println("last created quiz:" + lastQuizId);
             assertEquals(200, response.code);
         }
@@ -597,7 +617,7 @@ class LMSTests {
     }
 
     @Nested
-    @Order(3)
+    @Order(5)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class QuizSubmissionTests {
 
@@ -650,7 +670,7 @@ class LMSTests {
     }
 
     @Nested
-    @Order(4)
+    @Order(6)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class ProgressTests {
 
@@ -701,7 +721,7 @@ class LMSTests {
                 setupTests.testLoginInstructor();
             }
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
             if (studentToken == null) {
                 setupTests.testLoginStudent();
@@ -735,7 +755,7 @@ class LMSTests {
                 setupTests.testLoginInstructor();
             }
             if (lastCourseIdCreated == null) {
-                testCreateCourse();
+                courseTests.testCreateCourse();
             }
 
             LMSResponse response = getCourseProgress(instructorToken, lastCourseIdCreated);

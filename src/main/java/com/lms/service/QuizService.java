@@ -9,6 +9,7 @@ public interface QuizService {
   Quiz createQuiz(
       String courseId,
       String name,
+      String instructorId,
       int questionsNumber,
       int duration,
       String status);

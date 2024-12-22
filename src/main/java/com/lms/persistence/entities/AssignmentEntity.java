@@ -14,4 +14,5 @@ public class AssignmentEntity {
     private int grade;
     private Date dueDate;
     private String status;
+    private String instructorId;
 }

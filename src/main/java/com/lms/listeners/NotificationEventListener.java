@@ -1,6 +1,8 @@
 package com.lms.listeners;
 
 import com.lms.events.NotificationEvent;
+import com.lms.manager.NotificationManager;
+import com.lms.persistence.Notification;
 import com.lms.persistence.OtpRequest;
 import com.lms.persistence.User;
 import com.lms.service.SmsService;
@@ -18,14 +20,18 @@ import java.util.Optional;
 @AllArgsConstructor
 public class NotificationEventListener {
 
-    private final NotificationServiceImpl notificationService;
     private final EmailService emailService;
     private final SmsService smsService;
     private final ServiceFacade service;
+    private final NotificationManager notificationManager;
+
 
     @EventListener
     public void handleNotificationEvent(NotificationEvent event) {
-        notificationService.saveNotification(event.getUserId(), event.getMessage());
+        Notification notification = new Notification();
+        notification.setUserId(event.getUserId());
+        notification.setMessage(event.getMessage());
+        notificationManager.addNotification(notification);
 
         System.out.println("Notification Event Received:");
         System.out.println("Student ID: " + event.getUserId());
@@ -47,16 +53,22 @@ public class NotificationEventListener {
     }
 
     private void sendEmailNotification(NotificationEvent event) {
-        String subject = "Notification for " + event.getUserId();
         User user = service.findUserById(event.getUserId());
+        String subject = "Notification for " + event.getUserId() + " \"" + user.getFirstName() + "\"";
         new Thread(() -> {
-            emailService.sendEmail(user.getEmail(), subject, event.getMessage());
+
+            try {
+                emailService.sendEmail(user.getEmail(), subject, event.getMessage());
+            }
+            catch (Exception e) {
+                System.err.println("Couldn't send the email: " + e);
+            }
         }).start();
     }
 
     private void sendSMSNotification(NotificationEvent event) {
         User user = service.findUserById(event.getUserId());
-        String lessonName= event.getMessage();
+        String lessonName = event.getMessage();
         OtpRequest otpRequest = new OtpRequest(
                 "maya",
                 "+201014367954",

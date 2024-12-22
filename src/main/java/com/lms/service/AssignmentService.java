@@ -7,7 +7,7 @@ import com.lms.persistence.entities.AssignmentEntity;
 
 public interface AssignmentService {
 
-  AssignmentEntity createAssignment(AssignmentModel model, String courseId);
+  AssignmentEntity createAssignment(AssignmentModel model, String courseId, String instructorId);
 
   boolean deleteAssignment(int id, String courseId);
 
@@ -18,4 +18,5 @@ public interface AssignmentService {
 
   List<AssignmentEntity> getAssignmentsByCourse(String courseId);
 
+  AssignmentEntity findAssignmentById(int assignmentId);
 }

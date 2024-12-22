@@ -37,6 +37,7 @@ public class ServiceFacade {
   public Quiz createQuiz(
     String courseId,
     String name,
+    String instructorId,
     int questionsNumber,
     int duration,
     String status
@@ -44,6 +45,7 @@ public class ServiceFacade {
     return quizService.createQuiz(
       courseId,
       name,
+            instructorId,
       questionsNumber,
       duration,
       status
@@ -178,8 +180,8 @@ public class ServiceFacade {
 
   // Assignment operations
 
-  public AssignmentEntity createAssignment(AssignmentModel model, String courseId) {
-    return assignmentService.createAssignment(model, courseId);
+  public AssignmentEntity createAssignment(AssignmentModel model, String courseId, String instructorId) {
+    return assignmentService.createAssignment(model, courseId, instructorId);
   }
 
   public boolean deleteAssignment(int id, String courseId) {
@@ -198,6 +200,10 @@ public class ServiceFacade {
     return assignmentService.getAssignmentsByCourse(courseId);
   }
 
+  public AssignmentEntity findAssignmentById(int assignmentId) {
+    return assignmentService.findAssignmentById(assignmentId);
+  }
+
   public Optional<User> getCurrentUser() {
     Authentication authentication = SecurityContextHolder
       .getContext()
@@ -205,6 +211,7 @@ public class ServiceFacade {
     UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
     return userService.findByEmail(currentUserDetails.getUsername());
   }
+
 
   // Course operations
 

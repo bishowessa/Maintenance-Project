@@ -1,23 +1,28 @@
 package com.lms.presentation;
 
 import com.lms.business.models.QuizRequest;
+import com.lms.events.CourseNotificationEvent;
+import com.lms.events.NotificationEvent;
+import com.lms.persistence.Course;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.ServiceFacade;
 import java.util.*;
+
+import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/quizzes")
+@AllArgsConstructor
 public class QuizController {
 
   private final ServiceFacade service;
-
-  public QuizController(ServiceFacade service) {
-    this.service = service;
-  }
+  private ApplicationEventPublisher eventPublisher;
 
   @PostMapping
   public ResponseEntity<Object> createQuiz(
@@ -37,10 +42,17 @@ public class QuizController {
       Quiz quiz = service.createQuiz(
         quizRequest.getCourseId(),
         quizRequest.getTitle(),
+        currentUser.get().getId(),
         quizRequest.getQuestionsNumber(),
         quizRequest.getDuration(),
         quizRequest.getStatus()
       );
+
+      String studentMessage = "New quiz " + quiz.getId() + " \"" +quiz.getName() + "\"" +" in course " + quiz.getCourseId() + " number of questions is " + quiz.getNumberOfQuestions() + " quiz duration is " + quiz.getDuration();
+      eventPublisher.publishEvent(new CourseNotificationEvent(this, quiz.getCourseId(), studentMessage));
+      String instructorMessage = "You Published new quiz successfully";
+      eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+
       return ResponseEntity.ok(quiz);
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -71,7 +83,11 @@ public class QuizController {
         .body("Access Denied: You are unauthorized");
     }
 
-    service.markQuizAsDeleted(quizId);
+      String instructorMessage = "You Deleted quiz " + quizId + " successfully";
+      eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+
+
+      service.markQuizAsDeleted(quizId);
     return ResponseEntity.ok().body("Quiz " + quizId + " mark as deleted");
   }
 
@@ -89,7 +105,11 @@ public class QuizController {
     }
 
     service.markQuizAsOpened(quizId);
-    return ResponseEntity.ok().body("Quiz " + quizId + " mark as opened");
+
+    String instructorMessage = "You Marked quiz " + quizId + " as opened successfully";
+    eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+
+      return ResponseEntity.ok().body("Quiz " + quizId + " mark as opened");
   }
 
   @PostMapping("/{quizId}/submit")
@@ -107,6 +127,10 @@ public class QuizController {
         .status(403)
         .body("Access Denied: You are unauthorized");
     }
+    Quiz quiz = service.getQuizById(quizId);
+    if (quiz == null){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quiz not found");
+    }
 
     Map<String, String> answers = new HashMap<>();
     for (Map.Entry<String, Object> entry : studentAnswers.entrySet()) {
@@ -119,7 +143,14 @@ public class QuizController {
         answers
       );
       if (submission != null) {
-        return ResponseEntity.ok(submission);
+
+          String studentMessage = "You submitted quiz " + quizId + " successfully" + ", Your score is: \" " + submission.getScore() + " of " + submission.getGrade();
+          eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage, "EMAIL"));
+
+          String instructorMessage = "New submission for quiz " + quizId + " from " + currentUser.get().getId();
+          eventPublisher.publishEvent(new NotificationEvent(this, quiz.getInstructorId(), instructorMessage, "EMAIL"));
+
+          return ResponseEntity.ok(submission);
       } else {
         return ResponseEntity.status(404).body("Submission not found.");
       }

@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.lms.persistence.Notification;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-@Repository
+@Service
+@Scope("singleton")
 public class NotificationManager {
     private final List<Notification> notifications = new ArrayList<>();
 
@@ -38,19 +41,19 @@ public class NotificationManager {
 
     public List<Notification> findByUserId(String userId) {
         return notifications.stream()
-                .filter(notification -> notification.getUserId().equals(userId))
+                .filter(notification -> notification.getUserId() != null && notification.getUserId().equals(userId))
                 .collect(Collectors.toList());
     }
 
     public List<Notification> findUnreadByUserId(String userId) {
         return notifications.stream()
-                .filter(notification -> notification.getUserId().equals(userId) && !notification.isRead())
+                .filter(notification -> notification.getUserId() != null && notification.getUserId().equals(userId) && !notification.isRead())
                 .collect(Collectors.toList());
     }
 
     public List<Notification> findReadByUserId(String userId) {
         return notifications.stream()
-                .filter(notification -> notification.getUserId().equals(userId) && notification.isRead())
+                .filter(notification -> notification.getUserId() != null && notification.getUserId().equals(userId) && notification.isRead())
                 .collect(Collectors.toList());
     }
 
