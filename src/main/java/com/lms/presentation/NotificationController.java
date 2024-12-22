@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 
+import com.lms.business.models.NotificationRequest;
 import com.lms.persistence.User;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.lms.persistence.Notification;
 import com.lms.service.NotificationServiceImpl;
 import com.lms.service.impl.ServiceFacade;
-
-@Getter
-class NotificationRequest {
-    private String message;
-}
 
 @RestController
 @RequestMapping("/notifications")
