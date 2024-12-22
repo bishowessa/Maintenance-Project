@@ -1,7 +1,13 @@
-package com.lms.presentation;
+package com.lms;
 
+import java.lang.reflect.Field;
+
+import com.lms.events.NotificationEvent;
+import com.lms.persistence.Course;
 import com.lms.persistence.Enrollment;
 import com.lms.persistence.User;
+import com.lms.presentation.EnrollmentController;
+import com.lms.service.CourseService;
 import com.lms.service.EnrollmentService;
 import com.lms.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -30,6 +37,9 @@ class EnrollmentControllerTest {
     private UserService userService;
 
     @Mock
+    private CourseService courseService;
+
+    @Mock
     private Authentication authentication;
 
     @Mock
@@ -46,31 +56,46 @@ class EnrollmentControllerTest {
         MockitoAnnotations.openMocks(this);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        enrollmentController = new EnrollmentController(
+                enrollmentService,
+                userService,
+                mock(ApplicationEventPublisher.class),
+                courseService
+        );
     }
 
-@Test
-void testEnrollStudent_Success() {
+    @Test
+    void testEnrollStudent_Success() {
 
-    when(securityContext.getAuthentication()).thenReturn(authentication); 
-    when(authentication.getPrincipal()).thenReturn(userDetails);
-    when(userDetails.getUsername()).thenReturn("student@example.com");
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(userDetails.getUsername()).thenReturn("student@example.com");
 
-    User user = new User();
-    user.setRole("Student"); 
-    user.setId("S01");
+        User user = new User();
+        user.setRole("Student");
+        user.setId("S01");
 
-    when(userService.findByEmail("student@example.com")).thenReturn(Optional.of(user));
+        Course course = new Course("101", "JAVA", "Programming language", 3, "P01");
+        when(courseService.findCourseById("101")).thenReturn(course);
 
-    doNothing().when(enrollmentService).enrollStudent("S01", "101");
+        when(userService.findByEmail("student@example.com")).thenReturn(Optional.of(user));
+        doNothing().when(enrollmentService).enrollStudent("S01", "101");
+
+        ApplicationEventPublisher mockEventPublisher = enrollmentController.eventPublisher;
 
 
-    ResponseEntity<String> response = enrollmentController.enrollStudent("S01", "101");
+        ResponseEntity<String> response = enrollmentController.enrollStudent("S01", "101");
 
-    assertEquals(200, response.getStatusCodeValue(), "Expected status code should be 200.");
-    assertEquals("Student enrolled successfully", response.getBody(), "Expected response body does not match.");
-    verify(enrollmentService, times(1)).enrollStudent("S01", "101");
-    verify(userService, times(1)).findByEmail("student@example.com");
-}
+        assertEquals(200, response.getStatusCodeValue(), "Expected status code should be 200.");
+        assertEquals("Student enrolled successfully", response.getBody(), "Expected response body does not match.");
+        verify(enrollmentService, times(1)).enrollStudent("S01", "101");
+        verify(userService, times(1)).findByEmail("student@example.com");
+        verify(courseService, times(1)).findCourseById("101");
+        verify(mockEventPublisher, times(2)).publishEvent(any(NotificationEvent.class));
+    }
+
+
 
 
     @Test
@@ -88,7 +113,7 @@ void testEnrollStudent_Success() {
         verify(enrollmentService, never()).enrollStudent(anyString(), anyString());
     }
 
-    @Test
+
 @Test
 void testGetEnrollmentsByCourse() {
 

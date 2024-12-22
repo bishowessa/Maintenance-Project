@@ -27,7 +27,7 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     private final UserService userService;
-    private ApplicationEventPublisher eventPublisher;
+    public ApplicationEventPublisher eventPublisher;
     private CourseService courseService;
 
     public EnrollmentController(EnrollmentService enrollmentService, UserService userService, ApplicationEventPublisher eventPublisher, CourseService courseService) {
