@@ -48,37 +48,42 @@ class EnrollmentControllerTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
     }
 
-    @Test
-    void testEnrollStudent_Success() {
-        // Arrange
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("student@example.com");
-        User user = new User();
+@Test
+void testEnrollStudent_Success() {
 
-        user.setRole("Student");
-        user.setId("S01");
-        when(userService.findByEmail("student@example.com")).thenReturn(Optional.of(user));
+    when(securityContext.getAuthentication()).thenReturn(authentication); 
+    when(authentication.getPrincipal()).thenReturn(userDetails);
+    when(userDetails.getUsername()).thenReturn("student@example.com");
+
+    User user = new User();
+    user.setRole("Student"); 
+    user.setId("S01");
+
+    when(userService.findByEmail("student@example.com")).thenReturn(Optional.of(user));
+
+    doNothing().when(enrollmentService).enrollStudent("S01", "101");
 
 
-        ResponseEntity<String> response = enrollmentController.enrollStudent("S01", "101");
+    ResponseEntity<String> response = enrollmentController.enrollStudent("S01", "101");
 
+    assertEquals(200, response.getStatusCodeValue(), "Expected status code should be 200.");
+    assertEquals("Student enrolled successfully", response.getBody(), "Expected response body does not match.");
+    verify(enrollmentService, times(1)).enrollStudent("S01", "101");
+    verify(userService, times(1)).findByEmail("student@example.com");
+}
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Student enrolled successfully", response.getBody());
-        verify(enrollmentService, times(1)).enrollStudent("S01", "101");
-    }
 
     @Test
     void testEnrollStudent_UserNotFound() {
-        // Arrange
+
         when(authentication.getPrincipal()).thenReturn(userDetails);
         when(userDetails.getUsername()).thenReturn("unknown@example.com");
         when(userService.findByEmail("unknown@example.com")).thenReturn(Optional.empty());
 
-        // Act
+
         ResponseEntity<String> response = enrollmentController.enrollStudent("1", "101");
 
-        // Assert
+
         assertEquals(404, response.getStatusCodeValue());
         verify(enrollmentService, never()).enrollStudent(anyString(), anyString());
     }
