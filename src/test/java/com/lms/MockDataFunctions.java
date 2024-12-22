@@ -1,8 +1,11 @@
 package com.lms;
 
 import com.lms.persistence.LoginUserDto;
+import com.lms.persistence.OtpRequest;
 import com.lms.persistence.RegisterUserDto;
 import com.lms.persistence.User;
+
+import java.util.Optional;
 
 public class MockDataFunctions {
 
@@ -39,6 +42,24 @@ public class MockDataFunctions {
                 .setEmail(email)
                 .setPassword(password)
                 .setRole(role);
+    }
+
+    public static OtpRequest mockOtpRequest(String username, String phoneNumber, String lessonName) {
+        return new OtpRequest(username, phoneNumber, lessonName);
+    }
+
+    public static User mockUserForOtp(String id, String email) {
+        return new User()
+                .setId(id)
+                .setEmail(email)
+                .setFirstName("Test")
+                .setLastName("User")
+                .setPassword("password123")
+                .setRole("Student");
+    }
+
+    public static Optional<User> mockOptionalUser(String id, String email) {
+        return Optional.of(mockUserForOtp(id, email));
     }
 
 
