@@ -1,6 +1,5 @@
 package com.lms.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
 import com.lms.persistence.Course;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-class ProgressService {
+public class ProgressService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;
