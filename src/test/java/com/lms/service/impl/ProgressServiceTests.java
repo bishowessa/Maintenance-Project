@@ -11,7 +11,6 @@ import com.lms.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+
 public class ProgressServiceTests {
 
     @Mock
@@ -35,6 +34,8 @@ public class ProgressServiceTests {
 
     @BeforeEach
     public void setup() {
+        repository = mock(RepositoryFacade.class);
+        courseService = mock(CourseService.class);
         progressService = new ProgressService(repository, courseService);
     }
 

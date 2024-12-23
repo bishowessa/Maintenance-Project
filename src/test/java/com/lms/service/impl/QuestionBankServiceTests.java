@@ -21,10 +21,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QuestionBankServiceTests {
 
@@ -47,6 +45,8 @@ public class QuestionBankServiceTests {
 
     @BeforeEach
     public void setup() {
+        repository = mock(RepositoryFacade.class);
+        courseService = mock(CourseService.class);
         service = new QuestionBankServiceImpl(repository, courseService);
         setupCourse();
         setupQuestions();

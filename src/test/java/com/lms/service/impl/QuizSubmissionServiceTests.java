@@ -5,17 +5,16 @@ import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.RepositoryFacade;
 import com.lms.service.CourseService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 public class QuizSubmissionServiceTests {
 
     @Mock
@@ -24,6 +23,7 @@ public class QuizSubmissionServiceTests {
     @Mock
     private CourseService courseService;
 
+    @InjectMocks
     private QuizSubmissionServiceImpl service;
 
     private final String quizId = "Q01";
@@ -34,6 +34,8 @@ public class QuizSubmissionServiceTests {
 
     @BeforeEach
     public void setup() {
+        repository = mock(RepositoryFacade.class);
+        courseService = mock(CourseService.class);
         service = new QuizSubmissionServiceImpl(repository, courseService);
         setupQuizAndQuestions();
     }

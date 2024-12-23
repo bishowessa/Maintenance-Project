@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 public class QuizServiceTests {
 
     @Mock
@@ -41,6 +40,8 @@ public class QuizServiceTests {
 
     @BeforeEach
     public void setup() {
+        repository = mock(RepositoryFacade.class);
+        courseService = mock(CourseService.class);
         service = new QuizServiceImpl(repository, courseService);
         setupQuestions();
     }
