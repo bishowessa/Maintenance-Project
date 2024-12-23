@@ -215,8 +215,8 @@ public class ServiceFacade {
 
   // Course operations
 
-  public void createCourse(Course course) {
-    courseService.createCourse(course);
+  public Course createCourse(Course course) {
+    return courseService.createCourse(course);
   }
 
   public void uploadMedia(String courseId, MultipartFile file) {

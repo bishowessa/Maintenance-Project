@@ -265,11 +265,14 @@ class ServiceFacadeTest {
         Course mockCourse = mock(Course.class);
 
         // Mocking CourseService
-        doNothing().when(courseService).createCourse(mockCourse);
+        when(courseService.createCourse(mockCourse)).thenReturn(mockCourse); // Mock the return value
 
-        serviceFacade.createCourse(mockCourse);
+        // Call the service facade method
+        Course result = serviceFacade.createCourse(mockCourse);
 
+        // Verify the interaction with the mock and the result
         verify(courseService, times(1)).createCourse(mockCourse);
+        assertEquals(mockCourse, result); // Ensure the result matches the mock course
     }
 
     @Test
