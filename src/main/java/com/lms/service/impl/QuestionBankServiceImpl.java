@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-class QuestionBankServiceImpl implements QuestionBankService {
+public class QuestionBankServiceImpl implements QuestionBankService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;
@@ -34,7 +34,9 @@ class QuestionBankServiceImpl implements QuestionBankService {
       questionBank = new QuestionBank();
       questionBank.setCourseId(courseId);
       questionBank.setQuestions(new ArrayList<>());
+      questionBank.addQuestion(question);
       repository.saveQuestionBank(questionBank);
+      return;
     }
 
     questionBank.addQuestion(question);
@@ -43,18 +45,21 @@ class QuestionBankServiceImpl implements QuestionBankService {
 
   @Override
   public void deleteQuestion(String courseId, String questionId) {
+
     if (courseService.findCourseById(courseId) == null) {
       throw new IllegalArgumentException(
         "Course with id " + courseId + " does not exist"
       );
     }
     QuestionBank questionBank = repository.findQuestionBankByCourseId(courseId);
+
     if (questionBank == null) {
       throw new IllegalArgumentException(
         "Question bank not found for the course."
       );
     }
     questionBank.deleteQuestion(questionId);
+    repository.saveQuestionBank(questionBank);
   }
 
   @Override

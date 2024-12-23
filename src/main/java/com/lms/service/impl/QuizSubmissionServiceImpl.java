@@ -25,8 +25,6 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;
-  private final ApplicationEventPublisher eventPublisher;
-
 
   @Override
   public QuizSubmission submitQuiz(
