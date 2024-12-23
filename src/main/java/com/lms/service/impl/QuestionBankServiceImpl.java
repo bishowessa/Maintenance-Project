@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class QuestionBankServiceImpl implements QuestionBankService {
+class QuestionBankServiceImpl implements QuestionBankService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;

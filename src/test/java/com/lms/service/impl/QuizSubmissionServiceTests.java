@@ -1,11 +1,10 @@
-package com.lms;
+package com.lms.service.impl;
 
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.repositories.RepositoryFacade;
 import com.lms.service.CourseService;
-import com.lms.service.impl.QuizSubmissionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

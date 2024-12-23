@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
+class AssignmentSubmissionServiceImpl implements AssignmentSubmissionService {
 
   private final RepositoryFacade repository;
 

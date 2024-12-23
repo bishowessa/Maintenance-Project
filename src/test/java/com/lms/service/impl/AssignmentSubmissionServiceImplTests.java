@@ -1,10 +1,9 @@
-package com.lms;
+package com.lms.service.impl;
 
 import com.lms.business.models.AssignmentSubmissionModel;
 import com.lms.persistence.entities.AssignmentEntity;
 import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.repositories.RepositoryFacade;
-import com.lms.service.impl.AssignmentSubmissionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

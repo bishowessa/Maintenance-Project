@@ -1,6 +1,5 @@
-package com.lms;
+package com.lms.service.impl;
 
-import com.lms.business.models.QuestionRequest;
 import com.lms.persistence.Course;
 import com.lms.persistence.entities.QuestionBank;
 import com.lms.persistence.entities.questions.MCQQuestion;
@@ -9,7 +8,6 @@ import com.lms.persistence.entities.questions.ShortAnswerQuestion;
 import com.lms.persistence.entities.questions.TrueFalseQuestion;
 import com.lms.persistence.repositories.RepositoryFacade;
 import com.lms.service.CourseService;
-import com.lms.service.impl.QuestionBankServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;

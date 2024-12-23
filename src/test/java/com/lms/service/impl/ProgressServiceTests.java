@@ -1,4 +1,4 @@
-package com.lms;
+package com.lms.service.impl;
 
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
@@ -8,7 +8,6 @@ import com.lms.persistence.entities.AssignmentSubmissionEntity;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.repositories.RepositoryFacade;
 import com.lms.service.CourseService;
-import com.lms.service.impl.ProgressService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

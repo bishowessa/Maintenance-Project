@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class ProgressService {
+class ProgressService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;
