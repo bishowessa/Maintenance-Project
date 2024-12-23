@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AssignmentSubmissionController {
 
     private final ServiceFacade service;
-    private ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     public AssignmentSubmissionController(ServiceFacade service, ApplicationEventPublisher eventPublisher) {
         this.service = service;

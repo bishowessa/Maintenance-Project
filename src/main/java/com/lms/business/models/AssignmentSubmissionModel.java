@@ -4,12 +4,11 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 public class AssignmentSubmissionModel {
     private String studentId;
     private String fileUrl;
-    private int score;
+    private Integer score;
     private String feedback;
     private String status;
 }
