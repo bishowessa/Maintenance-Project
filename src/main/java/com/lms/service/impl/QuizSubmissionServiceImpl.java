@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-class QuizSubmissionServiceImpl implements QuizSubmissionService {
+public class QuizSubmissionServiceImpl implements QuizSubmissionService {
 
   private final RepositoryFacade repository;
   private final CourseService courseService;
