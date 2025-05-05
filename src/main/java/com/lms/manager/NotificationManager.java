@@ -17,7 +17,6 @@ public class NotificationManager {
     // Add a notification
     public void addNotification(Notification notification) {
         notifications.add(notification);
-//        sendEmail(notification.getUserId(), "New Notification", notification.getMessage());
     }
 
     // Get all notifications
@@ -64,13 +63,5 @@ public class NotificationManager {
                 .ifPresent(notification -> notification.setRead(true));
     }
 
-    /*
- Joseph
-    private void sendEmail(String userId, String subject, String body) {
-        // Replace this with actual email sending logic
-        System.out.println("Sending email to user " + userId);
-        System.out.println("Subject: " + subject);
-        System.out.println("Body: " + body);
-    }
-*/
+
 }

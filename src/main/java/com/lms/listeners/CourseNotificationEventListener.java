@@ -4,22 +4,29 @@ import com.lms.events.CourseNotificationEvent;
 import com.lms.manager.NotificationManager;
 import com.lms.persistence.Notification;
 import com.lms.service.EnrollmentService;
-import com.lms.service.EnrollmentServiceImpl;
 import com.lms.service.UserService;
 import com.lms.service.impl.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CourseNotificationEventListener {
 
+    private static final Logger logger = LoggerFactory.getLogger(CourseNotificationEventListener.class);
 
-    private final EmailService emailService;     // Service to send emails
-    private final EnrollmentService enrollmentService;     // Service to send emails
+    private final EmailService emailService;
+    private final EnrollmentService enrollmentService;
     private final UserService userService;
     private final NotificationManager notificationManager;
 
-    public CourseNotificationEventListener(EnrollmentService enrollmentService, EmailService emailService, EnrollmentServiceImpl enrollmentServiceImpl, UserService userService, NotificationManager notificationManager) {
+    public CourseNotificationEventListener(
+            EnrollmentService enrollmentService,
+            EmailService emailService,
+            UserService userService,
+            NotificationManager notificationManager
+    ) {
         this.enrollmentService = enrollmentService;
         this.emailService = emailService;
         this.userService = userService;
@@ -32,23 +39,26 @@ public class CourseNotificationEventListener {
         String message = event.getMessage();
 
         Notification notification = new Notification();
-        notification.setMessage(event.getMessage());
+        notification.setMessage(message);
 
-        // Fetch students registered in the course
         enrollmentService.getEnrollmentsByCourse(courseId).forEach(enrollment -> {
             notification.setUserId(enrollment.getsId());
             notificationManager.addNotification(notification);
+
             String email = userService.findById(enrollment.getsId()).getEmail();
             String subject = "Notification for Course: " + courseId;
-            new Thread(() -> {
-                try {
-                    emailService.sendEmail(email, subject, message);
-                } catch (Exception e) {
-                    System.err.println("Couldn't send the email: " + e);
-                }
-            }).start();
+
+            new Thread(() -> sendEmailSafe(email, subject, message, enrollment.getsId())).start();
         });
 
-        System.out.println("Notification sent to all students in course: " + courseId);
+        logger.info("Notification sent to all students in course: {}", courseId);
+    }
+
+    private void sendEmailSafe(String email, String subject, String message, String userId) {
+        try {
+            emailService.sendEmail(email, subject, message);
+        } catch (Exception e) {
+            logger.error("Couldn't send the email to user {}: {}", userId, e.getMessage(), e);
+        }
     }
 }
