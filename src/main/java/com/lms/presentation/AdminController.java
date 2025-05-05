@@ -26,8 +26,8 @@ public class AdminController {
 
 
     @PostMapping("/createUser")
-    public ResponseEntity<?> createUser(@RequestBody RegisterUserDto registerUserDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<Object> createUser(@RequestBody RegisterUserDto registerUserDto){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
         if (currentUser.isEmpty()) {

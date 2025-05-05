@@ -48,35 +48,6 @@ public class NotificationController {
         return ResponseEntity.ok("Notification added successfully!");
     }
 
-//    // Get all notifications
-//    @GetMapping
-//    public ResponseEntity<List<Notification>> getAllNotifications() {
-//        Optional<User> currentUser = service.getCurrentUser();
-//        if (currentUser.isEmpty()) {
-//            return ResponseEntity.status(404).build();
-//        }
-//        return ResponseEntity.ok(notificationService.getAllNotifications());
-//    }
-//
-//    // Get read notifications
-//    @GetMapping("/read")
-//    public ResponseEntity<List<Notification>> getReadNotifications() {
-//        Optional<User> currentUser = service.getCurrentUser();
-//        if (currentUser.isEmpty()) {
-//            return ResponseEntity.status(404).build();
-//        }
-//        return ResponseEntity.ok(notificationService.getReadNotifications());
-//    }
-//
-//    // Get unread notifications
-//    @GetMapping("/unread")
-//    public ResponseEntity<List<Notification>> getUnreadNotifications() {
-//        Optional<User> currentUser = service.getCurrentUser();
-//        if (currentUser.isEmpty()) {
-//            return ResponseEntity.status(404).build();
-//        }
-//        return ResponseEntity.ok(notificationService.getUnreadNotifications());
-//    }
 
     @GetMapping
     public ResponseEntity<Object> getAllNotifications() {
