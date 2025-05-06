@@ -4,27 +4,22 @@ import com.lms.persistence.Enrollment;
 import com.lms.persistence.User;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
     private final List<Enrollment> enrollmentList = new ArrayList<>();
-    private final UserService userService; // Inject UserService
+    private final UserService userService;
 
-    // Constructor injection for UserService
     public EnrollmentServiceImpl(UserService userService) {
         this.userService = userService;
     }
 
     @Override
     public void enrollStudent(String studentId, String courseId) {
-        String enrollmentId = "E" + (enrollmentList.size() + 1); // Simple ID generation
-        Enrollment enrollment = new Enrollment(enrollmentId, studentId, courseId);
-        enrollmentList.add(enrollment);
+        String enrollmentId = "E" + (enrollmentList.size() + 1);
+        enrollmentList.add(new Enrollment(enrollmentId, studentId, courseId));
     }
 
     @Override
@@ -47,12 +42,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .collect(Collectors.groupingBy(
                         Enrollment::getcId,
                         Collectors.mapping(
-                                enrollment -> {
-                                    // Use UserService to find user by student ID
-                                    Optional<User> userOptional = userService.findByEmail(enrollment.getsId());
-                                    return userOptional.orElse(null); // Return null if user not found
-                                },
-                                Collectors.filtering(user -> user != null, Collectors.toList()) // Filter out null users
+                                e -> userService.findByEmail(e.getsId()).orElse(null),
+                                Collectors.filtering(Objects::nonNull, Collectors.toList())
                         )
                 ));
     }
