@@ -25,6 +25,13 @@ public class NotificationEventListener {
     private final ServiceFacade service;
     private final NotificationManager notificationManager;
 
+    public NotificationEventListener(EmailService emailService, SmsService smsService, ServiceFacade service, NotificationManager notificationManager) {
+        this.emailService = emailService;
+        this.smsService = smsService;
+        this.service = service;
+        this.notificationManager = notificationManager;
+    }
+
 
     @EventListener
     public void handleNotificationEvent(NotificationEvent event) {
