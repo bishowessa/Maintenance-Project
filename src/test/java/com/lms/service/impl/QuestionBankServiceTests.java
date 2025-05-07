@@ -13,7 +13,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QuestionBankServiceTests {
+class QuestionBankServiceTests {
 
     @Mock
     private RepositoryFacade repository;
@@ -44,7 +44,7 @@ public class QuestionBankServiceTests {
     String courseId = "C01";
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         repository = mock(RepositoryFacade.class);
         courseService = mock(CourseService.class);
         service = new QuestionBankServiceImpl(repository, courseService);
@@ -78,7 +78,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testAddMCQQuestionSucceeds() {
+     void testAddMCQQuestionSucceeds() {
         Question question = mcqQuestion;
         when(courseService.findCourseById(courseId)).thenReturn(course);
         when(repository.findQuestionBankByCourseId(courseId)).thenReturn(null);
@@ -89,7 +89,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testAddTrueFalseQuestionSucceeds() {
+     void testAddTrueFalseQuestionSucceeds() {
         Question question = trueFalseQuestion;
         when(courseService.findCourseById(courseId)).thenReturn(course);
         when(repository.findQuestionBankByCourseId(courseId)).thenReturn(null);
@@ -100,7 +100,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testAddShortAnswerQuestionSucceeds() {
+     void testAddShortAnswerQuestionSucceeds() {
         Question question = shortAnswerQuestion;
         when(courseService.findCourseById(courseId)).thenReturn(course);
         when(repository.findQuestionBankByCourseId(courseId)).thenReturn(null);
@@ -111,7 +111,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testAddQuestion_CourseNotFound_ThrowsIllegalArgumentException() {
+     void testAddQuestion_CourseNotFound_ThrowsIllegalArgumentException() {
         Question question = mcqQuestion;
         when(courseService.findCourseById(courseId)).thenReturn(null);
 
@@ -119,7 +119,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testAddQuestion_InvalidQuestionData_ThrowsIllegalArgumentException() {
+     void testAddQuestion_InvalidQuestionData_ThrowsIllegalArgumentException() {
 
         String questionText = "What is the capital of France?";
         int grade = 5;
@@ -134,7 +134,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testDeleteQuestion_Succeeds() {
+     void testDeleteQuestion_Succeeds() {
         QuestionBank questionBank = new QuestionBank();
         List<Question> questions = new ArrayList<>(List.of(mcqQuestion, trueFalseQuestion, shortAnswerQuestion));
         questionBank.setQuestions(questions);
@@ -147,14 +147,14 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testDeleteQuestion_CourseNotFound_ThrowsIllegalArgumentException() {
+     void testDeleteQuestion_CourseNotFound_ThrowsIllegalArgumentException() {
         when(courseService.findCourseById(courseId)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () -> service.deleteQuestion(courseId, question1Id));
     }
 
     @Test
-    public void testDeleteQuestion_QuestionBankNotFound_ThrowsIllegalArgumentException() {
+     void testDeleteQuestion_QuestionBankNotFound_ThrowsIllegalArgumentException() {
         when(courseService.findCourseById(courseId)).thenReturn(course);
         when(repository.findQuestionBankByCourseId(courseId)).thenReturn(null);
 
@@ -162,7 +162,7 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testGetQuestions_Succeeds() {
+     void testGetQuestions_Succeeds() {
         List<Question> questions = List.of(mcqQuestion, trueFalseQuestion, shortAnswerQuestion);
         QuestionBank questionBank = new QuestionBank();
         questionBank.setQuestions(questions);
@@ -175,14 +175,14 @@ public class QuestionBankServiceTests {
     }
 
     @Test
-    public void testGetQuestions_CourseNotFound_ThrowsIllegalArgumentException() {
+     void testGetQuestions_CourseNotFound_ThrowsIllegalArgumentException() {
         when(courseService.findCourseById(courseId)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () -> service.getQuestions(courseId));
     }
 
     @Test
-    public void testGetQuestions_QuestionBankNotFound_ReturnsEmptyList() {
+     void testGetQuestions_QuestionBankNotFound_ReturnsEmptyList() {
         when(courseService.findCourseById(courseId)).thenReturn(course);
         when(repository.findQuestionBankByCourseId(courseId)).thenReturn(null);
 

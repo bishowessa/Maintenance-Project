@@ -45,10 +45,6 @@ class ServiceFacadeTest {
     private EnrollmentService enrollmentService;
     @Mock
     private ProgressService progressService;
-    @Mock
-    private User mockUser;
-    @Mock
-    private Authentication authentication;
 
     private ServiceFacade serviceFacade;
 
@@ -116,22 +112,23 @@ class ServiceFacadeTest {
     @Test
     void testGetCurrentUser() {
         String username = "user1";
-        User mockUser = mock(User.class);  // Mock the User object
-        Authentication authentication = mock(Authentication.class);  // Mock Authentication
+        User mockedUser = mock(User.class);  // Renamed to avoid shadowing
+        Authentication mockedAuth = mock(Authentication.class);  // Renamed
 
         try (MockedStatic<SecurityContextHolder> mockedStatic = Mockito.mockStatic(SecurityContextHolder.class)) {
             mockedStatic.when(SecurityContextHolder::getContext).thenReturn(mock(SecurityContext.class));
-            when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
-            when(authentication.getPrincipal()).thenReturn(mockUser);
-            when(mockUser.getUsername()).thenReturn(username);
-            when(userService.findByEmail(username)).thenReturn(Optional.of(mockUser));
+            when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(mockedAuth);
+            when(mockedAuth.getPrincipal()).thenReturn(mockedUser);
+            when(mockedUser.getUsername()).thenReturn(username);
+            when(userService.findByEmail(username)).thenReturn(Optional.of(mockedUser));
 
             Optional<User> result = serviceFacade.getCurrentUser();
 
             assertTrue(result.isPresent());
-            assertEquals(mockUser, result.get());
+            assertEquals(mockedUser, result.get());
         }
     }
+
 
     @Test
     void testAddQuestion() {

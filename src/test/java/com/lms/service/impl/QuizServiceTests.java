@@ -9,7 +9,7 @@ import com.lms.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class QuizServiceTests {
+ class QuizServiceTests {
 
     @Mock
     private RepositoryFacade repository;
@@ -39,7 +39,7 @@ public class QuizServiceTests {
     private Question question2;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         repository = mock(RepositoryFacade.class);
         courseService = mock(CourseService.class);
         service = new QuizServiceImpl(repository, courseService);
@@ -52,7 +52,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testCreateQuiz_Succeeds() {
+     void testCreateQuiz_Succeeds() {
         QuestionBank questionBank = new QuestionBank();
         questionBank.setQuestions(new ArrayList<>(List.of(question1, question2)));
 
@@ -74,7 +74,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testCreateQuiz_CourseNotFound_ThrowsIllegalArgumentException() {
+     void testCreateQuiz_CourseNotFound_ThrowsIllegalArgumentException() {
         when(courseService.findCourseById(courseId)).thenReturn(null);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
@@ -84,7 +84,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testCreateQuiz_NotEnoughQuestions_ThrowsIllegalArgumentException() {
+     void testCreateQuiz_NotEnoughQuestions_ThrowsIllegalArgumentException() {
         QuestionBank questionBank = new QuestionBank();
         questionBank.setQuestions(List.of(question1));
 
@@ -98,7 +98,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testMarkQuizAsDeleted_Succeeds() {
+     void testMarkQuizAsDeleted_Succeeds() {
         Quiz quiz = new Quiz(quizId, courseId, quizName, instructorId, questionsNumber, duration, status, new ArrayList<>());
 
         when(repository.findQuizById(quizId)).thenReturn(Optional.of(quiz));
@@ -112,7 +112,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testMarkQuizAsOpened_Succeeds() {
+     void testMarkQuizAsOpened_Succeeds() {
         Quiz quiz = new Quiz(quizId, courseId, quizName, instructorId, questionsNumber, duration, "created", new ArrayList<>());
 
         when(repository.findQuizById(quizId)).thenReturn(Optional.of(quiz));
@@ -124,7 +124,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testGetAllQuizzes_Succeeds() {
+     void testGetAllQuizzes_Succeeds() {
         List<Quiz> quizzes = List.of(
                 new Quiz(quizId, courseId, quizName, instructorId, questionsNumber, duration, status, new ArrayList<>())
         );
@@ -137,7 +137,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testGetQuizById_Succeeds() {
+     void testGetQuizById_Succeeds() {
         Quiz quiz = new Quiz(quizId, courseId, quizName, instructorId, questionsNumber, duration, status, new ArrayList<>());
 
         when(repository.findQuizById(quizId)).thenReturn(Optional.of(quiz));
@@ -148,7 +148,7 @@ public class QuizServiceTests {
     }
 
     @Test
-    public void testGetQuizById_NotFound_ReturnsNull() {
+     void testGetQuizById_NotFound_ReturnsNull() {
         when(repository.findQuizById(quizId)).thenReturn(Optional.empty());
 
         Quiz result = service.getQuizById(quizId);

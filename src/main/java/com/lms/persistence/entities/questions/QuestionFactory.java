@@ -6,32 +6,37 @@ import java.util.UUID;
 
 public class QuestionFactory {
 
+  // Private constructor to prevent instantiation
+  private QuestionFactory() {
+    throw new UnsupportedOperationException("Utility class should not be instantiated");
+  }
+
   public static Question createQuestion(
-    String type,
-    QuestionRequest questionRequest
+          String type,
+          QuestionRequest questionRequest
   ) {
     switch (type) {
       case "MCQ":
         return new MCQQuestion(
-          UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
-          questionRequest.getQuestionText(),
-          questionRequest.getGrade(),
-          questionRequest.getOptions(),
-          questionRequest.getCorrectAnswer()
+                UUID.randomUUID().toString().replace("-", "").substring(0, 6),
+                questionRequest.getQuestionText(),
+                questionRequest.getGrade(),
+                questionRequest.getOptions(),
+                questionRequest.getCorrectAnswer()
         );
       case "TrueFalse":
         return new TrueFalseQuestion(
-          UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
-          questionRequest.getQuestionText(),
-          questionRequest.getGrade(),
-          questionRequest.getCorrectAnswerBoolean()
+                UUID.randomUUID().toString().replace("-", "").substring(0, 6),
+                questionRequest.getQuestionText(),
+                questionRequest.getGrade(),
+                questionRequest.getCorrectAnswerBoolean()
         );
       case "ShortAnswer":
         return new ShortAnswerQuestion(
-          UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
-          questionRequest.getQuestionText(),
-          questionRequest.getGrade(),
-          questionRequest.getCorrectAnswer()
+                UUID.randomUUID().toString().replace("-", "").substring(0, 6),
+                questionRequest.getQuestionText(),
+                questionRequest.getGrade(),
+                questionRequest.getCorrectAnswer()
         );
       default:
         throw new IllegalArgumentException("Invalid question type.");

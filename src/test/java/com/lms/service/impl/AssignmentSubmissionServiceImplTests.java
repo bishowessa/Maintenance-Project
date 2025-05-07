@@ -14,80 +14,93 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class AssignmentSubmissionServiceImplTests {
+class AssignmentSubmissionServiceImplTests {
 
-    @Mock
-    private RepositoryFacade repository;
+   @Mock
+   private RepositoryFacade repository;
 
-    private AssignmentSubmissionServiceImpl service;
+   private AssignmentSubmissionServiceImpl service;
 
-    private final String studentId = "S01";
-    private final int assignmentId = 1;
-    private AssignmentSubmissionModel model;
-    private AssignmentSubmissionEntity assignmentSubmission;
+   private final String studentId = "S01";
+   private final int assignmentId = 1;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-        service = new AssignmentSubmissionServiceImpl(repository);
-        String fileUrl = "fileUrl";
-        model = new AssignmentSubmissionModel(studentId, fileUrl, null, null, null);
-        assignmentSubmission = new AssignmentSubmissionEntity(1, studentId, assignmentId, "C01",5,fileUrl,"feedback","Marked");
-    }
+   private AssignmentSubmissionModel model;
+   private AssignmentSubmissionEntity assignmentSubmission;
 
-    @Test
-    public void testSubmitAssignment_Succeeds() {
-        AssignmentEntity assignment = mock(AssignmentEntity.class);
-        when(repository.isAssignmentExist(assignmentId)).thenReturn(true);
-        when(repository.findAssignmentById(assignmentId)).thenReturn(assignment);
-        when(repository.addAssignmentSubmission(any(AssignmentSubmissionEntity.class))).thenReturn(true);
+   @BeforeEach
+   void setup() {
+      MockitoAnnotations.openMocks(this);
+      service = new AssignmentSubmissionServiceImpl(repository);
 
-        boolean result = service.submitAssignment(model, assignmentId, studentId);
+      String fileUrl = "fileUrl";
+      model = new AssignmentSubmissionModel(studentId, fileUrl, null, null, null);
 
-        assertTrue(result);
-        verify(repository).addAssignmentSubmission(any(AssignmentSubmissionEntity.class));
-    }
+      assignmentSubmission = new AssignmentSubmissionEntity(
+              1, studentId, assignmentId, "C01", 5, fileUrl, "feedback", "Marked"
+      );
+   }
 
-    @Test
-    public void testSubmitAssignment_Fails_IfAssignmentNotFound() {
-        when(repository.isAssignmentExist(assignmentId)).thenReturn(false);
+   @Test
+   void testSubmitAssignment_Succeeds() {
+      AssignmentEntity assignment = mock(AssignmentEntity.class);
 
-        boolean result = service.submitAssignment(model, assignmentId, studentId);
+      when(repository.isAssignmentExist(assignmentId)).thenReturn(true);
+      when(repository.findAssignmentById(assignmentId)).thenReturn(assignment);
+      when(repository.addAssignmentSubmission(any())).thenReturn(true);
 
-        assertFalse(result);
-    }
+      boolean result = service.submitAssignment(model, assignmentId, studentId);
 
-    @Test
-    public void testGetSubmissionsByAssignment() {
-        when(repository.findAllAssignmentSubmissions()).thenReturn(List.of(assignmentSubmission));
+      assertTrue(result);
+      verify(repository).addAssignmentSubmission(any(AssignmentSubmissionEntity.class));
+   }
 
-        var submissions = service.getSubmissionsByAssignment(assignmentId);
+   @Test
+   void testSubmitAssignment_Fails_IfAssignmentNotFound() {
+      when(repository.isAssignmentExist(assignmentId)).thenReturn(false);
 
-        assertNotNull(submissions);
-        assertFalse(submissions.isEmpty());
-    }
+      boolean result = service.submitAssignment(model, assignmentId, studentId);
 
-    @Test
-    public void testUpdateSubmission_Succeeds() {
-        AssignmentSubmissionEntity submission = assignmentSubmission;
-        submission.setId(1);
-        when(repository.findAssignmentSubmissionById(1)).thenReturn(submission);
-        when(repository.updateAssignmentSubmission(submission)).thenReturn(true);
+      assertFalse(result);
+      verify(repository, never()).addAssignmentSubmission(any());
+   }
 
-        boolean result = service.updateSubmission(submission);
+   @Test
+   void testGetSubmissionsByAssignment() {
+      when(repository.findAllAssignmentSubmissions()).thenReturn(List.of(assignmentSubmission));
 
-        assertTrue(result);
-        verify(repository).updateAssignmentSubmission(submission);
-    }
+      var submissions = service.getSubmissionsByAssignment(assignmentId);
 
-    @Test
-    public void testUpdateSubmission_Fails() {
-        AssignmentSubmissionEntity submission = assignmentSubmission;
-        submission.setId(1);
-        when(repository.findAssignmentSubmissionById(1)).thenReturn(null);
+      assertNotNull(submissions);
+      assertFalse(submissions.isEmpty());
+      assertEquals(1, submissions.size());
+   }
 
-        boolean result = service.updateSubmission(submission);
+   @Test
+   void testUpdateSubmission_Succeeds() {
+      AssignmentSubmissionEntity submission = new AssignmentSubmissionEntity(
+              1, studentId, assignmentId, "C01", 5, "fileUrl", "feedback", "Marked"
+      );
 
-        assertFalse(result);
-    }
+      when(repository.findAssignmentSubmissionById(1)).thenReturn(submission);
+      when(repository.updateAssignmentSubmission(submission)).thenReturn(true);
+
+      boolean result = service.updateSubmission(submission);
+
+      assertTrue(result);
+      verify(repository).updateAssignmentSubmission(submission);
+   }
+
+   @Test
+   void testUpdateSubmission_Fails() {
+      AssignmentSubmissionEntity submission = new AssignmentSubmissionEntity(
+              1, studentId, assignmentId, "C01", 5, "fileUrl", "feedback", "Marked"
+      );
+
+      when(repository.findAssignmentSubmissionById(1)).thenReturn(null);
+
+      boolean result = service.updateSubmission(submission);
+
+      assertFalse(result);
+      verify(repository, never()).updateAssignmentSubmission(submission);
+   }
 }

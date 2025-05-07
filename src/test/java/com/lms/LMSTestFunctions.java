@@ -67,15 +67,16 @@ public class LMSTestFunctions {
         Request request = new Request.Builder().url(url).post(body).build();
 
         Response response = client.newCall(request).execute();
+        assert response.body() != null;
         return new LMSResponse(response.code(), response.body().string());
     }
 
-    public static String getToken(String body)
-            throws JsonMappingException, JsonProcessingException {
+    public static String getToken(String body) throws JsonProcessingException { // ✅ removed JsonMappingException
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(body);
         return rootNode.get("token").asText();
     }
+
 
     public static LMSResponse createUser(
             String adminToken,
@@ -124,7 +125,7 @@ public class LMSTestFunctions {
             String title,
             String description,
             int duration,
-            String Profid
+            String profId // ✅ updated from Profid to profId
     ) throws IOException {
         String url = "http://localhost:8080/courses";
 
@@ -138,7 +139,7 @@ public class LMSTestFunctions {
                         "\",\"duration\":" +
                         duration +
                         ",\"profId\":\"" +
-                        Profid +
+                        profId + // ✅ updated variable usage
                         "\"}";
 
         RequestBody body = RequestBody.create(
@@ -155,6 +156,7 @@ public class LMSTestFunctions {
         Response response = client.newCall(request).execute();
         return new LMSResponse(response.code(), response.body().string());
     }
+
 
     public static LMSResponse createLesson(
             String instructorToken,
@@ -207,15 +209,12 @@ public class LMSTestFunctions {
         } catch (Exception e) {
             return new LMSResponse(500, "Error creating JSON");
         }
-//    System.out.println(jsonString);
 
         // Set up the request body with the JSON data
         RequestBody body = RequestBody.create(
                 jsonString,
                 okhttp3.MediaType.get("application/json; charset=utf-8")
         );
-
-        // Build the request with the appropriate headers
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -242,7 +241,6 @@ public class LMSTestFunctions {
         } catch (Exception e) {
             return new LMSResponse(500, "Error creating JSON");
         }
-//    System.out.println(jsonString);
 
         // Set up the request body with the JSON data
         RequestBody body = RequestBody.create(

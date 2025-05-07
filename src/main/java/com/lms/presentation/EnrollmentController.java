@@ -1,6 +1,6 @@
 package com.lms.presentation;
 
-import com.lms.events.CourseNotificationEvent;
+
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
 import com.lms.persistence.Enrollment;
@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+
 import java.util.Optional;
 
 @RestController
@@ -27,8 +27,8 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     private final UserService userService;
-    private final ApplicationEventPublisher eventPublisher;
-    private CourseService courseService;
+    public final ApplicationEventPublisher eventPublisher;
+    private final CourseService courseService;
 
     public EnrollmentController(EnrollmentService enrollmentService, UserService userService, ApplicationEventPublisher eventPublisher, CourseService courseService) {
         this.enrollmentService = enrollmentService;
@@ -61,7 +61,7 @@ public class EnrollmentController {
         String studentMessage = "you Enrolled in course " + courseId + " successfully";
         eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage, "EMAIL"));
         String instructorMessage = "New Student "+ studentId +" Enrolled in course  " + courseId + " \"" + course.getTitle() + "\"";
-        eventPublisher.publishEvent(new NotificationEvent(this, course.getProfid(), instructorMessage, "EMAIL"));
+        eventPublisher.publishEvent(new NotificationEvent(this, course.getProfId(), instructorMessage, "EMAIL"));
 
         return ResponseEntity.ok("Student enrolled successfully");
     }

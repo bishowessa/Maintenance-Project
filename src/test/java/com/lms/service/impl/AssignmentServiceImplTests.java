@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class AssignmentServiceImplTests {
+ class AssignmentServiceImplTests {
 
     @Mock
     private RepositoryFacade repository;
@@ -23,14 +23,14 @@ public class AssignmentServiceImplTests {
     private AssignmentModel model;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         MockitoAnnotations.openMocks(this);
         service = new AssignmentServiceImpl(repository);
         model = new AssignmentModel("Assignment 1", "Description", 100, java.sql.Date.valueOf("2024-12-31"), "Active");
     }
 
     @Test
-    public void testCreateAssignment_Succeeds() {
+     void testCreateAssignment_Succeeds() {
         AssignmentEntity entity = new AssignmentEntity(0, model.getTitle(), courseId, model.getDescription(),
                 model.getGrade(), model.getDueDate(), model.getStatus(), instructorId);
         when(repository.addAssignment(any(AssignmentEntity.class))).thenReturn(entity);
@@ -44,7 +44,7 @@ public class AssignmentServiceImplTests {
     }
 
     @Test
-    public void testDeleteAssignment_Succeeds() {
+     void testDeleteAssignment_Succeeds() {
         AssignmentEntity entity = new AssignmentEntity(1, "Assignment 1", courseId, "Description", 100, java.sql.Date.valueOf("2024-12-31"), "Active", instructorId);
         when(repository.findAssignmentById(1)).thenReturn(entity);
 
@@ -55,7 +55,7 @@ public class AssignmentServiceImplTests {
     }
 
     @Test
-    public void testDeleteAssignment_Fails() {
+     void testDeleteAssignment_Fails() {
         when(repository.findAssignmentById(1)).thenReturn(null);
 
         boolean result = service.deleteAssignment(1, courseId);
@@ -64,7 +64,7 @@ public class AssignmentServiceImplTests {
     }
 
     @Test
-    public void testEditAssignment_Succeeds() {
+     void testEditAssignment_Succeeds() {
         AssignmentEntity entity = new AssignmentEntity(1, "Assignment 1", courseId, "Description", 100, java.sql.Date.valueOf("2024-12-31"), "Active", instructorId);
         when(repository.findAssignmentById(1)).thenReturn(entity);
 
@@ -77,7 +77,7 @@ public class AssignmentServiceImplTests {
     }
 
     @Test
-    public void testEditAssignment_Fails() {
+    void testEditAssignment_Fails() {
         when(repository.findAssignmentById(1)).thenReturn(null);
 
         AssignmentModel newModel = new AssignmentModel("Updated Assignment", "Updated Description", 90, java.sql.Date.valueOf("2024-12-30"), "Active");

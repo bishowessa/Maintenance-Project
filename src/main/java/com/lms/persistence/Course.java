@@ -1,9 +1,11 @@
 package com.lms.persistence;
+
 import java.util.ArrayList;
 import java.util.List;
+
 public class Course {
     private String id;
-    private String Profid;
+    private String profId; // Renamed from Profid to profId
 
     private String title;
     private String description;
@@ -11,13 +13,13 @@ public class Course {
     private List<Lesson> lessons = new ArrayList<>();  // List of lessons
     private List<String> mediaPaths = new ArrayList<>();  // List of media file paths or URLs
 
-    // Constructor, Getters, Setters
-    public Course(String id, String title, String description, int duration,String profid) {
+    // Constructor
+    public Course(String id, String title, String description, int duration, String profId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.duration = duration;
-        this.Profid = profid;
+        this.profId = profId;
     }
 
     public void addLesson(Lesson lesson) {
@@ -41,6 +43,7 @@ public class Course {
     public void setLessons(List<Lesson> lessons) { this.lessons = lessons; }
     public List<String> getMediaPaths() { return mediaPaths; }
     public void setMediaPaths(List<String> mediaPaths) { this.mediaPaths = mediaPaths; }
-    public String getProfid() {return Profid;}
-    public void setProfid(String profid) {this.Profid = profid;}
+
+    public String getProfId() { return profId; } // Renamed getter
+    public void setProfId(String profId) { this.profId = profId; } // Renamed setter
 }

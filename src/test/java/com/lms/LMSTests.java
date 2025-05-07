@@ -61,18 +61,9 @@ class LMSTests {
         @Order(1)
         void testSignupAdmin() throws IOException {
             if (adminToken == null) {
-                LMSResponse signUpAdmin = signup(
-                        "A01",
-                        "John",
-                        "Doe",
-                        adminEmail,
-                        adminPassword,
-                        "Admin"
-                );
 
-                // System.out.println(
-                //   signUpAdmin.code == 200 ? "Admin created" : "Admin creation failed"
-                // );
+
+
 
                 LMSResponse loginAdmin = login(adminEmail, adminPassword);
                 adminToken = getToken(loginAdmin.body);
@@ -185,7 +176,7 @@ class LMSTests {
             System.out.println(
                     "Course creation response code: " + createCourseResponse.code
             );
-            //assertEquals(200, createCourseResponse.code);
+
             boolean successMessageFound = createCourseResponse.body.contains(
                     "successfully!"
             );
@@ -252,7 +243,7 @@ class LMSTests {
 
         @Test
         @Order(1)
-        public void testAddMCQQuestionToQuestionBank() throws IOException {
+         void testAddMCQQuestionToQuestionBank() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -283,7 +274,6 @@ class LMSTests {
             );
 
             System.out.println("Add question response code: " + response.code);
-//        System.out.println(response.body);
 
             assertEquals(200, response.code);
             assertTrue(
@@ -295,7 +285,7 @@ class LMSTests {
 
         @Test
         @Order(1)
-        public void testAddTrueFalseQuestionToQuestionBank() throws IOException {
+         void testAddTrueFalseQuestionToQuestionBank() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -337,7 +327,7 @@ class LMSTests {
 
         @Test
         @Order(1)
-        public void testAddShortAnswerQuestionToQuestionBank() throws IOException {
+         void testAddShortAnswerQuestionToQuestionBank() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -380,7 +370,7 @@ class LMSTests {
 
         @Test
         @Order(1)
-        public void testAddMultipleQuestionToQuestionBank() throws IOException {
+         void testAddMultipleQuestionToQuestionBank() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -451,7 +441,7 @@ class LMSTests {
 
         @Test
         @Order(2)
-        public void testGetQuestionsFromQuestionBank() throws IOException {
+         void testGetQuestionsFromQuestionBank() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -475,7 +465,7 @@ class LMSTests {
 
         @Test
         @Order(3)
-        public void testDeleteQuestion() throws IOException {
+         void testDeleteQuestion() throws IOException {
             testAddMultipleQuestionToQuestionBank();
 
             LMSResponse getQuestsResponse = getQuestionsFromQuestionBank(
@@ -515,7 +505,7 @@ class LMSTests {
 
         @Test
         @Order(1)
-        public void testCreateQuiz() throws IOException {
+         void testCreateQuiz() throws IOException {
             if (lastCourseIdCreated == null) {
                 courseTests.testCreateCourse();
             }
@@ -550,7 +540,7 @@ class LMSTests {
 
         @Test
         @Order(2)
-        public void testGetAllQuizzes() throws IOException {
+         void testGetAllQuizzes() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -562,7 +552,6 @@ class LMSTests {
             LMSResponse response = getAllQuizzes(instructorToken);
 
             System.out.println("Get quizzes response code: " + response.code);
-//        System.out.println("Get quizzes response body: " + response.body);
 
             assertEquals(200, response.code);
             assertNotNull(response.body);
@@ -571,7 +560,7 @@ class LMSTests {
 
         @Test
         @Order(2)
-        public void testGetQuizById() throws IOException {
+         void testGetQuizById() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -587,7 +576,7 @@ class LMSTests {
 
         @Test
         @Order(3)
-        public void testDeleteQuiz() throws IOException {
+         void testDeleteQuiz() throws IOException {
             if (lastQuizId == null) {
                 testCreateQuiz();
             }
@@ -601,7 +590,7 @@ class LMSTests {
 
         @Test
         @Order(4)
-        public void testAssignQuiz() throws IOException {
+         void testAssignQuiz() throws IOException {
             if (lastQuizId == null) {
                 testCreateQuiz();
             }
@@ -623,7 +612,7 @@ class LMSTests {
 
         @Test
         @Order(1)
-        public void testSubmitQuiz() throws IOException {
+         void testSubmitQuiz() throws IOException {
             if (lastQuizId == null) {
                 quizTests.testCreateQuiz();
             }
@@ -634,7 +623,7 @@ class LMSTests {
 
             LMSResponse response = submitQuiz(studentToken, lastQuizId, lastQuizTrueAnswers);
             System.out.println("Submit quiz response code: " + response.code);
-//        System.out.println("Submit quiz response body: " + response.body);
+
             quizSubmissionExist = true;
             assertEquals(200, response.code);
             assertTrue(response.body.contains(lastQuizId));
@@ -642,7 +631,7 @@ class LMSTests {
 
         @Test
         @Order(2)
-        public void testGetAllSubmissions() throws IOException {
+         void testGetAllSubmissions() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -656,7 +645,7 @@ class LMSTests {
 
         @Test
         @Order(2)
-        public void testGetSubmissionsByQuiz() throws IOException {
+         void testGetSubmissionsByQuiz() throws IOException {
             if (!quizSubmissionExist) {
                 testSubmitQuiz();
             }
@@ -675,7 +664,7 @@ class LMSTests {
     class ProgressTests {
 
         @Test
-        public void testGetAllStudentProgress() throws IOException {
+         void testGetAllStudentProgress() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -690,7 +679,7 @@ class LMSTests {
         }
 
         @Test
-        public void testGetStudentProgressByStudentId() throws IOException {
+         void testGetStudentProgressByStudentId() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -699,11 +688,6 @@ class LMSTests {
                 setupTests.testLoginStudent();
             }
 
-//        Claims claims = Jwts.parser().setSigningKey("3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b").parseClaimsJws(studentToken).getBody();
-//
-//        String userEmail = claims.get("sub", String.class);
-//        Optional<User> user = userService.findByEmail(userEmail);
-//        System.out.println(user);
 
 
             LMSResponse response = getStudentProgressByStudentId(instructorToken, studentId);
@@ -716,7 +700,7 @@ class LMSTests {
         }
 
         @Test
-        public void testGetStudentProgressByCourseId() throws IOException {
+         void testGetStudentProgressByCourseId() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }
@@ -750,7 +734,7 @@ class LMSTests {
         }
 
         @Test
-        public void testGetCourseProgress() throws IOException {
+         void testGetCourseProgress() throws IOException {
             if (instructorToken == null) {
                 setupTests.testLoginInstructor();
             }

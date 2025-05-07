@@ -15,7 +15,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class QuizSubmissionServiceTests {
+ class QuizSubmissionServiceTests {
 
     @Mock
     private RepositoryFacade repository;
@@ -33,7 +33,7 @@ public class QuizSubmissionServiceTests {
     private Quiz quiz;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         repository = mock(RepositoryFacade.class);
         courseService = mock(CourseService.class);
         service = new QuizSubmissionServiceImpl(repository, courseService);
@@ -59,7 +59,7 @@ public class QuizSubmissionServiceTests {
     }
 
     @Test
-    public void testSubmitQuiz_Succeeds() {
+     void testSubmitQuiz_Succeeds() {
         when(repository.studentExistsById(studentId)).thenReturn(true);
         when(repository.findQuizById(quizId)).thenReturn(Optional.of(quiz));
         when(repository.findQuizSubmissionByStudentIdAndQuizId(studentId, quizId)).thenReturn(false);
@@ -76,7 +76,7 @@ public class QuizSubmissionServiceTests {
     }
 
     @Test
-    public void testSubmitQuiz_StudentNotFound_ThrowsRuntimeException() {
+     void testSubmitQuiz_StudentNotFound_ThrowsRuntimeException() {
         when(repository.studentExistsById(studentId)).thenReturn(false);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
@@ -86,7 +86,7 @@ public class QuizSubmissionServiceTests {
     }
 
     @Test
-    public void testSubmitQuiz_QuizNotFound_ThrowsRuntimeException() {
+     void testSubmitQuiz_QuizNotFound_ThrowsRuntimeException() {
         when(repository.studentExistsById(studentId)).thenReturn(true);
         when(repository.findQuizById(quizId)).thenReturn(Optional.empty());
 
@@ -97,7 +97,7 @@ public class QuizSubmissionServiceTests {
     }
 
     @Test
-    public void testSubmitQuiz_AlreadySubmitted_ThrowsRuntimeException() {
+     void testSubmitQuiz_AlreadySubmitted_ThrowsRuntimeException() {
         when(repository.studentExistsById(studentId)).thenReturn(true);
         when(repository.findQuizById(quizId)).thenReturn(Optional.of(quiz));
         when(repository.findQuizSubmissionByStudentIdAndQuizId(studentId, quizId)).thenReturn(true);
@@ -109,7 +109,7 @@ public class QuizSubmissionServiceTests {
     }
 
     @Test
-    public void testSubmitQuiz_SkipsInvalidQuestions() {
+     void testSubmitQuiz_SkipsInvalidQuestions() {
         when(repository.studentExistsById(studentId)).thenReturn(true);
         when(repository.findQuizById(quizId)).thenReturn(Optional.of(quiz));
         when(repository.findQuizSubmissionByStudentIdAndQuizId(studentId, quizId)).thenReturn(false);

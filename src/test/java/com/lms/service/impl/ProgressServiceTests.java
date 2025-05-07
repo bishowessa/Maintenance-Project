@@ -4,8 +4,6 @@ import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
 import com.lms.persistence.Course;
 import com.lms.persistence.Lesson;
-import com.lms.persistence.entities.AssignmentSubmissionEntity;
-import com.lms.persistence.entities.QuizSubmission;
 import com.lms.persistence.repositories.RepositoryFacade;
 import com.lms.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +16,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
-public class ProgressServiceTests {
+class ProgressServiceTests {
 
     @Mock
     private RepositoryFacade repository;
@@ -33,14 +30,14 @@ public class ProgressServiceTests {
     private final String courseId = "C01";
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         repository = mock(RepositoryFacade.class);
         courseService = mock(CourseService.class);
         progressService = new ProgressService(repository, courseService);
     }
 
     @Test
-    public void testGetAllStudentProgress_Succeeds() {
+    void testGetAllStudentProgress_Succeeds() {
         List<String> studentIds = List.of(studentId);
         List<Course> courses = List.of(mock(Course.class));
         StudentProgress expectedProgress = new StudentProgress(studentId, Map.of(), Map.of(), Map.of());
@@ -57,7 +54,7 @@ public class ProgressServiceTests {
     }
 
     @Test
-    public void testGetStudentProgressByStudentId_Succeeds() {
+    void testGetStudentProgressByStudentId_Succeeds() {
         Course course = mock(Course.class);
         List<Course> courses = List.of(course);
 
@@ -70,7 +67,7 @@ public class ProgressServiceTests {
     }
 
     @Test
-    public void testGetStudentProgressByStudentIdAndCourseId_Succeeds() {
+    void testGetStudentProgressByStudentIdAndCourseId_Succeeds() {
         Course course = mock(Course.class);
 
         when(courseService.findCourseById(courseId)).thenReturn(course);
@@ -82,12 +79,9 @@ public class ProgressServiceTests {
     }
 
     @Test
-    public void testGetCourseProgress_Succeeds() {
+    void testGetCourseProgress_Succeeds() {
         Course course = mock(Course.class);
         List<Lesson> lessons = List.of(mock(Lesson.class));
-        Map<String, List<QuizSubmission>> quizSubmissions = Map.of();
-        Map<Integer, List<AssignmentSubmissionEntity>> assignmentSubmissions = Map.of();
-        Map<String, List<Object>> attendance = Map.of();
 
         when(courseService.findCourseById(courseId)).thenReturn(course);
         when(course.getLessons()).thenReturn(lessons);

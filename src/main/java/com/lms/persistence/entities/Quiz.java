@@ -16,7 +16,7 @@ import lombok.*;
 public class Quiz {
 
   private String id;
-  private String CourseId;
+  private String courseId; // renamed from CourseId to courseId
   private String name;
   private String instructorId;
   private int numberOfQuestions;
@@ -27,8 +27,8 @@ public class Quiz {
   public Map<String, String> getCorrectAnswers() {
     Map<String, String> correctAnswers = new HashMap<>();
     for (Question question : selectedQuestions) {
-        correctAnswers.put(question.getId(), question.getCorrectAnswer());
+      correctAnswers.put(question.getId(), question.getCorrectAnswer());
     }
     return correctAnswers;
-}
+  }
 }

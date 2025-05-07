@@ -41,7 +41,6 @@ class AdminTest {
     @InjectMocks
     private AdminController adminController;
 
-    private RegisterUserDto adminRegisterUserDto;
     private RegisterUserDto studentRegisterUserDto;
     private User registeredAdmin;
     private User registeredStudent;
@@ -52,7 +51,6 @@ class AdminTest {
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
-        adminRegisterUserDto = MockDataFunctions.mockRegisteredUser("A01", "Ahmed", "Elbeltagy", "ahmed@gmail.com", "password123", "Admin");
         studentRegisterUserDto = MockDataFunctions.mockRegisteredUser("S01", "Laila", "Khaled", "laila@gmail.com", "password123", "Student");
         registeredAdmin = MockDataFunctions.mockAddedUser("A01", "ahmed@gmail.com", "Admin");
         registeredStudent = MockDataFunctions.mockAddedUser("S01", "laila@gmail.com", "Student");
@@ -63,8 +61,9 @@ class AdminTest {
         when(userDetails.getUsername()).thenReturn("ahmed@gmail.com");
         when(userService.findByEmail("ahmed@gmail.com")).thenReturn(Optional.of(registeredAdmin));
         when(authenticationService.signup(studentRegisterUserDto)).thenReturn(registeredStudent);
+
         ResponseEntity<?> response = adminController.createUser(studentRegisterUserDto);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(registeredStudent, response.getBody());
     }
 
@@ -72,8 +71,9 @@ class AdminTest {
     void testUserCreationWithoutAuthorization() {
         when(userDetails.getUsername()).thenReturn("laila@gmail.com");
         when(userService.findByEmail("laila@gmail.com")).thenReturn(Optional.of(registeredStudent));
+
         ResponseEntity<?> response = adminController.createUser(studentRegisterUserDto);
-        assertEquals(403, response.getStatusCodeValue());
+        assertEquals(403, response.getStatusCode().value());
         assertEquals("Access Denied: Access Denied: you are unauthorized", response.getBody());
     }
 }

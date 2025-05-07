@@ -2,9 +2,9 @@ package com.lms;
 
 import com.lms.persistence.UpdateUserDto;
 import com.lms.persistence.User;
-import com.lms.persistence.UserInfoDto;
 import com.lms.presentation.UserController;
 import com.lms.service.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,7 +39,6 @@ class UserTest {
     private UserController userController;
 
     private User currentUser;
-    private UserInfoDto userInfoDto;
     private UpdateUserDto updateUserDto;
 
     @BeforeEach
@@ -49,6 +48,7 @@ class UserTest {
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
+
         currentUser = new User()
                 .setId("S01")
                 .setFirstName("Laila")
@@ -56,14 +56,6 @@ class UserTest {
                 .setEmail("laila@gmail.com")
                 .setPassword("password123")
                 .setRole("Student");
-
-        userInfoDto = new UserInfoDto(
-                currentUser.getId(),
-                currentUser.getFirstName(),
-                currentUser.getLastName(),
-                currentUser.getEmail(),
-                currentUser.getPassword()
-        );
 
         updateUserDto = new UpdateUserDto();
         updateUserDto.setFirstName("Leila");
@@ -75,15 +67,19 @@ class UserTest {
     void testViewAccountInfoWhenAuthenticated() {
         when(userDetails.getUsername()).thenReturn(currentUser.getEmail());
         when(userService.findByEmail(currentUser.getEmail())).thenReturn(Optional.of(currentUser));
+
         ResponseEntity<?> response = userController.getAccountInfo();
-        assertEquals(200, response.getStatusCodeValue());
+
+        assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     void testViewAccountInfoWhenUnauthenticated() {
         when(authentication.getPrincipal()).thenReturn(null);
+
         ResponseEntity<?> response = userController.getAccountInfo();
-        assertEquals(401, response.getStatusCodeValue());
+
+        assertEquals(401, response.getStatusCode().value());
         assertEquals("Unauthorized: Please log in.", response.getBody());
     }
 
@@ -91,8 +87,10 @@ class UserTest {
     void testViewAccountInfoOfUnknownUser() {
         when(userDetails.getUsername()).thenReturn("unknown@gmail.com");
         when(userService.findByEmail("unknown@gmail.com")).thenReturn(Optional.empty());
+
         ResponseEntity<?> response = userController.getAccountInfo();
-        assertEquals(404, response.getStatusCodeValue());
+
+        assertEquals(404, response.getStatusCode().value());
         assertEquals("User not found.", response.getBody());
     }
 
@@ -100,17 +98,21 @@ class UserTest {
     void testUpdateUserInfoWithValidData() {
         when(userDetails.getUsername()).thenReturn(currentUser.getEmail());
         when(userService.findByEmail(currentUser.getEmail())).thenReturn(Optional.of(currentUser));
+
         ResponseEntity<?> response = userController.updateUser(updateUserDto);
-        assertEquals(200, response.getStatusCodeValue());
+
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("Your info is updated", response.getBody());
         verify(userService).save(any(User.class));
     }
 
     @Test
-    void testUpdateUserInfoWithUnauthinticatedUser() {
+    void testUpdateUserInfoWithUnauthenticatedUser() {
         when(authentication.getPrincipal()).thenReturn(null);
+
         ResponseEntity<?> response = userController.updateUser(updateUserDto);
-        assertEquals(401, response.getStatusCodeValue());
+
+        assertEquals(401, response.getStatusCode().value());
         assertEquals("Unauthorized: Please log in.", response.getBody());
     }
 
@@ -118,8 +120,10 @@ class UserTest {
     void testUpdateUserInfoWithUnknownUser() {
         when(userDetails.getUsername()).thenReturn("unknown@gmail.com");
         when(userService.findByEmail("unknown@gmail.com")).thenReturn(Optional.empty());
+
         ResponseEntity<?> response = userController.updateUser(updateUserDto);
-        assertEquals(404, response.getStatusCodeValue());
+
+        assertEquals(404, response.getStatusCode().value());
         assertEquals("User not found.", response.getBody());
     }
 }

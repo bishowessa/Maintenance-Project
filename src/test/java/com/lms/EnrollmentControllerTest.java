@@ -1,6 +1,5 @@
 package com.lms;
 
-import java.lang.reflect.Field;
 
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
@@ -87,7 +86,7 @@ class EnrollmentControllerTest {
 
         ResponseEntity<String> response = enrollmentController.enrollStudent("S01", "101");
 
-        assertEquals(200, response.getStatusCodeValue(), "Expected status code should be 200.");
+        assertEquals(200, response.getStatusCode().value(), "Expected status code should be 200.");
         assertEquals("Student enrolled successfully", response.getBody(), "Expected response body does not match.");
         verify(enrollmentService, times(1)).enrollStudent("S01", "101");
         verify(userService, times(1)).findByEmail("student@example.com");
@@ -109,7 +108,7 @@ class EnrollmentControllerTest {
         ResponseEntity<String> response = enrollmentController.enrollStudent("1", "101");
 
 
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode().value());
         verify(enrollmentService, never()).enrollStudent(anyString(), anyString());
     }
 
@@ -129,7 +128,7 @@ void testGetEnrollmentsByCourse() {
 
     ResponseEntity<?> response = enrollmentController.getEnrollmentsByCourse("101");
 
-    assertEquals(200, response.getStatusCodeValue());
+    assertEquals(200, response.getStatusCode().value());
     assertEquals(enrollments.toString(), response.getBody()); 
     verify(enrollmentService, times(1)).getEnrollmentsByCourse("101");
 }

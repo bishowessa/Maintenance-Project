@@ -2,7 +2,6 @@ package com.lms.persistence;
 
 public class Lesson {
     private String  id;
-    //private Long CourseId;
     private String title;
     private String content;  // URL or textual content
 
