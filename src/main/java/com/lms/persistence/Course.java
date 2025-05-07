@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Course {
     private String id;
-    private String profId; // Renamed from Profid to profId
+    private String profId; 
 
     private String title;
     private String description;
-    private int duration;  // Duration in days or hours
-    private List<Lesson> lessons = new ArrayList<>();  // List of lessons
-    private List<String> mediaPaths = new ArrayList<>();  // List of media file paths or URLs
+    private int duration;  
+    private List<Lesson> lessons = new ArrayList<>();  
+    private List<String> mediaPaths = new ArrayList<>();  
 
     // Constructor
     public Course(String id, String title, String description, int duration, String profId) {
