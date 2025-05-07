@@ -1,7 +1,5 @@
 package com.lms.persistence.entities.questions;
 
-import org.springframework.stereotype.Component;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,3 +17,4 @@ public abstract class Question {
   public abstract boolean validate();
   public abstract String getCorrectAnswer();
 }
+
