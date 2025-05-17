@@ -52,8 +52,7 @@ public class UserController {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail(),
-                user.getPassword()
+                user.getEmail()
         );
         return ResponseEntity.ok(accountInfo);
     }

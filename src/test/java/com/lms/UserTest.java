@@ -61,8 +61,7 @@ class UserTest {
                 currentUser.getId(),
                 currentUser.getFirstName(),
                 currentUser.getLastName(),
-                currentUser.getEmail(),
-                currentUser.getPassword()
+                currentUser.getEmail()
         );
 
         updateUserDto = new UpdateUserDto();
