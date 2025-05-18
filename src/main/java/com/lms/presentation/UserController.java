@@ -82,6 +82,12 @@ public class UserController {
         return ResponseEntity.ok("Your info is updated");
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
+        List<User> results = userService.searchUsersByNameOrEmail(query);
+        return ResponseEntity.ok(results);
+    }
+
 
 
 //    @PostMapping("/createUser")

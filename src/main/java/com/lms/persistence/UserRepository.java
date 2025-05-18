@@ -77,6 +77,18 @@ public class UserRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    // ✅ New method for name/email search
+    public List<User> searchByNameOrEmail(String query) {
+        String lowerQuery = query.toLowerCase();
+        return users.stream()
+                .filter(user ->
+                        user.getFirstName().toLowerCase().contains(lowerQuery) ||
+                                user.getLastName().toLowerCase().contains(lowerQuery) ||
+                                user.getEmail().toLowerCase().contains(lowerQuery)
+                )
+                .collect(Collectors.toList());
+    }
 }
 
 

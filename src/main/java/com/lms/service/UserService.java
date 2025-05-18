@@ -38,6 +38,9 @@ public class UserService {
     public User findById(String userId) {
         return userRepository.findById(userId);
     }
+
+    // ✅ New method for search
+    public List<User> searchUsersByNameOrEmail(String query) {
+        return userRepository.searchByNameOrEmail(query);
+    }
 }
-
-
