@@ -8,17 +8,17 @@ import com.lms.persistence.User;
 import com.lms.service.SmsService;
 import com.lms.service.impl.EmailService;
 import com.lms.service.impl.ServiceFacade;
-import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import com.lms.service.NotificationServiceImpl;
 
 import java.util.Optional;
 
-
 @Component
-@AllArgsConstructor
 public class NotificationEventListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(NotificationEventListener.class);
 
     private final EmailService emailService;
     private final SmsService smsService;
@@ -32,7 +32,6 @@ public class NotificationEventListener {
         this.notificationManager = notificationManager;
     }
 
-
     @EventListener
     public void handleNotificationEvent(NotificationEvent event) {
         Notification notification = new Notification();
@@ -40,12 +39,11 @@ public class NotificationEventListener {
         notification.setMessage(event.getMessage());
         notificationManager.addNotification(notification);
 
-        System.out.println("Notification Event Received:");
-        System.out.println("Student ID: " + event.getUserId());
-        System.out.println("Message: " + event.getMessage());
-        System.out.println("Notification Type: " + event.getNotificationType());
+        logger.info("Notification Event Received:");
+        logger.info("Student ID: {}", event.getUserId());
+        logger.info("Message: {}", event.getMessage());
+        logger.info("Notification Type: {}", event.getNotificationType());
 
-        // Simulate notification sending
         switch (event.getNotificationType()) {
             case "EMAIL":
                 sendEmailNotification(event);
@@ -63,12 +61,10 @@ public class NotificationEventListener {
         User user = service.findUserById(event.getUserId());
         String subject = "Notification for " + event.getUserId() + " \"" + user.getFirstName() + "\"";
         new Thread(() -> {
-
             try {
                 emailService.sendEmail(user.getEmail(), subject, event.getMessage());
-            }
-            catch (Exception e) {
-                System.err.println("Couldn't send the email: " + e);
+            } catch (Exception e) {
+                logger.error("Couldn't send the email: {}", e.getMessage(), e);
             }
         }).start();
     }
@@ -76,18 +72,14 @@ public class NotificationEventListener {
     private void sendSMSNotification(NotificationEvent event) {
         User user = service.findUserById(event.getUserId());
         String lessonName = event.getMessage();
-        OtpRequest otpRequest = new OtpRequest(
-                "maya",
-                "+201014367954",
-                lessonName
-        );
-        new Thread(() -> {
-            smsService.sendSMS(otpRequest, Optional.of(user));
-        }).start();
-        System.out.println("Sending SMS to student " + event.getUserId() + " for attendance otp of lesson : " + event.getMessage());
+        OtpRequest otpRequest = new OtpRequest("maya", "+201014367954", lessonName);
+        new Thread(() -> smsService.sendSMS(otpRequest, Optional.of(user))).start();
+
+
+        logger.info("Sending SMS to student {} for attendance otp of lesson: {}", event.getUserId(), event.getMessage());
     }
 
     private void sendInAppNotification(NotificationEvent event) {
-        System.out.println("Sending IN-APP notification to student " + event.getUserId() + ": " + event.getMessage());
+        logger.info("Sending IN-APP notification to student {}: {}", event.getUserId(), event.getMessage());
     }
 }

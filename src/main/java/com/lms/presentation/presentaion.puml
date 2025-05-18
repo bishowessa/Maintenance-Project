@@ -1,0 +1,239 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam dpi 150
+skinparam linetype ortho
+
+' ==== Controllers ====
+class AdminController
+class ApplicationConfiguration
+class AssignmentController
+class AssignmentSubmissionController
+class AuthenticationController
+class CourseController
+class EnrollmentController
+class NotificationController
+class OtpController
+class ProgressController
+class QuestionBankController
+class QuizController
+class SecurityConfiguration
+class TwilioConfig
+class UserController
+class QuestionBankControllerTest
+
+' ==== Supporting Classes ====
+class ServiceFacade
+class NotificationServiceImpl
+class SmsService
+class JwtService
+class QuestionFactory
+
+' ==== Relationships ====
+AdminController ..> Authentication
+AdminController ..> List
+AdminController ..> User
+AdminController ..> UserService
+AdminController ..> AuthenticationService
+AdminController ..> Optional
+AdminController ..> RegisterUserDto
+AdminController ..> ResponseEntity
+AdminController ..> SecurityContextHolder
+AdminController ..> UserDetails
+
+ApplicationConfiguration ..> DaoAuthenticationProvider
+ApplicationConfiguration ..> AuthenticationConfiguration
+ApplicationConfiguration ..> BCryptPasswordEncoder
+ApplicationConfiguration ..> Configuration
+ApplicationConfiguration ..> UserDetailsService
+ApplicationConfiguration ..> UsernameNotFoundException
+ApplicationConfiguration ..> UserRepository
+ApplicationConfiguration ..> AuthenticationProvider
+ApplicationConfiguration ..> AuthenticationManager
+ApplicationConfiguration ..> Bean
+
+AssignmentController ..> HttpStatus
+AssignmentController ..> CourseNotificationEvent
+AssignmentController ..> User
+AssignmentController ..> ServiceFacade
+AssignmentController ..> NotificationEvent
+AssignmentController ..> ApplicationEventPublisher
+AssignmentController ..> AssignmentEntity
+AssignmentController ..> ResponseEntity
+AssignmentController ..> AssignmentModel
+
+AssignmentSubmissionController ..> HttpStatus
+AssignmentSubmissionController ..> AssignmentSubmissionEntity
+AssignmentSubmissionController ..> List
+AssignmentSubmissionController ..> CourseNotificationEvent
+AssignmentSubmissionController ..> User
+AssignmentSubmissionController ..> Optional
+AssignmentSubmissionController ..> AssignmentSubmissionModel
+AssignmentSubmissionController ..> NotificationEvent
+AssignmentSubmissionController ..> ServiceFacade
+AssignmentSubmissionController ..> ApplicationEventPublisher
+AssignmentSubmissionController ..> Collections
+AssignmentSubmissionController ..> AssignmentEntity
+AssignmentSubmissionController ..> ResponseEntity
+
+AuthenticationController ..> Authentication
+AuthenticationController ..> RestController
+AuthenticationController ..> RequestMapping
+AuthenticationController ..> User
+AuthenticationController ..> PostMapping
+AuthenticationController ..> AuthenticationService
+AuthenticationController ..> LoginUserDt
+AuthenticationController ..> RequestBody
+AuthenticationController ..> RegisterUserDto
+AuthenticationController ..> ResponseEntity
+AuthenticationController ..> LoginResponse
+AuthenticationController ..> JwtService
+
+CourseController ..> UserService
+CourseController ..> NotificationEvent
+CourseController ..> HttpStatus
+CourseController ..> CourseService
+CourseController ..> Authentication
+CourseController ..> Optional
+CourseController ..> UserDetails
+CourseController ..> List
+CourseController ..> CourseNotificationEvent
+CourseController ..> AuthenticationService
+CourseController ..> ApplicationEventPublisher
+CourseController ..> Lesson
+CourseController ..> SecurityContextHolder
+CourseController ..> MultipartFile
+CourseController ..> File
+CourseController ..> User
+CourseController ..> Course
+CourseController ..> ResponseEntity
+CourseController ..> FileOutputStream
+
+EnrollmentController ..> HttpStatus
+EnrollmentController ..> CourseService
+EnrollmentController ..> Enrollment
+EnrollmentController ..> Authentication
+EnrollmentController ..> CourseNotificationEvent
+EnrollmentController ..> EnrollmentService
+EnrollmentController ..> List
+EnrollmentController ..> User
+EnrollmentController ..> UserService
+EnrollmentController ..> Map
+EnrollmentController ..> Optional
+EnrollmentController ..> ApplicationEventPublisher
+EnrollmentController ..> NotificationEvent
+EnrollmentController ..> Course
+EnrollmentController ..> ResponseEntity
+EnrollmentController ..> SecurityContextHolder
+EnrollmentController ..> UserDetails
+
+NotificationController ..> HttpStatus
+NotificationController ..> NotificationServiceImpl
+NotificationController ..> List
+NotificationController ..> User
+NotificationController ..> NotificationRequest
+NotificationController ..> Optional
+NotificationController ..> ServiceFacade
+NotificationController ..> ResponseEntity
+NotificationController ..> Notification
+
+OtpController ..> SecurityContextHolder
+OtpController ..> CourseService
+OtpController ..> Authentication
+OtpController ..> Pair
+OtpController ..> User
+OtpController ..> UserService
+OtpController ..> ArrayList
+OtpController ..> AuthenticationService
+OtpController ..> SmsService
+OtpController ..> Slf4j
+OtpController ..> Optional
+OtpController ..> OtpResponseDto
+OtpController ..> Autowired
+OtpController ..> OtpRequest
+OtpController ..> ResponseEntity
+OtpController ..> OtpValidationRequest
+OtpController ..> UserDetails
+
+ProgressController ..> HttpStatus
+ProgressController ..> CourseProgress
+ProgressController ..> List
+ProgressController ..> User
+ProgressController ..> ObjectMapper
+ProgressController ..> Optional
+ProgressController ..> StudentProgress
+ProgressController ..> Collections
+ProgressController ..> ServiceFacade
+ProgressController ..> ResponseEntity
+
+QuestionBankController ..> HttpStatus
+QuestionBankController ..> List
+QuestionBankController ..> User
+QuestionBankController ..> QuestionRequest
+QuestionBankController ..> Optional
+QuestionBankController ..> Collections
+QuestionBankController ..> QuestionFactory
+QuestionBankController ..> ServiceFacade
+QuestionBankController ..> ResponseEntity
+QuestionBankController ..> Question
+
+QuizController ..> HttpStatus
+QuizController ..> QuizRequest
+QuizController ..> CourseNotificationEvent
+QuizController ..> User
+QuizController ..> QuizSubmission
+QuizController ..> NotificationEvent
+QuizController ..> ServiceFacade
+QuizController ..> ApplicationEventPublisher
+QuizController ..> AllArgsConstructor
+QuizController ..> Course
+QuizController ..> ResponseEntity
+QuizController ..> Quiz
+
+SecurityConfiguration ..> UrlBasedCorsConfigurationSource
+SecurityConfiguration ..> List
+SecurityConfiguration ..> Configuration
+SecurityConfiguration ..> SecurityFilterChain
+SecurityConfiguration ..> CorsConfigurationSource
+SecurityConfiguration ..> JwtAuthenticationFilter
+SecurityConfiguration ..> SessionCreationPolicy
+SecurityConfiguration ..> UsernamePasswordAuthenticationFilter
+SecurityConfiguration ..> AuthenticationProvider
+SecurityConfiguration ..> EnableWebSecurity
+SecurityConfiguration ..> Bean
+SecurityConfiguration ..> CorsConfiguration
+SecurityConfiguration ..> HttpSecurity
+
+TwilioConfig ..> ConfigurationProperties
+TwilioConfig ..> Data
+TwilioConfig ..> Configuration
+TwilioConfig ..> Component
+
+UserController ..> List
+UserController ..> UserInfoDto
+UserController ..> Authentication
+UserController ..> UpdateUserDto
+UserController ..> User
+UserController ..> UserService
+UserController ..> AuthenticationService
+UserController ..> Optional
+UserController ..> ResponseEntity
+UserController ..> SecurityContextHolder
+UserController ..> UserDetails
+
+QuestionBankControllerTest ..> OngoingStubbing
+QuestionBankControllerTest ..> MockitoAnnotations
+QuestionBankControllerTest ..> HttpStatus
+QuestionBankControllerTest ..> Test
+QuestionBankControllerTest ..> List
+QuestionBankControllerTest ..> User
+QuestionBankControllerTest ..> QuestionRequest
+QuestionBankControllerTest ..> Objects
+QuestionBankControllerTest ..> BeforeEach
+QuestionBankControllerTest ..> Optional
+QuestionBankControllerTest ..> Course
+QuestionBankControllerTest ..> ServiceFacade
+QuestionBankControllerTest ..> ResponseEntity
+QuestionBankControllerTest ..> Mock
+QuestionBankControllerTest ..> InjectMocks
+QuestionBankControllerTest ..> Question
+@enduml

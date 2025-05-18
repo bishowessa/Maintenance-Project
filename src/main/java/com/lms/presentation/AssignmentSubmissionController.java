@@ -38,6 +38,7 @@ public class AssignmentSubmissionController {
     ) {
         Optional<User> currentUser = service.getCurrentUser();
         if (currentUser.isEmpty()) {
+
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Not authenticated");

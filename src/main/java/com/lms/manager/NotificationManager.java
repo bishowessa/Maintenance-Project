@@ -1,13 +1,12 @@
 package com.lms.manager;
 
+import com.lms.persistence.Notification;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.lms.persistence.Notification;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")

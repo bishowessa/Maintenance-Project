@@ -3,18 +3,20 @@ package com.lms.presentation;
 import com.lms.business.models.QuizRequest;
 import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
-import com.lms.persistence.Course;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.Quiz;
 import com.lms.persistence.entities.QuizSubmission;
 import com.lms.service.impl.ServiceFacade;
-import java.util.*;
-
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/quizzes")
