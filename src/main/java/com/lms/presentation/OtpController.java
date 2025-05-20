@@ -7,14 +7,13 @@ import com.lms.persistence.User;
 import com.lms.service.SmsService;
 import com.lms.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,11 +49,11 @@ public class OtpController {
     }
 
     @GetMapping("/viewAttendance")
-    public ResponseEntity<ArrayList<Pair<String, Optional<User>>>> getMediaForCourse() {
+    public ResponseEntity<List<String>> getMediaForCourse() {
         if (getCurrentUser().isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.ok(SmsService.viewAttendance());
+        return ResponseEntity.ok(smsService.viewAttendance());
     }
 
     private Optional<User> getCurrentUser() {

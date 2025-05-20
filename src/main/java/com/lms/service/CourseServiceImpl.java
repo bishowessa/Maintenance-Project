@@ -32,7 +32,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void uploadMedia(String courseId, MultipartFile file) throws CourseNotFoundException {
+    public void uploadMedia(String courseId, MultipartFile file) throws IllegalArgumentException, IOException {
         Course course = findCourseById(courseId);
         if (course != null) {
             try {
@@ -44,37 +44,37 @@ public class CourseServiceImpl implements CourseService {
                 throw new IOException("Failed to upload media file", e);
             }
         } else {
-            throw new CourseNotFoundException("Course not found with ID: " + courseId);
+            throw new IllegalArgumentException("Course not found with ID: " + courseId);
         }
     }
 
     @Override
-    public List<String> getMediaForCourse(String courseId) throws CourseNotFoundException {
+    public List<String> getMediaForCourse(String courseId) throws IllegalArgumentException {
         Course course = findCourseById(courseId);
         if (course != null) {
             return course.getMediaPaths();
         } else {
-            throw new CourseNotFoundException("Course not found with ID: " + courseId);
+            throw new IllegalArgumentException("Course not found with ID: " + courseId);
         }
     }
 
     @Override
-    public void addLessonToCourse(String courseId, Lesson lesson) throws CourseNotFoundException {
+    public void addLessonToCourse(String courseId, Lesson lesson) throws IllegalArgumentException {
         Course course = findCourseById(courseId);
         if (course != null) {
             course.addLesson(lesson);
         } else {
-            throw new CourseNotFoundException("Course not found with ID: " + courseId);
+            throw new IllegalArgumentException("Course not found with ID: " + courseId);
         }
     }
 
     @Override
-    public List<Lesson> getLessonsForCourse(String courseId) throws CourseNotFoundException {
+    public List<Lesson> getLessonsForCourse(String courseId) throws IllegalArgumentException {
         Course course = findCourseById(courseId);
         if (course != null) {
             return course.getLessons();
         } else {
-            throw new CourseNotFoundException("Course not found with ID: " + courseId);
+            throw new IllegalArgumentException("Course not found with ID: " + courseId);
         }
     }
 

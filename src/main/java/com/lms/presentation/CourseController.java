@@ -48,7 +48,7 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ACCESS_DENIED);
         }
 
-        course.setProfid(currentUser.get().getId());
+        course.setProfId(currentUser.get().getId());
         Course newCourse = courseService.createCourse(course);
 
         String message = "Course " + newCourse.getId() + " \"" + newCourse.getTitle() + "\" created successfully";
