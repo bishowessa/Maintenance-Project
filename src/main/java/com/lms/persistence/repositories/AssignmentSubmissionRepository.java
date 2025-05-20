@@ -1,40 +1,24 @@
 package com.lms.persistence.repositories;
 
-import java.util.ArrayList;
+import com.lms.persistence.entities.AssignmentSubmissionEntity;
+
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-import com.lms.persistence.entities.AssignmentSubmissionEntity;
-import com.lms.persistence.events.AssignmentSubmissionEvent;
-
-@Repository
-@Scope("singleton")
 public class AssignmentSubmissionRepository {
-    private final List<AssignmentSubmissionEntity> submissions = new ArrayList<>();
-    private final AtomicInteger idGenerator = new AtomicInteger(1);
-    private final ApplicationEventPublisher eventPublisher;
 
-    // Constructor injection for ApplicationEventPublisher
-    public AssignmentSubmissionRepository(ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
-    }
+    private final List<AssignmentSubmissionEntity> submissions = new CopyOnWriteArrayList<>();
+    private final AtomicInteger idGenerator = new AtomicInteger(1);
 
     public boolean add(AssignmentSubmissionEntity submission) {
         submission.setId(idGenerator.getAndIncrement());
-        boolean added = submissions.add(submission);
-        if (added) {
-            // Publish event after successful submission
-            eventPublisher.publishEvent(new AssignmentSubmissionEvent(this, submission));
-        }
-        return added;
+        return submissions.add(submission);
     }
 
     public List<AssignmentSubmissionEntity> findAll() {
-        return new ArrayList<>(submissions);
+        return List.copyOf(submissions);
     }
 
     public AssignmentSubmissionEntity findById(int id) {
@@ -45,11 +29,11 @@ public class AssignmentSubmissionRepository {
     }
 
     public boolean update(AssignmentSubmissionEntity updatedSubmission) {
-        AssignmentSubmissionEntity existing = findById(updatedSubmission.getId());
-        if (existing != null) {
-            submissions.remove(existing);
-            submissions.add(updatedSubmission);
-            return true;
+        for (int i = 0; i < submissions.size(); i++) {
+            if (submissions.get(i).getId() == updatedSubmission.getId()) {
+                submissions.set(i, updatedSubmission);
+                return true;
+            }
         }
         return false;
     }
@@ -65,19 +49,16 @@ public class AssignmentSubmissionRepository {
                 .anyMatch(submission -> submission.getStudentId().equals(studentId));
     }
 
-    public int generateUniqueId() {
-        return idGenerator.getAndIncrement();
-    }
-
     public List<AssignmentSubmissionEntity> findByStudentAndCourse(String studentId, String courseId) {
         return submissions.stream()
-                .filter(submission -> submission.getStudentId().equals(studentId) && submission.getCourseId().equals(courseId))
+                .filter(submission -> submission.getStudentId().equals(studentId)
+                        && submission.getCourseId().equals(courseId))
                 .collect(Collectors.toList());
     }
 
-    public List<AssignmentSubmissionEntity> findByAssignmentSubmissionsByAssignmentId(int id) {
+    public List<AssignmentSubmissionEntity> findByAssignmentId(int assignmentId) {
         return submissions.stream()
-                .filter(submission -> submission.getAssignmentId() == id)
+                .filter(submission -> submission.getAssignmentId() == assignmentId)
                 .collect(Collectors.toList());
     }
 }

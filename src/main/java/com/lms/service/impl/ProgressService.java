@@ -80,12 +80,13 @@ class ProgressService {
   }
 
   private boolean isLessonAttended(String studentId, Lesson lesson) {
-    return SmsService.viewAttendance()
-            .stream()
-            .filter(pair -> pair.getKey().equals(lesson.getTitle()))
-            .flatMap(pair -> pair.getValue().stream())
-            .filter(Objects::nonNull)
-            .anyMatch(user -> user.getId().equals(studentId));
+      SmsService.viewAttendance()
+              .stream()
+              .filter(pair -> pair.getKey().equals(lesson.getTitle()))
+              .flatMap(pair -> pair.getValue().stream())
+              .filter(Objects::nonNull)
+              .anyMatch(user -> user.getId().equals(studentId));
+      return false;
   }
 
   public CourseProgress getCourseProgress(String courseId) {
