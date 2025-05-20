@@ -34,6 +34,7 @@ public class CourseNotificationEventListener {
     }
 
     @EventListener
+    @Async
     public void handleCourseNotificationEvent(CourseNotificationEvent event) {
         String courseId = event.getCourseId();
         String message = event.getMessage();
